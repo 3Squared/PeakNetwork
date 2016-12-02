@@ -57,7 +57,7 @@ public class ImageController {
                         self.cache.setObject(image, forKey: key)
                         self.setImage(image, toImageView: imageView, animated: animated, completion: completion)
                     } catch {
-                        
+                        completion(false)
                     }
                     
                     synchronized(self.mapTable) {
