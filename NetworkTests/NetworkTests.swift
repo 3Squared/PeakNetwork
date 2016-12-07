@@ -8,7 +8,7 @@
 
 import XCTest
 import OHHTTPStubs
-import SQKResult
+import THRResult
 @testable import Network
 
 class NetworkTests: XCTestCase {

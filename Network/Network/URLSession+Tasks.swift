@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import SQKResult
+import THRResult
 
 // MARK: - Convenience methods on URLSession to return configured data tasks, used internally.
 extension URLSession {

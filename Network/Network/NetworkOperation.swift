@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SQKResult
+import THRResult
 
 open class NetworkOperation<T>: RetryingOperation<T> {
     internal var task: URLSessionTask?

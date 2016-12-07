@@ -5,7 +5,7 @@ source 'git@gitlab.3squared.com:iOSLibraries/CocoaPodSpecs.git'
 
 target 'Network' do
     use_frameworks!
-		pod 'SQKResult'
+		pod 'THRResult'
 	
 		target 'NetworkTests' do
 	    inherit! :search_paths

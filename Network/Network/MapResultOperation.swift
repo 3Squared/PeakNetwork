@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import SQKResult
+import THRResult
 
 open class MapResultOperation<I, O>: ResultOperation<O> {
     let block: (Result<I>) -> (Result<O>)

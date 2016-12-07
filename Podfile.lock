@@ -14,17 +14,17 @@ PODS:
   - OHHTTPStubs/OHPathHelpers (5.2.2)
   - OHHTTPStubs/Swift (5.2.2):
     - OHHTTPStubs/Core
-  - SQKResult (0.0.1)
+  - THRResult (0.0.1)
 
 DEPENDENCIES:
   - OHHTTPStubs (~> 5.2)
   - OHHTTPStubs/Swift (~> 5.2)
-  - SQKResult
+  - THRResult
 
 SPEC CHECKSUMS:
   OHHTTPStubs: 34d9d0994e64fcf8552dbfade5ce82ada913ee31
-  SQKResult: b5b677ea3369005ce08d935efb3395bd81ebbac7
+  THRResult: 173d7193812ef859e14c8fdbe8cd81e9deea5db4
 
-PODFILE CHECKSUM: 2215dd9f3610672faf6f97eec7cc9d5266563dd5
+PODFILE CHECKSUM: cf222e4418500d3d2ee18bcc3d308f35c55af58e
 
 COCOAPODS: 1.1.1

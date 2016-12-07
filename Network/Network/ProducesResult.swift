@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import SQKResult
+import THRResult
 
 public protocol ProducesResult: class {
     associatedtype T

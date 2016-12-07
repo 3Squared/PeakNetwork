@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import SQKResult
+import THRResult
 
 open class ResultOperation<T>: Operation, ProducesResult {
     open var operationResult: Result<T> = Result { throw ResultError.noResult }
