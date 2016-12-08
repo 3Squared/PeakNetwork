@@ -5,8 +5,8 @@ source 'git@gitlab.3squared.com:iOSLibraries/CocoaPodSpecs.git'
 
 target 'Network' do
     use_frameworks!
-		pod 'THRResult'
-	
+		pod 'THROperations'
+			
 		target 'NetworkTests' do
 	    inherit! :search_paths
 			pod 'OHHTTPStubs', '~> 5.2'

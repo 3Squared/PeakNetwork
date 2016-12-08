@@ -16,19 +16,12 @@
 		CBDC03CF1DEC7F2D00EA80EF /* NetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03CC1DEC7F2D00EA80EF /* NetworkTests.swift */; };
 		CBDC03D11DEC7F3700EA80EF /* github.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = CBDC03D01DEC7F3700EA80EF /* github.com.cer */; };
 		CBDC03E11DEC7F4500EA80EF /* CertificatePinningSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03D21DEC7F4500EA80EF /* CertificatePinningSessionDelegate.swift */; };
-		CBDC03E21DEC7F4500EA80EF /* Collection+Then.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03D31DEC7F4500EA80EF /* Collection+Then.swift */; };
-		CBDC03E31DEC7F4500EA80EF /* ConcurrentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03D41DEC7F4500EA80EF /* ConcurrentOperation.swift */; };
 		CBDC03E41DEC7F4500EA80EF /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03D51DEC7F4500EA80EF /* Errors.swift */; };
 		CBDC03E51DEC7F4500EA80EF /* HTTPMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03D61DEC7F4500EA80EF /* HTTPMethods.swift */; };
 		CBDC03E61DEC7F4500EA80EF /* ImageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03D71DEC7F4500EA80EF /* ImageController.swift */; };
 		CBDC03E71DEC7F4500EA80EF /* JSONConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03D81DEC7F4500EA80EF /* JSONConvertible.swift */; };
-		CBDC03E81DEC7F4500EA80EF /* MapResultOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03D91DEC7F4500EA80EF /* MapResultOperation.swift */; };
 		CBDC03E91DEC7F4500EA80EF /* NetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03DA1DEC7F4500EA80EF /* NetworkOperation.swift */; };
-		CBDC03EA1DEC7F4500EA80EF /* Operation+Then.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03DB1DEC7F4500EA80EF /* Operation+Then.swift */; };
 		CBDC03EB1DEC7F4500EA80EF /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03DC1DEC7F4500EA80EF /* Operators.swift */; };
-		CBDC03EC1DEC7F4500EA80EF /* ProducesResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03DD1DEC7F4500EA80EF /* ProducesResult.swift */; };
-		CBDC03ED1DEC7F4500EA80EF /* ResultOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03DE1DEC7F4500EA80EF /* ResultOperation.swift */; };
-		CBDC03EE1DEC7F4500EA80EF /* RetryingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03DF1DEC7F4500EA80EF /* RetryingOperation.swift */; };
 		CBDC03EF1DEC7F4500EA80EF /* URLSession+Tasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03E01DEC7F4500EA80EF /* URLSession+Tasks.swift */; };
 /* End PBXBuildFile section */
 
@@ -56,19 +49,12 @@
 		CBDC03CC1DEC7F2D00EA80EF /* NetworkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkTests.swift; sourceTree = "<group>"; };
 		CBDC03D01DEC7F3700EA80EF /* github.com.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = github.com.cer; sourceTree = "<group>"; };
 		CBDC03D21DEC7F4500EA80EF /* CertificatePinningSessionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CertificatePinningSessionDelegate.swift; path = Network/CertificatePinningSessionDelegate.swift; sourceTree = "<group>"; };
-		CBDC03D31DEC7F4500EA80EF /* Collection+Then.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Collection+Then.swift"; path = "Network/Collection+Then.swift"; sourceTree = "<group>"; };
-		CBDC03D41DEC7F4500EA80EF /* ConcurrentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConcurrentOperation.swift; path = Network/ConcurrentOperation.swift; sourceTree = "<group>"; };
 		CBDC03D51DEC7F4500EA80EF /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Errors.swift; path = Network/Errors.swift; sourceTree = "<group>"; };
 		CBDC03D61DEC7F4500EA80EF /* HTTPMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HTTPMethods.swift; path = Network/HTTPMethods.swift; sourceTree = "<group>"; };
 		CBDC03D71DEC7F4500EA80EF /* ImageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageController.swift; path = Network/ImageController.swift; sourceTree = "<group>"; };
 		CBDC03D81DEC7F4500EA80EF /* JSONConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONConvertible.swift; path = Network/JSONConvertible.swift; sourceTree = "<group>"; };
-		CBDC03D91DEC7F4500EA80EF /* MapResultOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapResultOperation.swift; path = Network/MapResultOperation.swift; sourceTree = "<group>"; };
 		CBDC03DA1DEC7F4500EA80EF /* NetworkOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkOperation.swift; path = Network/NetworkOperation.swift; sourceTree = "<group>"; };
-		CBDC03DB1DEC7F4500EA80EF /* Operation+Then.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Operation+Then.swift"; path = "Network/Operation+Then.swift"; sourceTree = "<group>"; };
 		CBDC03DC1DEC7F4500EA80EF /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Operators.swift; path = Network/Operators.swift; sourceTree = "<group>"; };
-		CBDC03DD1DEC7F4500EA80EF /* ProducesResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProducesResult.swift; path = Network/ProducesResult.swift; sourceTree = "<group>"; };
-		CBDC03DE1DEC7F4500EA80EF /* ResultOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ResultOperation.swift; path = Network/ResultOperation.swift; sourceTree = "<group>"; };
-		CBDC03DF1DEC7F4500EA80EF /* RetryingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RetryingOperation.swift; path = Network/RetryingOperation.swift; sourceTree = "<group>"; };
 		CBDC03E01DEC7F4500EA80EF /* URLSession+Tasks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "URLSession+Tasks.swift"; path = "Network/URLSession+Tasks.swift"; sourceTree = "<group>"; };
 		D45A0EDC848AE1CD5181A68D /* Pods-NetworkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetworkTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NetworkTests/Pods-NetworkTests.debug.xcconfig"; sourceTree = "<group>"; };
 		DCEBC9D84893928A6D393FA0 /* Pods_Network.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Network.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -141,19 +127,12 @@
 			children = (
 				CBDC03B31DEC7E2D00EA80EF /* Network.h */,
 				CBDC03D21DEC7F4500EA80EF /* CertificatePinningSessionDelegate.swift */,
-				CBDC03D31DEC7F4500EA80EF /* Collection+Then.swift */,
-				CBDC03D41DEC7F4500EA80EF /* ConcurrentOperation.swift */,
 				CBDC03D51DEC7F4500EA80EF /* Errors.swift */,
 				CBDC03D61DEC7F4500EA80EF /* HTTPMethods.swift */,
 				CBDC03D71DEC7F4500EA80EF /* ImageController.swift */,
 				CBDC03D81DEC7F4500EA80EF /* JSONConvertible.swift */,
-				CBDC03D91DEC7F4500EA80EF /* MapResultOperation.swift */,
 				CBDC03DA1DEC7F4500EA80EF /* NetworkOperation.swift */,
-				CBDC03DB1DEC7F4500EA80EF /* Operation+Then.swift */,
 				CBDC03DC1DEC7F4500EA80EF /* Operators.swift */,
-				CBDC03DD1DEC7F4500EA80EF /* ProducesResult.swift */,
-				CBDC03DE1DEC7F4500EA80EF /* ResultOperation.swift */,
-				CBDC03DF1DEC7F4500EA80EF /* RetryingOperation.swift */,
 				CBDC03E01DEC7F4500EA80EF /* URLSession+Tasks.swift */,
 				CBDC03B41DEC7E2D00EA80EF /* Info.plist */,
 			);
@@ -368,19 +347,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CBDC03EA1DEC7F4500EA80EF /* Operation+Then.swift in Sources */,
 				CBDC03E51DEC7F4500EA80EF /* HTTPMethods.swift in Sources */,
-				CBDC03E81DEC7F4500EA80EF /* MapResultOperation.swift in Sources */,
 				CBDC03E41DEC7F4500EA80EF /* Errors.swift in Sources */,
-				CBDC03E21DEC7F4500EA80EF /* Collection+Then.swift in Sources */,
-				CBDC03E31DEC7F4500EA80EF /* ConcurrentOperation.swift in Sources */,
 				CBDC03EB1DEC7F4500EA80EF /* Operators.swift in Sources */,
-				CBDC03EC1DEC7F4500EA80EF /* ProducesResult.swift in Sources */,
 				CBDC03E11DEC7F4500EA80EF /* CertificatePinningSessionDelegate.swift in Sources */,
 				CBDC03EF1DEC7F4500EA80EF /* URLSession+Tasks.swift in Sources */,
-				CBDC03EE1DEC7F4500EA80EF /* RetryingOperation.swift in Sources */,
 				CBDC03E71DEC7F4500EA80EF /* JSONConvertible.swift in Sources */,
-				CBDC03ED1DEC7F4500EA80EF /* ResultOperation.swift in Sources */,
 				CBDC03E91DEC7F4500EA80EF /* NetworkOperation.swift in Sources */,
 				CBDC03E61DEC7F4500EA80EF /* ImageController.swift in Sources */,
 			);

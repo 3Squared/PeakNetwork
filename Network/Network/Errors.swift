@@ -25,11 +25,3 @@ public enum ServerError: Error {
     case authentication()
     case unknown(HTTPURLResponse)
 }
-
-
-/// Used when an operation fails
-///
-/// - noResult: The initial value of an operation Result, before it has been set
-public enum OperationError: Error {
-    case noResult
-}

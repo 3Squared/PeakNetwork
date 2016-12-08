@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import THROperations
 import THRResult
 
 open class NetworkOperation<T>: RetryingOperation<T> {

@@ -125,59 +125,6 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
-    func testDependancies() {
-        let expect = expectation(description: "")
-        
-        let trueOperation = BlockResultOperation {
-            return true
-        }
-        
-        let negatingOperation = MapResultOperation<Bool, Bool> { previous in
-            do {
-                let boolean = try previous.resolve()
-                return Result { return !boolean }
-            } catch {
-                return Result { throw error }
-            }
-        }
-        
-        negatingOperation.addResultBlock { result in
-            do {
-                let boolean = try result.resolve()
-                XCTAssertFalse(boolean)
-                expect.fulfill()
-            } catch {
-                XCTFail()
-            }
-        }
-        
-        trueOperation.then(do: negatingOperation).enqueue()
-        
-        waitForExpectations(timeout: 1)
-    }
-    
-    func testMultipleResultBlocks() {
-        let expect1 = expectation(description: "")
-        let expect2 = expectation(description: "")
-
-        let operation = BlockResultOperation {
-            return true
-        }
-        
-        operation.addResultBlock { result in
-            expect1.fulfill()
-        }
-        
-        operation.addResultBlock { result in
-            expect2.fulfill()
-        }
-        
-        operation.enqueue()
-        
-        waitForExpectations(timeout: 1)
-    }
-
-    
     func testNetworkOperationFailureWithRetry() {
         let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
             return OHHTTPStubsResponse(jsonObject: [:], statusCode: 500, headers: [:])
