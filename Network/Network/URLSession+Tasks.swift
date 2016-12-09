@@ -45,9 +45,13 @@ extension URLSession {
         return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             switch self.valid(response: response, error: error) {
             case .ok:
-                if let data = data, let json = try? self.json(from: data) as! [String: Any] {
+                if let data = data, let json = try? self.json(from: data), let object = json as? [String: Any] {
                     completion(Result {
-                        return try T(fromJson: json)
+                        return try T(fromJson: object)
+                    })
+                } else {
+                    completion(Result {
+                        throw SerializationError.invalid
                     })
                 }
             case .needsAuthentication:
@@ -73,6 +77,10 @@ extension URLSession {
                 if let data = data, let json = try? self.json(from: data), let array = json as? [[String: Any]] {
                     completion(Result {
                         return try array.flatMap(T.init)
+                    })
+                } else {
+                    completion(Result {
+                        throw SerializationError.invalid
                     })
                 }
             case .needsAuthentication:
