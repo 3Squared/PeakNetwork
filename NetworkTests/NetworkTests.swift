@@ -125,14 +125,14 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
-    func testGetOperationParseSuccess() {
+    func testRequestOperationParseSuccess() {
         let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
             return OHHTTPStubsResponse(jsonObject: ["name" : "Sam"], statusCode: 200, headers: [:])
         }
         
         let expect = expectation(description: "")
         
-        let networkOperation = GetOperation<TestEntity>(BlockRequestable {
+        let networkOperation = RequestOperation<TestEntity>(BlockRequestable {
             return URLRequest(url: URL(string: "http://google.com")!)
         })
         
@@ -151,14 +151,14 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
-    func testGetOperationParseFailure() {
+    func testRequestOperationParseFailure() {
         let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
             return OHHTTPStubsResponse(jsonObject: ["wrong" : "key"], statusCode: 200, headers: [:])
         }
         
         let expect = expectation(description: "")
         
-        let networkOperation = GetOperation<TestEntity>(BlockRequestable {
+        let networkOperation = RequestOperation<TestEntity>(BlockRequestable {
             return URLRequest(url: URL(string: "http://google.com")!)
         })
         
@@ -181,14 +181,14 @@ class NetworkTests: XCTestCase {
     }
 
     
-    func testManyGetOperationParseSuccess() {
+    func testManyRequestOperationParseSuccess() {
         let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
             return OHHTTPStubsResponse(jsonObject: [["name" : "Sam"], ["name" : "Ben"]], statusCode: 200, headers: [:])
         }
         
         let expect = expectation(description: "")
         
-        let networkOperation = GetManyOperation<TestEntity>(BlockRequestable {
+        let networkOperation = RequestManyOperation<TestEntity>(BlockRequestable {
             return URLRequest(url: URL(string: "http://google.com")!)
         })
         
@@ -216,7 +216,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = GetManyOperation<TestEntity>(BlockRequestable {
+        let networkOperation = RequestManyOperation<TestEntity>(BlockRequestable {
             return URLRequest(url: URL(string: "http://google.com")!)
         })
         
@@ -245,7 +245,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = GetManyOperation<TestEntity>(BlockRequestable {
+        let networkOperation = RequestManyOperation<TestEntity>(BlockRequestable {
             return URLRequest(url: URL(string: "http://google.com")!)
         })
         
@@ -275,7 +275,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = GetOperation<TestEntity>(BlockRequestable {
+        let networkOperation = RequestOperation<TestEntity>(BlockRequestable {
             return URLRequest(url: URL(string: "http://google.com")!)
         })
         
