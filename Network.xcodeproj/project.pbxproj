@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3502CE15F0FFCE58A1F91A85 /* Pods_NetworkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB9DD2953DE432F8BFE1C981 /* Pods_NetworkTests.framework */; };
 		47F270D36D34465E6F8AB5DA /* Pods_Network.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCEBC9D84893928A6D393FA0 /* Pods_Network.framework */; };
+		CB0B6ABE1DFACE2F00F144F6 /* TestEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0B6ABD1DFACE2F00F144F6 /* TestEntity.swift */; };
 		CBDC03BA1DEC7E2D00EA80EF /* Network.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBDC03B01DEC7E2D00EA80EF /* Network.framework */; };
 		CBDC03C11DEC7E2D00EA80EF /* Network.h in Headers */ = {isa = PBXBuildFile; fileRef = CBDC03B31DEC7E2D00EA80EF /* Network.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CBDC03CD1DEC7F2D00EA80EF /* CertificatePinningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDC03CA1DEC7F2D00EA80EF /* CertificatePinningTests.swift */; };
@@ -38,6 +39,7 @@
 /* Begin PBXFileReference section */
 		15BE930300A8B76DFA66FF14 /* Pods-NetworkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetworkTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-NetworkTests/Pods-NetworkTests.release.xcconfig"; sourceTree = "<group>"; };
 		52769A85B5A686999199DB62 /* Pods-Network.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Network.release.xcconfig"; path = "Pods/Target Support Files/Pods-Network/Pods-Network.release.xcconfig"; sourceTree = "<group>"; };
+		CB0B6ABD1DFACE2F00F144F6 /* TestEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestEntity.swift; sourceTree = "<group>"; };
 		CB45273A92D0D255A6B2EB3E /* Pods-Network.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Network.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Network/Pods-Network.debug.xcconfig"; sourceTree = "<group>"; };
 		CBDC03B01DEC7E2D00EA80EF /* Network.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Network.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBDC03B31DEC7E2D00EA80EF /* Network.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Network.h; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				CBDC03CA1DEC7F2D00EA80EF /* CertificatePinningTests.swift */,
 				CBDC03CB1DEC7F2D00EA80EF /* ImageControllerTests.swift */,
 				CBDC03CC1DEC7F2D00EA80EF /* NetworkTests.swift */,
+				CB0B6ABD1DFACE2F00F144F6 /* TestEntity.swift */,
 				CBDC03D01DEC7F3700EA80EF /* github.com.cer */,
 				CBDC03C01DEC7E2D00EA80EF /* Info.plist */,
 			);
@@ -362,6 +365,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB0B6ABE1DFACE2F00F144F6 /* TestEntity.swift in Sources */,
 				CBDC03CF1DEC7F2D00EA80EF /* NetworkTests.swift in Sources */,
 				CBDC03CD1DEC7F2D00EA80EF /* CertificatePinningTests.swift in Sources */,
 				CBDC03CE1DEC7F2D00EA80EF /* ImageControllerTests.swift in Sources */,

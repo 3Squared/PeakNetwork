@@ -125,6 +125,179 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
+    func testGetOperationParseSuccess() {
+        let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
+            return OHHTTPStubsResponse(jsonObject: ["name" : "Sam"], statusCode: 200, headers: [:])
+        }
+        
+        let expect = expectation(description: "")
+        
+        let networkOperation = GetOperation<TestEntity>(BlockRequestable {
+            return URLRequest(url: URL(string: "http://google.com")!)
+        })
+        
+        networkOperation.addResultBlock { result in
+            do {
+                let entity = try result.resolve()
+                XCTAssertEqual(entity.name, "Sam")
+                expect.fulfill()
+            } catch {
+                XCTFail()
+            }
+        }
+        
+        networkOperation.enqueue()
+        
+        waitForExpectations(timeout: 1)
+    }
+    
+    func testGetOperationParseFailure() {
+        let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
+            return OHHTTPStubsResponse(jsonObject: ["wrong" : "key"], statusCode: 200, headers: [:])
+        }
+        
+        let expect = expectation(description: "")
+        
+        let networkOperation = GetOperation<TestEntity>(BlockRequestable {
+            return URLRequest(url: URL(string: "http://google.com")!)
+        })
+        
+        networkOperation.addResultBlock { result in
+            do {
+                let _ = try result.resolve()
+                XCTFail()
+            } catch {
+                switch error {
+                case SerializationError.invalid:
+                    expect.fulfill()
+                default:
+                    XCTFail()
+                }
+            }
+        }
+        
+        networkOperation.enqueue()
+        waitForExpectations(timeout: 1)
+    }
+
+    
+    func testManyGetOperationParseSuccess() {
+        let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
+            return OHHTTPStubsResponse(jsonObject: [["name" : "Sam"], ["name" : "Ben"]], statusCode: 200, headers: [:])
+        }
+        
+        let expect = expectation(description: "")
+        
+        let networkOperation = GetManyOperation<TestEntity>(BlockRequestable {
+            return URLRequest(url: URL(string: "http://google.com")!)
+        })
+        
+        networkOperation.addResultBlock { result in
+            do {
+                let entities = try result.resolve()
+                XCTAssertEqual(entities.count, 2)
+                XCTAssertEqual(entities[0].name, "Sam")
+                XCTAssertEqual(entities[1].name, "Ben")
+                expect.fulfill()
+            } catch {
+                XCTFail()
+            }
+        }
+        
+        networkOperation.enqueue()
+    
+        waitForExpectations(timeout: 1)
+    }
+    
+    func testManyOperationParseFailure() {
+        let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
+            return OHHTTPStubsResponse(jsonObject: [["wrong" : "key"], ["name" : "Ben"]], statusCode: 200, headers: [:])
+        }
+        
+        let expect = expectation(description: "")
+        
+        let networkOperation = GetManyOperation<TestEntity>(BlockRequestable {
+            return URLRequest(url: URL(string: "http://google.com")!)
+        })
+        
+        networkOperation.addResultBlock { result in
+            do {
+                let _ = try result.resolve()
+                XCTFail()
+            } catch {
+                switch error {
+                case SerializationError.invalid:
+                    expect.fulfill()
+                default:
+                    XCTFail()
+                }
+            }
+        }
+        
+        networkOperation.enqueue()
+        waitForExpectations(timeout: 1)
+    }
+    
+    func testManyRequestSingleResponseMismatchFailure() {
+        let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
+            return OHHTTPStubsResponse(jsonObject: ["name" : "Sam"], statusCode: 200, headers: [:])
+        }
+        
+        let expect = expectation(description: "")
+        
+        let networkOperation = GetManyOperation<TestEntity>(BlockRequestable {
+            return URLRequest(url: URL(string: "http://google.com")!)
+        })
+        
+        networkOperation.addResultBlock { result in
+            do {
+                let _ = try result.resolve()
+                XCTFail()
+            } catch {
+                switch error {
+                case SerializationError.invalid:
+                    expect.fulfill()
+                default:
+                    XCTFail()
+                }
+            }
+        }
+        
+        networkOperation.enqueue()
+        waitForExpectations(timeout: 1)
+    }
+    
+    
+    func testSingleRequestManyResponseMismatchFailure() {
+        let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
+            return OHHTTPStubsResponse(jsonObject: [["name" : "Sam"], ["name" : "Ben"]], statusCode: 200, headers: [:])
+        }
+        
+        let expect = expectation(description: "")
+        
+        let networkOperation = GetOperation<TestEntity>(BlockRequestable {
+            return URLRequest(url: URL(string: "http://google.com")!)
+        })
+        
+        networkOperation.addResultBlock { result in
+            do {
+                let _ = try result.resolve()
+                XCTFail()
+            } catch {
+                switch error {
+                case SerializationError.invalid:
+                    expect.fulfill()
+                default:
+                    XCTFail()
+                }
+            }
+        }
+        
+        networkOperation.enqueue()
+        waitForExpectations(timeout: 1)
+    }
+    
+    
     func testNetworkOperationFailureWithRetry() {
         let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
             return OHHTTPStubsResponse(jsonObject: [:], statusCode: 500, headers: [:])
