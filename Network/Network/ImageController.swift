@@ -87,7 +87,7 @@ public struct AnimationOptions
     let duration: TimeInterval
     let options: UIViewAnimationOptions
     
-    init(duration: TimeInterval, options: UIViewAnimationOptions) {
+    public init(duration: TimeInterval, options: UIViewAnimationOptions) {
         self.duration = duration
         self.options = options
     }
