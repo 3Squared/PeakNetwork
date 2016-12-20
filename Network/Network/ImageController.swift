@@ -94,11 +94,11 @@ public struct AnimationOptions
 }
 
 public extension UIImageView {
-    public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
+    public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping () -> () = { _ in }) {
         self.setImage(URLRequestable(url), queue: queue, animation: animation, completion: completion)
     }
     
-    public func setImage(_ requestable: Requestable, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
+    public func setImage(_ requestable: Requestable, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping () -> () = { _ in }) {
         ImageController.sharedInstance.getImage(requestable, object: self, queue: queue) { image, imageView in
             OperationQueue.main.addOperation {
                 if let animationOptions = animation {
@@ -107,10 +107,11 @@ public extension UIImageView {
                                       options: animationOptions.options,
                                       animations: {
                                         imageView.image = image
-                    }, completion: completion)
+                    }, completion: nil)
+                    completion()
                 } else {
                     imageView.image = image
-                    completion(true)
+                    completion()
                 }
             }
         }
