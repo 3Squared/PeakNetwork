@@ -53,6 +53,19 @@ class ImageControllerTests: XCTestCase {
         waitForExpectations(timeout: 2)
     }
     
+    func testSetImageWithAnimation() {
+        let expect = expectation(description: "")
+        let imageView = UIImageView(frame: CGRect.zero)
+        
+        XCTAssertNil(imageView.image)
+        imageView.setImage(URL(string: "https://placehold.it/350x350")!, animation: AnimationOptions(duration: 0.1, options: .transitionCrossDissolve)) { finished in
+            XCTAssertNotNil(imageView.image)
+            expect.fulfill()
+        }
+        
+        waitForExpectations(timeout: 2)
+    }
+    
     func testSetImageOnButton() {
         let expect = expectation(description: "")
         let button = UIButton(frame: CGRect.zero)
