@@ -12,63 +12,66 @@ import UIKit
 /// Manages starting, cancellung, and mapping  of download operations.
 public class ImageController {
     
-    static let sharedInstance = ImageController()
+    static var sharedInstance = ImageController()
     
     let internalQueue = OperationQueue()
-    let mapTable = NSMapTable<UIImageView, ImageOperation>.weakToWeakObjects()
+    let mapTable = NSMapTable<NSObject, ImageOperation>.weakToWeakObjects()
     let cache = NSCache<NSURL, UIImage>()
-    
-    public init() {
+    let session: URLSession
+
+    public init(_ session: URLSession = URLSession.shared) {
         cache.totalCostLimit = 128 * 1024 * 1024;
+        self.session = session
     }
     
     
-    /// Cancel a pending operation on the given imageview, if one exists.
-    public func cancelOperation(forImageView imageView: UIImageView) {
+    /// Cancel a pending operation on the given object, if one exists.
+    public func cancelOperation(forObject object: NSObject) {
         synchronized(mapTable) {
-            if let previousOperation = mapTable.object(forKey: imageView) {
+            if let previousOperation = mapTable.object(forKey: object) {
                 previousOperation.cancel()
             }
-            mapTable.removeObject(forKey: imageView)
+            mapTable.removeObject(forKey: object)
         }
     }
     
-    /// Set an image available at the URL described by a Requestable on a given imageView.
-    public func setImage(_ requestable: Requestable, onImageView imageView: UIImageView, queue: OperationQueue? = nil, animated: Bool = false, completion: @escaping  (Bool) -> () = { _ in }) {
+    
+    /// Get an image available at the URL described by a Requestable. object is a unique key, such as an ImageView.
+    public func getImage<T: NSObject>(_ requestable: Requestable, object: T, queue: OperationQueue? = nil, completion: @escaping (UIImage?, T) -> ()) {
         
-        // Cancel any in-flight operation for the same imageview
-        cancelOperation(forImageView: imageView)
+        // Cancel any in-flight operation for the same object
+        cancelOperation(forObject: object)
         
         // Maybe we already have the image in the cache
         let key = requestable.request.url! as NSURL
         if let image = cache.object(forKey: key) {
-            setImage(image, toImageView: imageView, animated: animated, completion: completion)
+            completion(image, object)
             return
         }
         
         // Create an operation to fetch the image data
-        let imageOperation = ImageOperation(requestable)
+        let imageOperation = ImageOperation(requestable, session: session)
         imageOperation.addResultBlock { result in
-            // Ensure that the operation completing is the most recent on for the imageView
-            if let currentOperation = self.mapTable.object(forKey: imageView) {
+            // Ensure that the operation completing is the most recent
+            if let currentOperation = self.mapTable.object(forKey: object) {
                 if currentOperation == imageOperation {
                     do {
                         let image = try result.resolve()
                         self.cache.setObject(image, forKey: key)
-                        self.setImage(image, toImageView: imageView, animated: animated, completion: completion)
+                        completion(image, object)
                     } catch {
-                        completion(false)
+                        completion(nil, object)
                     }
                     
                     synchronized(self.mapTable) {
-                        self.mapTable.removeObject(forKey: imageView)
+                        self.mapTable.removeObject(forKey: object)
                     }
                 }
             }
         }
         
         synchronized(mapTable) {
-            mapTable.setObject(imageOperation, forKey: imageView)
+            mapTable.setObject(imageOperation, forKey: object)
         }
         
         if let q = queue {
@@ -77,39 +80,74 @@ public class ImageController {
             imageOperation.enqueue(on: internalQueue)
         }
     }
+}
+
+public struct AnimationOptions
+{
+    let duration: TimeInterval
+    let options: UIViewAnimationOptions
     
-    
-    internal func setImage(_ image: UIImage, toImageView imageView: UIImageView, animated: Bool = false, completion: @escaping (Bool) -> () = { _ in }) {
-        OperationQueue.main.addOperation {
-            if animated {
-                UIView.transition(with: imageView,
-                                  duration: 0.1,
-                                  options: .transitionCrossDissolve,
-                                  animations: {
-                                    imageView.image = image
-                }, completion: completion)
-            } else {
-                imageView.image = image
-                completion(true)
-            }
-        }
+    init(duration: TimeInterval, options: UIViewAnimationOptions) {
+        self.duration = duration
+        self.options = options
     }
 }
 
 public extension UIImageView {
-    public func setImage(_ url: URL, queue: OperationQueue? = nil, animated: Bool = false, completion: @escaping (Bool) -> () = { _ in }) {
-        ImageController.sharedInstance.setImage(URLRequestable(url), onImageView: self, queue: queue, animated: animated, completion: completion)
+    public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
+        self.setImage(URLRequestable(url), queue: queue, animation: animation, completion: completion)
     }
-
-    public func setImage(_ requestable: Requestable, queue: OperationQueue? = nil, animated: Bool = false, completion: @escaping (Bool) -> () = { _ in }) {
-        ImageController.sharedInstance.setImage(requestable, onImageView: self, queue: queue, animated: animated, completion: completion)
+    
+    public func setImage(_ requestable: Requestable, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
+        ImageController.sharedInstance.getImage(requestable, object: self, queue: queue) { image, imageView in
+            OperationQueue.main.addOperation {
+                if let animationOptions = animation {
+                    UIView.transition(with: imageView,
+                                      duration: animationOptions.duration,
+                                      options: animationOptions.options,
+                                      animations: {
+                                        imageView.image = image
+                    }, completion: completion)
+                } else {
+                    imageView.image = image
+                    completion(true)
+                }
+            }
+        }
     }
     
     public func cancelImage() {
-        ImageController.sharedInstance.cancelOperation(forImageView: self)
+        ImageController.sharedInstance.cancelOperation(forObject: self)
     }
 }
 
+public extension UIButton {
+    public func setImage(_ url: URL, for state: UIControlState, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
+        self.setImage(URLRequestable(url), for: state, queue: queue, animation: animation, completion: completion)
+    }
+    
+    public func setImage(_ requestable: Requestable, for state: UIControlState, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
+        ImageController.sharedInstance.getImage(requestable, object: self, queue: queue) { image, button in
+            OperationQueue.main.addOperation {
+                if let animationOptions = animation {
+                    UIView.transition(with: button,
+                                      duration: animationOptions.duration,
+                                      options: animationOptions.options,
+                                      animations: {
+                                        button.setImage(image, for: state)
+                    }, completion: completion)
+                } else {
+                    button.setImage(image, for: state)
+                    completion(true)
+                }
+            }
+        }
+    }
+    
+    public func cancelImage() {
+        ImageController.sharedInstance.cancelOperation(forObject: self)
+    }
+}
 
 /// Emulate the functionality of ObjC's @synchronized
 func synchronized(_ lock: AnyObject, block:() throws -> Void) rethrows {
