@@ -12,6 +12,19 @@ import OHHTTPStubs
 
 class ImageControllerTests: XCTestCase {
     
+    func testSharedInstance() {
+        XCTAssert(ImageController.sharedInstance === ImageController.sharedInstance)
+    }
+    
+    func testSetSharedInstance() {
+        let original = ImageController.sharedInstance
+        let new = ImageController(URLSession())
+        
+        ImageController.sharedInstance = new
+        XCTAssertFalse(ImageController.sharedInstance === original)
+        XCTAssert(ImageController.sharedInstance === new)
+    }
+    
     func testGetImage() {
         let expect = expectation(description: "")
         

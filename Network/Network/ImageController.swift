@@ -12,14 +12,16 @@ import UIKit
 /// Manages starting, cancellung, and mapping  of download operations.
 public class ImageController {
     
-    static let sharedInstance = ImageController()
+    static var sharedInstance = ImageController()
     
     let internalQueue = OperationQueue()
     let mapTable = NSMapTable<NSObject, ImageOperation>.weakToWeakObjects()
     let cache = NSCache<NSURL, UIImage>()
-    
-    public init() {
+    let session: URLSession
+
+    public init(_ session: URLSession = URLSession.shared) {
         cache.totalCostLimit = 128 * 1024 * 1024;
+        self.session = session
     }
     
     
@@ -48,7 +50,7 @@ public class ImageController {
         }
         
         // Create an operation to fetch the image data
-        let imageOperation = ImageOperation(requestable)
+        let imageOperation = ImageOperation(requestable, session: session)
         imageOperation.addResultBlock { result in
             // Ensure that the operation completing is the most recent
             if let currentOperation = self.mapTable.object(forKey: object) {
