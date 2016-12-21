@@ -87,18 +87,18 @@ public struct AnimationOptions
     let duration: TimeInterval
     let options: UIViewAnimationOptions
     
-    init(duration: TimeInterval, options: UIViewAnimationOptions) {
+    public init(duration: TimeInterval, options: UIViewAnimationOptions) {
         self.duration = duration
         self.options = options
     }
 }
 
 public extension UIImageView {
-    public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
+    public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping () -> () = { _ in }) {
         self.setImage(URLRequestable(url), queue: queue, animation: animation, completion: completion)
     }
     
-    public func setImage(_ requestable: Requestable, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
+    public func setImage(_ requestable: Requestable, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping () -> () = { _ in }) {
         ImageController.sharedInstance.getImage(requestable, object: self, queue: queue) { image, imageView in
             OperationQueue.main.addOperation {
                 if let animationOptions = animation {
@@ -107,10 +107,11 @@ public extension UIImageView {
                                       options: animationOptions.options,
                                       animations: {
                                         imageView.image = image
-                    }, completion: completion)
+                    }, completion: nil)
+                    completion()
                 } else {
                     imageView.image = image
-                    completion(true)
+                    completion()
                 }
             }
         }
@@ -127,17 +128,19 @@ public extension UIButton {
     }
     
     public func setImage(_ requestable: Requestable, for state: UIControlState, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
-        ImageController.sharedInstance.getImage(requestable, object: self, queue: queue) { image, button in
+        // Cannot use self as the object, as you may want to request multiple images - one for each state
+        let object: NSString = NSString.init(format: "%d%d", self.hash, state.rawValue)
+        ImageController.sharedInstance.getImage(requestable, object: object, queue: queue) { image, button in
             OperationQueue.main.addOperation {
                 if let animationOptions = animation {
-                    UIView.transition(with: button,
+                    UIView.transition(with: self,
                                       duration: animationOptions.duration,
                                       options: animationOptions.options,
                                       animations: {
-                                        button.setImage(image, for: state)
+                                        self.setImage(image, for: state)
                     }, completion: completion)
                 } else {
-                    button.setImage(image, for: state)
+                    self.setImage(image, for: state)
                     completion(true)
                 }
             }
