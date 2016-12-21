@@ -22,6 +22,6 @@ public enum SerializationError: Error {
 /// - authentication: The server responsed with a 401
 /// - unknown:        The server responsed with a status code outside the range 200-300
 public enum ServerError: Error {
-    case authentication()
+    case authentication
     case unknown(HTTPURLResponse)
 }

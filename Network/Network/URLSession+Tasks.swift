@@ -26,7 +26,7 @@ extension URLSession {
                     return (response as! T, data)
                 })
             case .needsAuthentication:
-                completion(Result { throw ServerError.authentication() })
+                completion(Result { throw ServerError.authentication })
             case .server(let httpResponse):
                 completion(Result { throw ServerError.unknown(httpResponse) })
             case .device(let error):
@@ -55,7 +55,7 @@ extension URLSession {
                     })
                 }
             case .needsAuthentication:
-                completion(Result { throw ServerError.authentication() })
+                completion(Result { throw ServerError.authentication })
             case .server(let httpResponse):
                 completion(Result { throw ServerError.unknown(httpResponse) })
             case .device(let error):
@@ -84,7 +84,7 @@ extension URLSession {
                     })
                 }
             case .needsAuthentication:
-                completion(Result { throw ServerError.authentication() })
+                completion(Result { throw ServerError.authentication })
             case .server(let httpResponse):
                 completion(Result { throw ServerError.unknown(httpResponse) })
             case .device(let error):
