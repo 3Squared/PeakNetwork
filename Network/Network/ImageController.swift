@@ -12,7 +12,7 @@ import UIKit
 /// Manages starting, cancellung, and mapping  of download operations.
 public class ImageController {
     
-    static var sharedInstance = ImageController()
+    public static var sharedInstance = ImageController()
     
     let internalQueue = OperationQueue()
     let mapTable = NSMapTable<NSObject, ImageOperation>.weakToWeakObjects()
