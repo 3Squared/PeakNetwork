@@ -84,8 +84,8 @@ public class ImageController {
 
 public struct AnimationOptions
 {
-    let duration: TimeInterval
-    let options: UIViewAnimationOptions
+    public let duration: TimeInterval
+    public let options: UIViewAnimationOptions
     
     public init(duration: TimeInterval, options: UIViewAnimationOptions) {
         self.duration = duration
