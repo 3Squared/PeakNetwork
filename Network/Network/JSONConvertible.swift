@@ -8,14 +8,15 @@
 
 import Foundation
 
-public typealias JSON = [String: Any]
+public typealias JSONObject = [String: Any]
+public typealias JSONArray = [Any]
 
-/// Implement this protocol to signify that the object can be initialised with a JSON dictionary
+/// Implement this protocol to signify that the object can be initialised with a JSON object
 public protocol JSONConvertible {
-    init(fromJson json: JSON) throws
-    var json: JSON { get }
+    init(fromJson json: JSONObject) throws
+    var json: JSONObject { get }
 }
 
 public extension JSONConvertible {
-    var json: JSON { return [:] }
+    var json: JSONObject { return [:] }
 }
