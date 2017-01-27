@@ -106,14 +106,14 @@ class ImageControllerTests: XCTestCase {
         let imageView = UIImageView(frame: CGRect.zero)
         
         imageView.setImage(BlockRequestable {
-            return URLRequest(url: URL(string: "https://placehold.it/350x350")!)
+            return URLRequest(url: URL(string: "https://placehold.it/500x500")!)
         }, queue: queue) { finished in
             XCTFail()
         }
         XCTAssertEqual(queue.operations.count, 1)
         
         imageView.setImage(BlockRequestable {
-            return URLRequest(url: URL(string: "https://placehold.it/500x500")!)
+            return URLRequest(url: URL(string: "https://placehold.it/600x600")!)
         }, queue: queue) { finished in
             expect.fulfill()
         }

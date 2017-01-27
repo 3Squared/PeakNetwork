@@ -34,7 +34,7 @@ class CertificatePinningTests: XCTestCase {
         
         networkOperation.enqueue()
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
     
@@ -61,7 +61,7 @@ class CertificatePinningTests: XCTestCase {
         
         networkOperation.enqueue()
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
 }
