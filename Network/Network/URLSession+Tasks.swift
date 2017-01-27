@@ -34,40 +34,12 @@ extension URLSession {
             }
         }
     }
-    
-    /// Create a URLSessionTask for a single object conforming to JSONConstructable.
-    ///
-    /// - parameter request: A URLRequest
-    /// - parameter completion:  A completion block called with a Result containing a JSONConstructable
-    ///
-    /// - returns: A new URLSessionTask.
-    func dataTask<T:JSONConvertible>(forRequest request: URLRequest, completion: @escaping (Result<T>) -> Void) -> URLSessionTask {
-        return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            switch self.valid(response: response, error: error) {
-            case .ok:
-                if let data = data, let json = try? self.json(from: data), let object = json as? [String: Any] {
-                    completion(Result {
-                        return try T(fromJson: object)
-                    })
-                } else {
-                    completion(Result {
-                        throw SerializationError.invalid
-                    })
-                }
-            case .needsAuthentication:
-                completion(Result { throw ServerError.authentication })
-            case .server(let httpResponse):
-                completion(Result { throw ServerError.unknown(httpResponse) })
-            case .device(let error):
-                completion(Result { throw error })
-            }
-        }
-    }
+
     
     /// Create a URLSessionTask for an array of objects conforming to JSONConstructable.
     ///
     /// - parameter request: A URLRequest
-    /// - parameter completion:  A completion block called with a Result containing an array of JSONConstructables
+    /// - parameter completion:  A completion block called with a Result containing an array of JSONConvertibles
     ///
     /// - returns: A new URLSessionTask.
     func dataTask<T:JSONConvertible>(forRequest request: URLRequest, completion: @escaping (Result<[T]>) -> Void) -> URLSessionTask {
@@ -77,6 +49,10 @@ extension URLSession {
                 if let data = data, let json = try? self.json(from: data), let array = json as? [[String: Any]] {
                     completion(Result {
                         return try array.flatMap(T.init)
+                    })
+                } else if let data = data, let json = try? self.json(from: data), let object = json as? [String: Any] {
+                    completion(Result {
+                        return try [T(fromJson: object)]
                     })
                 } else {
                     completion(Result {
@@ -97,6 +73,7 @@ extension URLSession {
     func json(from data: Data) throws -> Any {
         return try JSONSerialization.jsonObject(with: data, options: [])
     }
+    
     
     func valid(response: URLResponse?, error: Error?) -> ResponseStatus {
         if let e = error {
