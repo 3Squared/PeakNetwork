@@ -138,8 +138,8 @@ class NetworkTests: XCTestCase {
         
         networkOperation.addResultBlock { result in
             do {
-                let entity = try result.resolve()
-                XCTAssertEqual(entity.name, "Sam")
+                let entities = try result.resolve()
+                XCTAssertEqual(entities.first?.name, "Sam")
                 expect.fulfill()
             } catch {
                 XCTFail()
@@ -188,7 +188,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = RequestManyOperation<TestEntity>(BlockRequestable {
+        let networkOperation = RequestOperation<TestEntity>(BlockRequestable {
             return URLRequest(url: URL(string: "http://google.com")!)
         })
         
@@ -216,65 +216,6 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = RequestManyOperation<TestEntity>(BlockRequestable {
-            return URLRequest(url: URL(string: "http://google.com")!)
-        })
-        
-        networkOperation.addResultBlock { result in
-            do {
-                let _ = try result.resolve()
-                XCTFail()
-            } catch {
-                switch error {
-                case SerializationError.invalid:
-                    expect.fulfill()
-                default:
-                    XCTFail()
-                }
-            }
-        }
-        
-        networkOperation.enqueue()
-        waitForExpectations(timeout: 1)
-    }
-    
-    func testManyRequestSingleResponseMismatchFailure() {
-        let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
-            return OHHTTPStubsResponse(jsonObject: ["name" : "Sam"], statusCode: 200, headers: [:])
-        }
-        
-        let expect = expectation(description: "")
-        
-        let networkOperation = RequestManyOperation<TestEntity>(BlockRequestable {
-            return URLRequest(url: URL(string: "http://google.com")!)
-        })
-        
-        networkOperation.addResultBlock { result in
-            do {
-                let _ = try result.resolve()
-                XCTFail()
-            } catch {
-                switch error {
-                case SerializationError.invalid:
-                    expect.fulfill()
-                default:
-                    XCTFail()
-                }
-            }
-        }
-        
-        networkOperation.enqueue()
-        waitForExpectations(timeout: 1)
-    }
-    
-    
-    func testSingleRequestManyResponseMismatchFailure() {
-        let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
-            return OHHTTPStubsResponse(jsonObject: [["name" : "Sam"], ["name" : "Ben"]], statusCode: 200, headers: [:])
-        }
-        
-        let expect = expectation(description: "")
-        
         let networkOperation = RequestOperation<TestEntity>(BlockRequestable {
             return URLRequest(url: URL(string: "http://google.com")!)
         })
@@ -296,7 +237,6 @@ class NetworkTests: XCTestCase {
         networkOperation.enqueue()
         waitForExpectations(timeout: 1)
     }
-    
     
     func testNetworkOperationFailureWithRetry() {
         let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in

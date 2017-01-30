@@ -12,7 +12,7 @@ import Network
 struct TestEntity: JSONConvertible {
     let name: String
     
-    init(fromJson json: JSON) throws {
+    init(fromJson json: JSONObject) throws {
         guard let name = json["name"] as? String
             else {
                 throw SerializationError.invalid
