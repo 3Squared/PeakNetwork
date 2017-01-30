@@ -46,19 +46,7 @@ public class BlockRequestable: Requestable {
     }
 }
 
-public class RequestOperation<T:JSONConvertible>: NetworkOperation<T> {
-    public init(_ requestable: Requestable, session: URLSession = URLSession.shared) {
-        super.init()
-        taskMaker = {
-            return session.dataTask(forRequest: requestable.request)  { (result: Result<T>) in
-                self.operationResult = result
-                self.finish()
-            }
-        }
-    }
-}
-
-public class RequestManyOperation<J:JSONConvertible>: NetworkOperation<[J]> {
+public class RequestOperation<J:JSONConvertible>: NetworkOperation<[J]> {
     public init(_ requestable: Requestable, session: URLSession = URLSession.shared) {
         super.init()
         taskMaker = {
