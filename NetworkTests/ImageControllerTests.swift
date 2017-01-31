@@ -145,4 +145,61 @@ class ImageControllerTests: XCTestCase {
         waitForExpectations(timeout: 5)
     }
     
+    func testSecondRequestIsMerged() {
+        let expect1 = expectation(description: "image1")
+        let expect2 = expectation(description: "image2")
+
+        let queue = OperationQueue()
+        
+        let imageView1 = UIImageView(frame: CGRect.zero)
+        imageView1.accessibilityHint = "imageView1"
+        let imageView2 = UIImageView(frame: CGRect.zero)
+        imageView2.accessibilityHint = "imageView2"
+
+        
+        var image1: UIImage?
+        var image2: UIImage?
+
+        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView1, queue: queue) { image, view in
+            image1 = image
+            expect1.fulfill()
+        }
+        
+        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView2, queue: queue) { image, view in
+            image2 = image
+            expect2.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5)
+        
+        XCTAssertNotNil(image1)
+        XCTAssertEqual(image1, image2)
+    }
+
+    func testSecondRequestIsNotCancelledIfFirstIs() {
+        let expect = expectation(description: "")
+        
+        let queue = OperationQueue()
+        
+        let imageView1 = UIImageView(frame: CGRect.zero)
+        imageView1.accessibilityHint = "imageView1"
+        let imageView2 = UIImageView(frame: CGRect.zero)
+        imageView2.accessibilityHint = "imageView2"
+        
+        
+        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView1, queue: queue) { image, view in
+            XCTFail()
+        }
+        
+        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView2, queue: queue) { image, view in
+            XCTAssertNotNil(image)
+            expect.fulfill()
+        }
+        
+        ImageController.sharedInstance.cancelOperation(forObject: imageView1)
+    
+        waitForExpectations(timeout: 5)
+    }
+
+    
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import THRResult
 
 /// Allow remote images to be easilty set on UIImageViews.
 /// Manages starting, cancellung, and mapping  of download operations.
@@ -15,7 +16,9 @@ public class ImageController {
     public static var sharedInstance = ImageController()
     
     let internalQueue = OperationQueue()
-    let mapTable = NSMapTable<NSObject, ImageOperation>.weakToWeakObjects()
+    let objectToOperationTable = NSMapTable<NSObject, ImageOperation>.weakToWeakObjects()
+    let urlToOperationTable = NSMapTable<NSURL, ImageOperation>.weakToWeakObjects()
+
     let cache = NSCache<NSURL, UIImage>()
     let session: URLSession
 
@@ -27,11 +30,11 @@ public class ImageController {
     
     /// Cancel a pending operation on the given object, if one exists.
     public func cancelOperation(forObject object: NSObject) {
-        synchronized(mapTable) {
-            if let previousOperation = mapTable.object(forKey: object) {
+        synchronized(objectToOperationTable) {
+            if let previousOperation = objectToOperationTable.object(forKey: object) {
                 previousOperation.cancel()
             }
-            mapTable.removeObject(forKey: object)
+            objectToOperationTable.removeObject(forKey: object)
         }
     }
     
@@ -43,42 +46,69 @@ public class ImageController {
         cancelOperation(forObject: object)
         
         // Maybe we already have the image in the cache
-        let key = requestable.request.url! as NSURL
-        if let image = cache.object(forKey: key) {
+        let url = requestable.request.url! as NSURL
+        if let image = cache.object(forKey: url) {
             completion(image, object)
             return
         }
         
+        
+        let imageOperation: ImageOperation
+        var attachingToExistingOperation = false
+        // Maybe we already have an operation for that URL
+        if let existingOperation = self.urlToOperationTable.object(forKey: url) {
+            imageOperation = existingOperation
+            attachingToExistingOperation = true
+        } else {
+            // Or make a new one
+            imageOperation = ImageOperation(requestable, session: session)
+        }
+        
         // Create an operation to fetch the image data
-        let imageOperation = ImageOperation(requestable, session: session)
         imageOperation.addResultBlock { result in
             // Ensure that the operation completing is the most recent
-            if let currentOperation = self.mapTable.object(forKey: object) {
+            if let currentOperation = self.objectToOperationTable.object(forKey: object) {
                 if currentOperation == imageOperation {
                     do {
                         let image = try result.resolve()
-                        self.cache.setObject(image, forKey: key)
+                        self.cache.setObject(image, forKey: url)
                         completion(image, object)
                     } catch {
                         completion(nil, object)
                     }
                     
-                    synchronized(self.mapTable) {
-                        self.mapTable.removeObject(forKey: object)
+                    
+                    synchronized(self.urlToOperationTable) {
+                        self.urlToOperationTable.removeObject(forKey: url)
+                    }
+                    
+                    synchronized(self.objectToOperationTable) {
+                        self.objectToOperationTable.removeObject(forKey: object)
                     }
                 }
             }
         }
         
-        synchronized(mapTable) {
-            mapTable.setObject(imageOperation, forKey: object)
+        synchronized(objectToOperationTable) {
+            objectToOperationTable.setObject(imageOperation, forKey: object)
         }
         
-        if let q = queue {
-            imageOperation.enqueue(on: q)
-        } else {
-            imageOperation.enqueue(on: internalQueue)
+
+        // If we have made a new operation, queue it
+        if !attachingToExistingOperation {
+            synchronized(urlToOperationTable) {
+                urlToOperationTable.setObject(imageOperation, forKey: url)
+            }
+            if let q = queue {
+                imageOperation.enqueue(on: q)
+            } else {
+                imageOperation.enqueue(on: internalQueue)
+            }
         }
+    }
+    
+    private func resultBlock(result: Result<UIImage>) {
+        
     }
 }
 
