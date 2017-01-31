@@ -12,6 +12,30 @@ import OHHTTPStubs
 
 class ImageControllerTests: XCTestCase {
     
+    override func setUp() {
+        super.setUp()
+        
+        let new = ImageController()
+        ImageController.sharedInstance = new
+
+        let bundle = Bundle(for: type(of: self))
+        let data300 = try! Data(contentsOf: bundle.url(forResource: "300", withExtension: "png")!)
+        let _ = stub(condition: isPath("/300")) { _ -> OHHTTPStubsResponse in
+            return OHHTTPStubsResponse(data: data300, statusCode: 200, headers: nil)
+        }
+        
+        let data600 = try! Data(contentsOf: bundle.url(forResource: "600", withExtension: "png")!)
+        let _ = stub(condition: isPath("/600")) { _ -> OHHTTPStubsResponse in
+            return OHHTTPStubsResponse(data: data600, statusCode: 200, headers: nil)
+        }
+
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+        OHHTTPStubs.removeAllStubs()
+    }
+    
     func testSharedInstance() {
         XCTAssert(ImageController.sharedInstance === ImageController.sharedInstance)
     }
@@ -30,7 +54,7 @@ class ImageControllerTests: XCTestCase {
         
         let context: NSString = "Hello"
 
-        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/350x350")!), object: context) { image, thing in
+        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: context) { image, thing in
             XCTAssertEqual(context, thing)
             XCTAssertNotNil(image)
             expect.fulfill()
@@ -45,7 +69,7 @@ class ImageControllerTests: XCTestCase {
         let imageView = UIImageView(frame: CGRect.zero)
         
         XCTAssertNil(imageView.image)
-        imageView.setImage(URL(string: "https://placehold.it/350x350")!) { finished in
+        imageView.setImage(URL(string: "https://placehold.it/300")!) { finished in
             XCTAssertNotNil(imageView.image)
             expect.fulfill()
         }
@@ -58,7 +82,7 @@ class ImageControllerTests: XCTestCase {
         let imageView = UIImageView(frame: CGRect.zero)
         
         XCTAssertNil(imageView.image)
-        imageView.setImage(URL(string: "https://placehold.it/350x350")!, animation: AnimationOptions(duration: 0.1, options: .transitionCrossDissolve)) { finished in
+        imageView.setImage(URL(string: "https://placehold.it/300")!, animation: AnimationOptions(duration: 0.1, options: .transitionCrossDissolve)) { finished in
             XCTAssertNotNil(imageView.image)
             expect.fulfill()
         }
@@ -71,7 +95,7 @@ class ImageControllerTests: XCTestCase {
         let button = UIButton(frame: CGRect.zero)
         
         XCTAssertNil(button.image(for: .normal))
-        button.setImage(URL(string: "https://placehold.it/350x350")!, for: .normal) { finished in
+        button.setImage(URL(string: "https://placehold.it/300")!, for: .normal) { finished in
             XCTAssertNotNil(button.image(for: .normal))
             expect.fulfill()
         }
@@ -85,7 +109,7 @@ class ImageControllerTests: XCTestCase {
         let imageView = UIImageView(frame: CGRect.zero)
         
         imageView.setImage(BlockRequestable {
-            return URLRequest(url: URL(string: "https://placehold.it/350x350")!)
+            return URLRequest(url: URL(string: "https://placehold.it/300")!)
         }, queue: queue) { finished in
             XCTFail()
         }
@@ -106,14 +130,14 @@ class ImageControllerTests: XCTestCase {
         let imageView = UIImageView(frame: CGRect.zero)
         
         imageView.setImage(BlockRequestable {
-            return URLRequest(url: URL(string: "https://placehold.it/500x500")!)
+            return URLRequest(url: URL(string: "https://placehold.it/300")!)
         }, queue: queue) { finished in
             XCTFail()
         }
         XCTAssertEqual(queue.operations.count, 1)
         
         imageView.setImage(BlockRequestable {
-            return URLRequest(url: URL(string: "https://placehold.it/600x600")!)
+            return URLRequest(url: URL(string: "https://placehold.it/600")!)
         }, queue: queue) { finished in
             expect.fulfill()
         }
