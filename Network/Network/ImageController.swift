@@ -16,12 +16,13 @@ public class ImageController {
     public static var sharedInstance = ImageController()
     
     let internalQueue = OperationQueue()
-    let objectToOperationTable = NSMapTable<NSObject, ImageOperation>.weakToWeakObjects()
-    let urlToOperationTable = NSMapTable<NSURL, ImageOperation>.weakToWeakObjects()
+    let urlToOperationTable = NSMapTable<NSURL, ImageOperation>.strongToWeakObjects()
+    let objectToUrlTable = NSMapTable<NSObject, NSURL>.weakToStrongObjects()
+    let urlsToObjectsTable = NSMapTable<NSURL, NSMutableSet>.weakToStrongObjects()
 
     let cache = NSCache<NSURL, UIImage>()
     let session: URLSession
-
+    
     public init(_ session: URLSession = URLSession.shared) {
         cache.totalCostLimit = 128 * 1024 * 1024;
         self.session = session
@@ -30,12 +31,26 @@ public class ImageController {
     
     /// Cancel a pending operation on the given object, if one exists.
     public func cancelOperation(forObject object: NSObject) {
-        synchronized(objectToOperationTable) {
-            if let previousOperation = objectToOperationTable.object(forKey: object) {
-                previousOperation.cancel()
+        if let url = objectToUrlTable.object(forKey: object) {
+            let objects = urlsToObjectsTable.object(forKey: url)
+            objects?.remove(object)
+            if objects?.count == 0 {
+                urlToOperationTable.object(forKey: url)?.cancel()
+                urlToOperationTable.removeObject(forKey: url)
             }
-            objectToOperationTable.removeObject(forKey: object)
         }
+        objectToUrlTable.removeObject(forKey: object)
+    }
+    
+    public func completeOperation(forObject object: NSObject) {
+        if let url = objectToUrlTable.object(forKey: object) {
+            let objects = urlsToObjectsTable.object(forKey: url)
+            objects?.remove(object)
+            if objects?.count == 0 {
+                urlToOperationTable.removeObject(forKey: url)
+            }
+        }
+        objectToUrlTable.removeObject(forKey: object)
     }
     
     
@@ -52,59 +67,50 @@ public class ImageController {
             return
         }
         
-        
         let imageOperation: ImageOperation
-        var attachingToExistingOperation = false
-        // Maybe we already have an operation for that URL
-        if let existingOperation = self.urlToOperationTable.object(forKey: url) {
+        var usingExisting = false
+        if let existingOperation = urlToOperationTable.object(forKey: url) {
             imageOperation = existingOperation
-            attachingToExistingOperation = true
+            usingExisting = true
         } else {
-            // Or make a new one
             imageOperation = ImageOperation(requestable, session: session)
         }
         
         // Create an operation to fetch the image data
         imageOperation.addResultBlock { result in
-            // Ensure that the operation completing is the most recent
-            if let currentOperation = self.objectToOperationTable.object(forKey: object) {
-                if currentOperation == imageOperation {
-                    do {
-                        let image = try result.resolve()
-                        self.cache.setObject(image, forKey: url)
-                        completion(image, object)
-                    } catch {
-                        completion(nil, object)
-                    }
-                    
-                    
-                    synchronized(self.urlToOperationTable) {
-                        self.urlToOperationTable.removeObject(forKey: url)
-                    }
-                    
-                    synchronized(self.objectToOperationTable) {
-                        self.objectToOperationTable.removeObject(forKey: object)
-                    }
+            if imageOperation.isCancelled {
+                completion(nil, object)
+            } else {
+                do {
+                    let image = try result.resolve()
+                    self.cache.setObject(image, forKey: url)
+                    completion(image, object)
+                } catch {
+                    completion(nil, object)
                 }
             }
+            
+            self.completeOperation(forObject: object)
         }
         
-        synchronized(objectToOperationTable) {
-            objectToOperationTable.setObject(imageOperation, forKey: object)
+        urlToOperationTable.setObject(imageOperation, forKey: url)
+        objectToUrlTable.setObject(url, forKey: object)
+        
+        if let objects =  urlsToObjectsTable.object(forKey: url) {
+            objects.add(object)
+        } else {
+            urlsToObjectsTable.setObject(NSMutableSet(), forKey: url)
+            urlsToObjectsTable.object(forKey: url)?.add(object)
         }
         
-
-        // If we have made a new operation, queue it
-        if !attachingToExistingOperation {
-            synchronized(urlToOperationTable) {
-                urlToOperationTable.setObject(imageOperation, forKey: url)
-            }
+        if !usingExisting {
             if let q = queue {
                 imageOperation.enqueue(on: q)
             } else {
                 imageOperation.enqueue(on: internalQueue)
             }
         }
+    
     }
     
     private func resultBlock(result: Result<UIImage>) {
@@ -124,13 +130,17 @@ public struct AnimationOptions
 }
 
 public extension UIImageView {
-    public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping () -> () = { _ in }) {
+    public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
         self.setImage(URLRequestable(url), queue: queue, animation: animation, completion: completion)
     }
     
-    public func setImage(_ requestable: Requestable, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping () -> () = { _ in }) {
+    public func setImage(_ requestable: Requestable, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
         ImageController.sharedInstance.getImage(requestable, object: self, queue: queue) { image, imageView in
             OperationQueue.main.addOperation {
+                if image == nil {
+                    completion(false)
+                    return
+                }
                 if let animationOptions = animation {
                     UIView.transition(with: imageView,
                                       duration: animationOptions.duration,
@@ -138,11 +148,10 @@ public extension UIImageView {
                                       animations: {
                                         imageView.image = image
                     }, completion: nil)
-                    completion()
                 } else {
                     imageView.image = image
-                    completion()
                 }
+                completion(true)
             }
         }
     }
@@ -162,17 +171,21 @@ public extension UIButton {
         let object: NSString = NSString.init(format: "%d%d", self.hash, state.rawValue)
         ImageController.sharedInstance.getImage(requestable, object: object, queue: queue) { image, button in
             OperationQueue.main.addOperation {
+                if image == nil {
+                    completion(false)
+                    return
+                }
                 if let animationOptions = animation {
                     UIView.transition(with: self,
                                       duration: animationOptions.duration,
                                       options: animationOptions.options,
                                       animations: {
                                         self.setImage(image, for: state)
-                    }, completion: completion)
+                    }, completion: nil)
                 } else {
                     self.setImage(image, for: state)
-                    completion(true)
                 }
+                completion(true)
             }
         }
     }

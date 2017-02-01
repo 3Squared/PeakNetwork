@@ -21,12 +21,12 @@ class ImageControllerTests: XCTestCase {
         let bundle = Bundle(for: type(of: self))
         let data300 = try! Data(contentsOf: bundle.url(forResource: "300", withExtension: "png")!)
         let _ = stub(condition: isPath("/300")) { _ -> OHHTTPStubsResponse in
-            return OHHTTPStubsResponse(data: data300, statusCode: 200, headers: nil)
+            return OHHTTPStubsResponse(data: data300, statusCode: 200, headers: nil).responseTime(1)
         }
         
         let data600 = try! Data(contentsOf: bundle.url(forResource: "600", withExtension: "png")!)
         let _ = stub(condition: isPath("/600")) { _ -> OHHTTPStubsResponse in
-            return OHHTTPStubsResponse(data: data600, statusCode: 200, headers: nil)
+            return OHHTTPStubsResponse(data: data600, statusCode: 200, headers: nil).responseTime(1)
         }
 
     }
@@ -69,8 +69,9 @@ class ImageControllerTests: XCTestCase {
         let imageView = UIImageView(frame: CGRect.zero)
         
         XCTAssertNil(imageView.image)
-        imageView.setImage(URL(string: "https://placehold.it/300")!) { finished in
+        imageView.setImage(URL(string: "https://placehold.it/300")!) { success in
             XCTAssertNotNil(imageView.image)
+            XCTAssertTrue(success)
             expect.fulfill()
         }
         
@@ -82,8 +83,9 @@ class ImageControllerTests: XCTestCase {
         let imageView = UIImageView(frame: CGRect.zero)
         
         XCTAssertNil(imageView.image)
-        imageView.setImage(URL(string: "https://placehold.it/300")!, animation: AnimationOptions(duration: 0.1, options: .transitionCrossDissolve)) { finished in
+        imageView.setImage(URL(string: "https://placehold.it/300")!, animation: AnimationOptions(duration: 0.1, options: .transitionCrossDissolve)) { success in
             XCTAssertNotNil(imageView.image)
+            XCTAssertTrue(success)
             expect.fulfill()
         }
         
@@ -95,12 +97,13 @@ class ImageControllerTests: XCTestCase {
         let button = UIButton(frame: CGRect.zero)
         
         XCTAssertNil(button.image(for: .normal))
-        button.setImage(URL(string: "https://placehold.it/300")!, for: .normal) { finished in
+        button.setImage(URL(string: "https://placehold.it/300")!, for: .normal) { success in
             XCTAssertNotNil(button.image(for: .normal))
+            XCTAssertTrue(success)
             expect.fulfill()
         }
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 2)
     }
     
     func testCancellingImage() {
@@ -108,10 +111,9 @@ class ImageControllerTests: XCTestCase {
         
         let imageView = UIImageView(frame: CGRect.zero)
         
-        imageView.setImage(BlockRequestable {
-            return URLRequest(url: URL(string: "https://placehold.it/300")!)
-        }, queue: queue) { finished in
-            XCTFail()
+        imageView.setImage(URLRequestable(URL(string: "https://placehold.it/300")!), queue: queue) { success in
+            XCTAssertNil(imageView.image)
+            XCTAssertFalse(success)
         }
         XCTAssertEqual(queue.operations.count, 1)
         imageView.cancelImage()
@@ -129,16 +131,13 @@ class ImageControllerTests: XCTestCase {
         
         let imageView = UIImageView(frame: CGRect.zero)
         
-        imageView.setImage(BlockRequestable {
-            return URLRequest(url: URL(string: "https://placehold.it/300")!)
-        }, queue: queue) { finished in
-            XCTFail()
+        imageView.setImage(URLRequestable(URL(string: "https://placehold.it/300")!), queue: queue) { success in
+            XCTAssertFalse(success)
         }
         XCTAssertEqual(queue.operations.count, 1)
         
-        imageView.setImage(BlockRequestable {
-            return URLRequest(url: URL(string: "https://placehold.it/600")!)
-        }, queue: queue) { finished in
+        imageView.setImage(URLRequestable(URL(string: "https://placehold.it/600")!), queue: queue) { success in
+            XCTAssertTrue(success)
             expect.fulfill()
         }
 
@@ -188,7 +187,7 @@ class ImageControllerTests: XCTestCase {
         
         
         ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView1, queue: queue) { image, view in
-            XCTFail()
+            XCTAssertNil(imageView1.image)
         }
         
         ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView2, queue: queue) { image, view in
