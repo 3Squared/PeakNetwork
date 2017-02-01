@@ -21,6 +21,7 @@ open class NetworkOperation<T>: RetryingOperation<T> {
     }
     
     override open func cancel() {
+        super.cancel()
         task?.cancel()
     }
 }
