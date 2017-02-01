@@ -55,7 +55,7 @@ public class ImageController {
     
     
     /// Get an image available at the URL described by a Requestable. object is a unique key, such as an ImageView.
-    public func getImage<T: NSObject>(_ requestable: Requestable, object: T, queue: OperationQueue? = nil, completion: @escaping (UIImage?, T) -> ()) {
+    public func getImage<T: NSObject>(_ requestable: Requestable, object: T, queue: OperationQueue? = nil, completion: @escaping (UIImage?, T, Source) -> ()) {
         
         // Cancel any in-flight operation for the same object
         cancelOperation(forObject: object)
@@ -63,7 +63,7 @@ public class ImageController {
         // Maybe we already have the image in the cache
         let url = requestable.request.url! as NSURL
         if let image = cache.object(forKey: url) {
-            completion(image, object)
+            completion(image, object, .cache)
             return
         }
         
@@ -79,14 +79,14 @@ public class ImageController {
         // Create an operation to fetch the image data
         imageOperation.addResultBlock { result in
             if imageOperation.isCancelled {
-                completion(nil, object)
+                completion(nil, object, .network)
             } else {
                 do {
                     let image = try result.resolve()
                     self.cache.setObject(image, forKey: url)
-                    completion(image, object)
+                    completion(image, object, .network)
                 } catch {
-                    completion(nil, object)
+                    completion(nil, object, .network)
                 }
             }
             
@@ -118,8 +118,12 @@ public class ImageController {
     }
 }
 
-public struct AnimationOptions
-{
+public enum Source {
+    case cache
+    case network
+}
+
+public struct AnimationOptions {
     public let duration: TimeInterval
     public let options: UIViewAnimationOptions
     
@@ -135,13 +139,13 @@ public extension UIImageView {
     }
     
     public func setImage(_ requestable: Requestable, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
-        ImageController.sharedInstance.getImage(requestable, object: self, queue: queue) { image, imageView in
+        ImageController.sharedInstance.getImage(requestable, object: self, queue: queue) { image, imageView, source in
             OperationQueue.main.addOperation {
                 if image == nil {
                     completion(false)
                     return
                 }
-                if let animationOptions = animation {
+                if source == .network, let animationOptions = animation {
                     UIView.transition(with: imageView,
                                       duration: animationOptions.duration,
                                       options: animationOptions.options,
@@ -169,13 +173,13 @@ public extension UIButton {
     public func setImage(_ requestable: Requestable, for state: UIControlState, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
         // Cannot use self as the object, as you may want to request multiple images - one for each state
         let object: NSString = NSString.init(format: "%d%d", self.hash, state.rawValue)
-        ImageController.sharedInstance.getImage(requestable, object: object, queue: queue) { image, button in
+        ImageController.sharedInstance.getImage(requestable, object: object, queue: queue) { image, button, source in
             OperationQueue.main.addOperation {
                 if image == nil {
                     completion(false)
                     return
                 }
-                if let animationOptions = animation {
+                if source == .network, let animationOptions = animation {
                     UIView.transition(with: self,
                                       duration: animationOptions.duration,
                                       options: animationOptions.options,

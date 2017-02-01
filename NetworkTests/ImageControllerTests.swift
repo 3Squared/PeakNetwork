@@ -54,7 +54,7 @@ class ImageControllerTests: XCTestCase {
         
         let context: NSString = "Hello"
 
-        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: context) { image, thing in
+        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: context) { image, thing, source in
             XCTAssertEqual(context, thing)
             XCTAssertNotNil(image)
             expect.fulfill()
@@ -159,12 +159,12 @@ class ImageControllerTests: XCTestCase {
         var image1: UIImage?
         var image2: UIImage?
 
-        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView1, queue: queue) { image, view in
+        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView1, queue: queue) { image, view, source in
             image1 = image
             expect1.fulfill()
         }
         
-        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView2, queue: queue) { image, view in
+        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView2, queue: queue) { image, view, source in
             image2 = image
             expect2.fulfill()
         }
@@ -186,11 +186,11 @@ class ImageControllerTests: XCTestCase {
         imageView2.accessibilityHint = "imageView2"
         
         
-        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView1, queue: queue) { image, view in
+        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView1, queue: queue) { image, view, source in
             XCTAssertNil(imageView1.image)
         }
         
-        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView2, queue: queue) { image, view in
+        ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView2, queue: queue) { image, view, source in
             XCTAssertNotNil(image)
             expect.fulfill()
         }
