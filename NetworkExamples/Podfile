@@ -1,0 +1,10 @@
+platform :ios, '9.0'
+
+source 'https://github.com/CocoaPods/Specs.git'
+source 'git@gitlab.3squared.com:iOSLibraries/CocoaPodSpecs.git'
+
+target 'NetworkExamples' do
+  use_frameworks!
+
+  pod 'THRNetwork', :path => '../'
+end
