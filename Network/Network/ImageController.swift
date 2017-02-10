@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import THRResult
 
 /// Allow remote images to be easilty set on UIImageViews.
 /// Manages starting, cancellung, and mapping  of download operations.
@@ -15,10 +16,13 @@ public class ImageController {
     public static var sharedInstance = ImageController()
     
     let internalQueue = OperationQueue()
-    let mapTable = NSMapTable<NSObject, ImageOperation>.weakToWeakObjects()
+    let urlToOperationTable = NSMapTable<NSURL, ImageOperation>.strongToWeakObjects()
+    let objectToUrlTable = NSMapTable<NSObject, NSURL>.weakToStrongObjects()
+    let urlsToObjectsTable = NSMapTable<NSURL, NSMutableSet>.weakToStrongObjects()
+
     let cache = NSCache<NSURL, UIImage>()
     let session: URLSession
-
+    
     public init(_ session: URLSession = URLSession.shared) {
         cache.totalCostLimit = 128 * 1024 * 1024;
         self.session = session
@@ -27,63 +31,99 @@ public class ImageController {
     
     /// Cancel a pending operation on the given object, if one exists.
     public func cancelOperation(forObject object: NSObject) {
-        synchronized(mapTable) {
-            if let previousOperation = mapTable.object(forKey: object) {
-                previousOperation.cancel()
+        if let url = objectToUrlTable.object(forKey: object) {
+            let objects = urlsToObjectsTable.object(forKey: url)
+            objects?.remove(object)
+            if objects?.count == 0 {
+                urlToOperationTable.object(forKey: url)?.cancel()
+                urlToOperationTable.removeObject(forKey: url)
             }
-            mapTable.removeObject(forKey: object)
         }
+        objectToUrlTable.removeObject(forKey: object)
+    }
+    
+    public func completeOperation(forObject object: NSObject) {
+        if let url = objectToUrlTable.object(forKey: object) {
+            let objects = urlsToObjectsTable.object(forKey: url)
+            objects?.remove(object)
+            if objects?.count == 0 {
+                urlToOperationTable.removeObject(forKey: url)
+            }
+        }
+        objectToUrlTable.removeObject(forKey: object)
     }
     
     
     /// Get an image available at the URL described by a Requestable. object is a unique key, such as an ImageView.
-    public func getImage<T: NSObject>(_ requestable: Requestable, object: T, queue: OperationQueue? = nil, completion: @escaping (UIImage?, T) -> ()) {
+    public func getImage<T: NSObject>(_ requestable: Requestable, object: T, queue: OperationQueue? = nil, completion: @escaping (UIImage?, T, Source) -> ()) {
         
         // Cancel any in-flight operation for the same object
         cancelOperation(forObject: object)
         
         // Maybe we already have the image in the cache
-        let key = requestable.request.url! as NSURL
-        if let image = cache.object(forKey: key) {
-            completion(image, object)
+        let url = requestable.request.url! as NSURL
+        if let image = cache.object(forKey: url) {
+            completion(image, object, .cache)
             return
         }
         
+        let imageOperation: ImageOperation
+        var usingExisting = false
+        if let existingOperation = urlToOperationTable.object(forKey: url) {
+            imageOperation = existingOperation
+            usingExisting = true
+        } else {
+            imageOperation = ImageOperation(requestable, session: session)
+        }
+        
         // Create an operation to fetch the image data
-        let imageOperation = ImageOperation(requestable, session: session)
         imageOperation.addResultBlock { result in
-            // Ensure that the operation completing is the most recent
-            if let currentOperation = self.mapTable.object(forKey: object) {
-                if currentOperation == imageOperation {
-                    do {
-                        let image = try result.resolve()
-                        self.cache.setObject(image, forKey: key)
-                        completion(image, object)
-                    } catch {
-                        completion(nil, object)
-                    }
-                    
-                    synchronized(self.mapTable) {
-                        self.mapTable.removeObject(forKey: object)
-                    }
+            if imageOperation.isCancelled {
+                completion(nil, object, .network)
+            } else {
+                do {
+                    let image = try result.resolve()
+                    self.cache.setObject(image, forKey: url)
+                    completion(image, object, .network)
+                } catch {
+                    completion(nil, object, .network)
                 }
             }
+            
+            self.completeOperation(forObject: object)
         }
         
-        synchronized(mapTable) {
-            mapTable.setObject(imageOperation, forKey: object)
-        }
+        urlToOperationTable.setObject(imageOperation, forKey: url)
+        objectToUrlTable.setObject(url, forKey: object)
         
-        if let q = queue {
-            imageOperation.enqueue(on: q)
+        if let objects =  urlsToObjectsTable.object(forKey: url) {
+            objects.add(object)
         } else {
-            imageOperation.enqueue(on: internalQueue)
+            urlsToObjectsTable.setObject(NSMutableSet(), forKey: url)
+            urlsToObjectsTable.object(forKey: url)?.add(object)
         }
+        
+        if !usingExisting {
+            if let q = queue {
+                imageOperation.enqueue(on: q)
+            } else {
+                imageOperation.enqueue(on: internalQueue)
+            }
+        }
+    
+    }
+    
+    private func resultBlock(result: Result<UIImage>) {
+        
     }
 }
 
-public struct AnimationOptions
-{
+public enum Source {
+    case cache
+    case network
+}
+
+public struct AnimationOptions {
     public let duration: TimeInterval
     public let options: UIViewAnimationOptions
     
@@ -94,25 +134,28 @@ public struct AnimationOptions
 }
 
 public extension UIImageView {
-    public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping () -> () = { _ in }) {
+    public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
         self.setImage(URLRequestable(url), queue: queue, animation: animation, completion: completion)
     }
     
-    public func setImage(_ requestable: Requestable, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping () -> () = { _ in }) {
-        ImageController.sharedInstance.getImage(requestable, object: self, queue: queue) { image, imageView in
+    public func setImage(_ requestable: Requestable, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
+        ImageController.sharedInstance.getImage(requestable, object: self, queue: queue) { image, imageView, source in
             OperationQueue.main.addOperation {
-                if let animationOptions = animation {
+                if image == nil {
+                    completion(false)
+                    return
+                }
+                if source == .network, let animationOptions = animation {
                     UIView.transition(with: imageView,
                                       duration: animationOptions.duration,
                                       options: animationOptions.options,
                                       animations: {
                                         imageView.image = image
                     }, completion: nil)
-                    completion()
                 } else {
                     imageView.image = image
-                    completion()
                 }
+                completion(true)
             }
         }
     }
@@ -130,19 +173,23 @@ public extension UIButton {
     public func setImage(_ requestable: Requestable, for state: UIControlState, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
         // Cannot use self as the object, as you may want to request multiple images - one for each state
         let object: NSString = NSString.init(format: "%d%d", self.hash, state.rawValue)
-        ImageController.sharedInstance.getImage(requestable, object: object, queue: queue) { image, button in
+        ImageController.sharedInstance.getImage(requestable, object: object, queue: queue) { image, button, source in
             OperationQueue.main.addOperation {
-                if let animationOptions = animation {
+                if image == nil {
+                    completion(false)
+                    return
+                }
+                if source == .network, let animationOptions = animation {
                     UIView.transition(with: self,
                                       duration: animationOptions.duration,
                                       options: animationOptions.options,
                                       animations: {
                                         self.setImage(image, for: state)
-                    }, completion: completion)
+                    }, completion: nil)
                 } else {
                     self.setImage(image, for: state)
-                    completion(true)
                 }
+                completion(true)
             }
         }
     }

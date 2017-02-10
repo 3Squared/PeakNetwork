@@ -1,0 +1,22 @@
+PODS:
+  - THRNetwork (0.1.0):
+    - THROperations (~> 0.0.1)
+  - THROperations (0.0.2):
+    - THRResult (~> 0.0.1)
+  - THRResult (0.0.1)
+
+DEPENDENCIES:
+  - THRNetwork (from `../`)
+
+EXTERNAL SOURCES:
+  THRNetwork:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  THRNetwork: ff33c9df5410435cbb1821ba3aafcdd5d5d9a442
+  THROperations: c2a652d2425eb854c541f3dbeb37dbf25ea05516
+  THRResult: 173d7193812ef859e14c8fdbe8cd81e9deea5db4
+
+PODFILE CHECKSUM: eff8274b713db994baef2049334114d67609d38b
+
+COCOAPODS: 1.1.1

@@ -21,6 +21,7 @@ open class NetworkOperation<T>: RetryingOperation<T> {
     }
     
     override open func cancel() {
+        super.cancel()
         task?.cancel()
     }
 }
@@ -51,7 +52,7 @@ public class RequestOperation<J:JSONConvertible>: NetworkOperation<[J]> {
         super.init()
         taskMaker = {
             return session.dataTask(forRequest: requestable.request) { (result: Result<[J]>) in
-                self.operationResult = result
+                self.output = result
                 self.finish()
             }
         }
@@ -65,9 +66,9 @@ public class URLResponseOperation: NetworkOperation<HTTPURLResponse> {
             return session.dataTask(forRequest: requestable.request)  { (result: Result<(HTTPURLResponse, Data?)>) in
                 do {
                     let (response, _) = try result.resolve()
-                    self.operationResult = Result { return response }
+                    self.output = Result { return response }
                 } catch {
-                    self.operationResult = Result { throw error }
+                    self.output = Result { throw error }
                 }
                 self.finish()
             }
@@ -83,12 +84,12 @@ public class DataOperation: NetworkOperation<Data> {
                 do {
                     let (_, data) = try result.resolve()
                     if let d = data {
-                        self.operationResult = Result { return d }
+                        self.output = Result { return d }
                     } else {
-                        self.operationResult = Result { throw OperationError.noResult }
+                        self.output = Result { throw OperationError.noResult }
                     }
                 } catch {
-                    self.operationResult = Result { throw error }
+                    self.output = Result { throw error }
                 }
                 self.finish()
             }
@@ -104,12 +105,12 @@ public class ImageOperation: NetworkOperation<UIImage> {
                 do {
                     let (_, data) = try result.resolve()
                     if let d = data, let image = UIImage(data: d) {
-                        self.operationResult = Result { return image }
+                        self.output = Result { return image }
                     } else {
-                        self.operationResult = Result { throw OperationError.noResult }
+                        self.output = Result { throw OperationError.noResult }
                     }
                 } catch {
-                    self.operationResult = Result { throw error }
+                    self.output = Result { throw error }
                 }
                 
                 self.finish()
