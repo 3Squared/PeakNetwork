@@ -19,6 +19,7 @@ extension URLSession {
     ///
     /// - returns: A new URLSessionTask.
     func dataTask<T:URLResponse>(forRequest request: URLRequest, completion: @escaping (Result<(T, Data?)>) -> Void) -> URLSessionTask {
+       let request = setHeaders(on: request)
         return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             switch self.valid(response: response, error: error) {
             case .ok:
@@ -43,6 +44,7 @@ extension URLSession {
     ///
     /// - returns: A new URLSessionTask.
     func dataTask<T:JSONConvertible>(forRequest request: URLRequest, completion: @escaping (Result<[T]>) -> Void) -> URLSessionTask {
+        let request = setHeaders(on: request)
         return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             switch self.valid(response: response, error: error) {
             case .ok:
@@ -69,6 +71,17 @@ extension URLSession {
         }
     }
     
+    private func setHeaders(on request: URLRequest) -> URLRequest {
+        
+        var request = request
+        request.addValue(DeviceProfile.deviceName, forHTTPHeaderField: "X-Device")
+        request.addValue(DeviceProfile.deviceVersion, forHTTPHeaderField: "X-DeviceVersion")
+        if let appVersion = DeviceProfile.applicationVersion {
+            request.addValue(appVersion, forHTTPHeaderField: "X-SoftwareVersion")
+        }
+        
+        return request
+    }
     
     func json(from data: Data) throws -> Any {
         return try JSONSerialization.jsonObject(with: data, options: [])
