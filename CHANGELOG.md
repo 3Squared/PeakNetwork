@@ -4,6 +4,10 @@ The changelog for `THRNetwork`.
 
 --------------------------------------
 
+0.2.1
+-----
+- Update Operations library to 0.2.0
+
 0.2.0
 -----
 - Set device detail headers on request
