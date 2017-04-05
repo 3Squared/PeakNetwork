@@ -14,20 +14,20 @@ PODS:
   - OHHTTPStubs/OHPathHelpers (5.2.2)
   - OHHTTPStubs/Swift (5.2.2):
     - OHHTTPStubs/Core
-  - THROperations (0.1.0):
+  - THROperations (0.2.0):
     - THRResult (~> 0.0.1)
   - THRResult (0.0.1)
 
 DEPENDENCIES:
   - OHHTTPStubs (~> 5.2)
   - OHHTTPStubs/Swift (~> 5.2)
-  - THROperations (~> 0.1.0)
+  - THROperations
 
 SPEC CHECKSUMS:
   OHHTTPStubs: 34d9d0994e64fcf8552dbfade5ce82ada913ee31
-  THROperations: 039c24eb7416cf8d684c1e07be9135b5876af06a
+  THROperations: 4b367afde0725be08875883bf67959b7c24b3daf
   THRResult: 173d7193812ef859e14c8fdbe8cd81e9deea5db4
 
-PODFILE CHECKSUM: 1146339c241aafbeb98239d4aa5bf2863ed41d0e
+PODFILE CHECKSUM: a41ab06b794f30e6bb12ff2fd5c2735b0bc06023
 
 COCOAPODS: 1.2.0

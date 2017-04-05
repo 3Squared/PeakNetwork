@@ -14,7 +14,7 @@ open class NetworkOperation<T>: RetryingOperation<T> {
     internal var task: URLSessionTask?
     internal var taskMaker: (() -> (URLSessionTask))!
     
-    open override func run() {
+    open override func execute() {
         task?.cancel()
         task = taskMaker()
         task?.resume()
