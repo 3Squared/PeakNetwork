@@ -13,6 +13,10 @@ import THRResult
 /// Manages starting, cancellung, and mapping  of download operations.
 public class ImageController {
     
+    
+    /// A convenience singleton used by the `UIKit` extension methods.
+    /// If you need to customise their behavior, this variable can be overwritten
+    /// with another your own instance of `ImageController`.
     public static var sharedInstance = ImageController()
     
     let internalQueue = OperationQueue()
@@ -23,6 +27,10 @@ public class ImageController {
     let cache = NSCache<NSURL, UIImage>()
     let session: URLSession
     
+    
+    /// Create a new `ImageController`.
+    ///
+    /// - Parameter session: The `URLSession` in which to perform the fetches (optional).
     public init(_ session: URLSession = URLSession.shared) {
         cache.totalCostLimit = 128 * 1024 * 1024;
         self.session = session
@@ -42,7 +50,7 @@ public class ImageController {
         objectToUrlTable.removeObject(forKey: object)
     }
     
-    public func completeOperation(forObject object: NSObject) {
+    fileprivate func completeOperation(forObject object: NSObject) {
         if let url = objectToUrlTable.object(forKey: object) {
             let objects = urlsToObjectsTable.object(forKey: url)
             objects?.remove(object)
@@ -112,26 +120,38 @@ public class ImageController {
         }
     
     }
-    
-    private func resultBlock(result: Result<UIImage>) {
-        
-    }
 }
 
+
+/// An enum which describes the source of a loaded `UIImage`.
 public enum Source {
+    /// Loaded from the in-memory `NSCache`.
     case cache
+    /// Loaded from the network, or possibly the on-disk cache.
     case network
 }
 
+
+/// Describes the AnimationOptions to be used when setting an image on a view.
 public struct AnimationOptions {
+    
+    /// The duration of the animation.
     public let duration: TimeInterval
+    /// The animation options.
     public let options: UIViewAnimationOptions
     
+    
+    /// Create a new `AnimationOptions`.
+    ///
+    /// - Parameters:
+    ///   - duration: The duration of the animation.
+    ///   - options: The animation options.
     public init(duration: TimeInterval, options: UIViewAnimationOptions) {
         self.duration = duration
         self.options = options
     }
 }
+
 
 public extension UIImageView {
     public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
@@ -165,11 +185,33 @@ public extension UIImageView {
     }
 }
 
+
 public extension UIButton {
+    
+
+    /// Set the image available at the given URL as the `UIButton`'s image, for the given state.
+    /// You may set multiple images, one for each state, on a `UIButton` - only images for the same state will clash.
+    ///
+    /// - Parameters:
+    ///   - url: The URL of an image.
+    ///   - state: The `UIControlState` for which the image be displayed.
+    ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
+    ///   - animation: The animation options (optional).
+    ///   - completion: A completion block indicating success or failure.
     public func setImage(_ url: URL, for state: UIControlState, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
         self.setImage(URLRequestable(url), for: state, queue: queue, animation: animation, completion: completion)
     }
     
+    
+    /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
+    /// You may set multiple images, one for each state, on a `UIButton` - only images for the same state will clash.
+    ///
+    /// - Parameters:
+    ///   - requestable: A requestable describing the location of an image.
+    ///   - state: The `UIControlState` for which the image be displayed.
+    ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
+    ///   - animation: The animation options (optional).
+    ///   - completion: A completion block indicating success or failure.
     public func setImage(_ requestable: Requestable, for state: UIControlState, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
         // Cannot use self as the object, as you may want to request multiple images - one for each state
         let object: NSString = NSString.init(format: "%d%d", self.hash, state.rawValue)
@@ -197,13 +239,4 @@ public extension UIButton {
     public func cancelImage() {
         ImageController.sharedInstance.cancelOperation(forObject: self)
     }
-}
-
-/// Emulate the functionality of ObjC's @synchronized
-func synchronized(_ lock: AnyObject, block:() throws -> Void) rethrows {
-    objc_sync_enter(lock)
-    defer {
-        objc_sync_exit(lock)
-    }
-    try block()
 }

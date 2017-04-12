@@ -8,6 +8,12 @@
 
 import Foundation
 
+
+/// A URLSessionDelegate that you can use with your URLSession to implement Certificate Pinning.
+/// Add valid certificates to your bundle with the file name corresponding to the domain you want to pin.
+/// For example, "google.com.cer" for connections to google.com. 
+///
+/// If a certificate is missing, the terminal command to generate it will be printed to the console.
 public class CertificatePinningSessionDelegate: NSObject, URLSessionDelegate {
     
     let domains: [String]?
@@ -23,6 +29,7 @@ public class CertificatePinningSessionDelegate: NSObject, URLSessionDelegate {
     }
     
     
+    /// :nodoc:
     public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         
         let domain = challenge.protectionSpace.host
@@ -44,7 +51,7 @@ public class CertificatePinningSessionDelegate: NSObject, URLSessionDelegate {
         
         // Check that a certificate is present in any bundle.
         guard let pathToCert = Bundle.allBundles.path(forResource: domain, ofType: "cer"),
-            let localCertificate = NSData(contentsOfFile: pathToCert) as? Data else {
+            let localCertificate = NSData(contentsOfFile: pathToCert) else {
                 print("Missing local certificate for '\(domain)'. Disable certificate pinning, or add a valid certificate to your bundle with the file name '\(domain).cer'.\n\n"
                     + "To get your certificate, run the following command:\n\n"
                     + "openssl s_client -showcerts -connect \(domain):\(challenge.protectionSpace.port) < /dev/null | openssl x509 -outform DER > \(domain).cer\n\n")
@@ -66,7 +73,7 @@ public class CertificatePinningSessionDelegate: NSObject, URLSessionDelegate {
         // Get remote cert data
         let remoteCertificateData = SecCertificateCopyData(certificate!) as Data
         
-        if (isServerTrusted && remoteCertificateData == localCertificate) {
+        if (isServerTrusted && remoteCertificateData == localCertificate as Data) {
             let credential = URLCredential(trust: serverTrust)
             completionHandler(.useCredential, credential)
             return

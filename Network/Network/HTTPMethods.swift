@@ -8,7 +8,18 @@
 
 import Foundation
 
+
 /// Simple enum defining the HTTP verbs
 public enum HTTPMethod: String {
-    case get, put, post, delete
+    /// GET
+    case get
+    
+    /// PUT
+    case put
+    
+    /// POST
+    case post
+    
+    /// DELETE
+    case delete
 }
