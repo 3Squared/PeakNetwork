@@ -154,10 +154,25 @@ public struct AnimationOptions {
 
 
 public extension UIImageView {
+    
+    /// Set the image available at the given URL as the `UIImageView`'s image.
+    ///
+    /// - Parameters:
+    ///   - url: The URL of an image.
+    ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
+    ///   - animation: The animation options (optional).
+    ///   - completion: A completion block indicating success or failure.
     public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
         self.setImage(URLRequestable(url), queue: queue, animation: animation, completion: completion)
     }
     
+    /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
+    ///
+    /// - Parameters:
+    ///   - requestable: A requestable describing the location of an image.
+    ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
+    ///   - animation: The animation options (optional).
+    ///   - completion: A completion block indicating success or failure.
     public func setImage(_ requestable: Requestable, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
         ImageController.sharedInstance.getImage(requestable, object: self, queue: queue) { image, imageView, source in
             OperationQueue.main.addOperation {
@@ -180,6 +195,7 @@ public extension UIImageView {
         }
     }
     
+    /// Cancel any in-flight images requests for the `UIImageView`.
     public func cancelImage() {
         ImageController.sharedInstance.cancelOperation(forObject: self)
     }
@@ -187,7 +203,6 @@ public extension UIImageView {
 
 
 public extension UIButton {
-    
 
     /// Set the image available at the given URL as the `UIButton`'s image, for the given state.
     /// You may set multiple images, one for each state, on a `UIButton` - only images for the same state will clash.
@@ -236,6 +251,8 @@ public extension UIButton {
         }
     }
     
+    
+    /// Cancel any in-flight images requests for the `UIButton`.
     public func cancelImage() {
         ImageController.sharedInstance.cancelOperation(forObject: self)
     }
