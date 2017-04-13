@@ -1,5 +1,4 @@
 # THRNetwork 
-![](https://gitlab.3squared.com/iOSLibraries/THRNetwork/raw/develop/badge.svg)
 
 A collection of classes to aid performing network operations.
 
