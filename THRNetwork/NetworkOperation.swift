@@ -73,13 +73,12 @@ public class BlockRequestable: Requestable {
 }
 
 /// A subclass of `NetworkOperation`.
-/// `RequestOperation` will attempt to parse the response into a list of type `J`, 
-/// using the initialiser definied in the `JSONConvertible` protocol.
+/// `RequestOperation` will attempt to parse the response into a list of a `Decodable` type.
 ///
 /// The `Result` of the operation will always be a list, but the parser will handle both
 /// `JSONArray`s and single `JSONObject`s returned by the request. To use a single object,
 /// simply get the only object in the `Result`'s array.
-public class RequestOperation<J:JSONConvertible>: NetworkOperation<[J]> {
+public class RequestOperation<D: Decodable>: NetworkOperation<[D]> {
     
     /// Create a new `RequestOperation`, parsing the response to a list of the given generic type.
     ///
@@ -89,7 +88,7 @@ public class RequestOperation<J:JSONConvertible>: NetworkOperation<[J]> {
     public init(_ requestable: Requestable, session: URLSession = URLSession.shared) {
         super.init()
         taskMaker = {
-            return session.dataTask(forRequest: requestable.request) { (result: Result<[J]>) in
+            return session.dataTask(forRequest: requestable.request) { (result: Result<[D]>) in
                 self.output = result
                 self.finish()
             }

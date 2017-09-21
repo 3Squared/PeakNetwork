@@ -157,7 +157,7 @@ class NetworkTests: XCTestCase {
                 XCTFail()
             } catch {
                 switch error {
-                case SerializationError.invalid:
+                case DecodingError.keyNotFound(_, _):
                     expect.fulfill()
                 default:
                     XCTFail()
@@ -211,7 +211,7 @@ class NetworkTests: XCTestCase {
                 XCTFail()
             } catch {
                 switch error {
-                case SerializationError.invalid:
+                case DecodingError.typeMismatch(_, _):
                     expect.fulfill()
                 default:
                     XCTFail()

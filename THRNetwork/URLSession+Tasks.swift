@@ -37,28 +37,28 @@ extension URLSession {
     }
 
     
-    /// Create a URLSessionTask for an array of objects conforming to JSONConstructable.
+    /// Create a URLSessionTask for an array of `Decodable` objects.
     ///
     /// - parameter request: A URLRequest
-    /// - parameter completion:  A completion block called with a Result containing an array of JSONConvertibles
+    /// - parameter completion: A completion block called with a Result containing an array of `Decodable`s.
     ///
     /// - returns: A new URLSessionTask.
-    func dataTask<T:JSONConvertible>(forRequest request: URLRequest, completion: @escaping (Result<[T]>) -> Void) -> URLSessionTask {
+    func dataTask<T: Decodable>(forRequest request: URLRequest, decoder: JSONDecoder = JSONDecoder(), completion: @escaping (Result<[T]>) -> Void) -> URLSessionTask {
         let request = setHeaders(on: request)
         return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             switch self.valid(response: response, error: error) {
             case .ok:
-                if let data = data, let json = try? self.json(from: data), let array = json as? [[String: Any]] {
+                if let data = data {
                     completion(Result {
-                        return try array.flatMap(T.init)
-                    })
-                } else if let data = data, let json = try? self.json(from: data), let object = json as? [String: Any] {
-                    completion(Result {
-                        return try [T(fromJson: object)]
+                        do {
+                            return try decoder.decode([T].self, from: data)
+                        } catch {
+                            return [try decoder.decode(T.self, from: data)]
+                        }
                     })
                 } else {
                     completion(Result {
-                        throw SerializationError.invalid
+                        throw SerializationError.noData
                     })
                 }
             case .needsAuthentication:
@@ -81,10 +81,6 @@ extension URLSession {
         }
         
         return request
-    }
-    
-    func json(from data: Data) throws -> Any {
-        return try JSONSerialization.jsonObject(with: data, options: [])
     }
     
     

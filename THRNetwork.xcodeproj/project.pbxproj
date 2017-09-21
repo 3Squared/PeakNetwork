@@ -15,7 +15,6 @@
 		CB2380E71F740D1500F1B001 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DE1F740D1500F1B001 /* Operators.swift */; };
 		CB2380E81F740D1500F1B001 /* URLSession+Tasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DF1F740D1500F1B001 /* URLSession+Tasks.swift */; };
 		CB2380E91F740D1500F1B001 /* HTTPMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380E01F740D1500F1B001 /* HTTPMethods.swift */; };
-		CB2380EA1F740D1500F1B001 /* JSONConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380E11F740D1500F1B001 /* JSONConvertible.swift */; };
 		CB2380EB1F740D1500F1B001 /* DeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380E21F740D1500F1B001 /* DeviceProfile.swift */; };
 		CB2380EC1F740D1500F1B001 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380E31F740D1500F1B001 /* Errors.swift */; };
 		CB2380F51F740D9C00F1B001 /* CertificatePinningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380F21F740D7600F1B001 /* CertificatePinningTests.swift */; };
@@ -50,7 +49,6 @@
 		CB2380DE1F740D1500F1B001 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		CB2380DF1F740D1500F1B001 /* URLSession+Tasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Tasks.swift"; sourceTree = "<group>"; };
 		CB2380E01F740D1500F1B001 /* HTTPMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethods.swift; sourceTree = "<group>"; };
-		CB2380E11F740D1500F1B001 /* JSONConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONConvertible.swift; sourceTree = "<group>"; };
 		CB2380E21F740D1500F1B001 /* DeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceProfile.swift; sourceTree = "<group>"; };
 		CB2380E31F740D1500F1B001 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		CB2380EE1F740D7600F1B001 /* ImageControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageControllerTests.swift; sourceTree = "<group>"; };
@@ -140,7 +138,6 @@
 				CB2380E31F740D1500F1B001 /* Errors.swift */,
 				CB2380E01F740D1500F1B001 /* HTTPMethods.swift */,
 				CB2380DD1F740D1500F1B001 /* ImageController.swift */,
-				CB2380E11F740D1500F1B001 /* JSONConvertible.swift */,
 				CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */,
 				CB2380DE1F740D1500F1B001 /* Operators.swift */,
 				CB2380DF1F740D1500F1B001 /* URLSession+Tasks.swift */,
@@ -379,7 +376,6 @@
 				CB2380E91F740D1500F1B001 /* HTTPMethods.swift in Sources */,
 				CB2380E51F740D1500F1B001 /* CertificatePinningSessionDelegate.swift in Sources */,
 				CB2380E61F740D1500F1B001 /* ImageController.swift in Sources */,
-				CB2380EA1F740D1500F1B001 /* JSONConvertible.swift in Sources */,
 				CB2380E81F740D1500F1B001 /* URLSession+Tasks.swift in Sources */,
 				CB2380EC1F740D1500F1B001 /* Errors.swift in Sources */,
 				CB2380EB1F740D1500F1B001 /* DeviceProfile.swift in Sources */,

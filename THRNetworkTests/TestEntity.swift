@@ -9,15 +9,6 @@
 import Foundation
 import THRNetwork
 
-struct TestEntity: JSONConvertible {
+struct TestEntity: Decodable {
     let name: String
-    
-    init(fromJson json: JSONObject) throws {
-        guard let name = json["name"] as? String
-            else {
-                throw SerializationError.invalid
-        }
-        
-        self.name = name
-   }
 }
