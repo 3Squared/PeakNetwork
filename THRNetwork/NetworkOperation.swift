@@ -138,7 +138,7 @@ public class DataOperation: NetworkOperation<Data> {
                     if let d = data {
                         self.output = Result { return d }
                     } else {
-                        self.output = Result { throw OperationError.noResult }
+                        self.output = Result { throw ResultError.noResult }
                     }
                 } catch {
                     self.output = Result { throw error }
@@ -166,7 +166,7 @@ public class ImageOperation: NetworkOperation<UIImage> {
                     if let d = data, let image = UIImage(data: d) {
                         self.output = Result { return image }
                     } else {
-                        self.output = Result { throw OperationError.noResult }
+                        self.output = Result { throw ResultError.noResult }
                     }
                 } catch {
                     self.output = Result { throw error }

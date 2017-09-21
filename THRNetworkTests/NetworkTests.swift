@@ -9,7 +9,7 @@
 import XCTest
 import OHHTTPStubs
 import THRResult
-@testable import Network
+@testable import THRNetwork
 
 class NetworkTests: XCTestCase {
     override func tearDown() {

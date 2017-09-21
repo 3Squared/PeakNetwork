@@ -8,7 +8,7 @@
 
 import Foundation
 import XCTest
-@testable import Network
+@testable import THRNetwork
 
 class CertificatePinningTests: XCTestCase {
     func testNoCertificate() {

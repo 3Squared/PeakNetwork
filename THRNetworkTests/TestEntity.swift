@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Network
+import THRNetwork
 
 struct TestEntity: JSONConvertible {
     let name: String
