@@ -73,23 +73,19 @@ public class BlockRequestable: Requestable {
 }
 
 /// A subclass of `NetworkOperation`.
-/// `RequestOperation` will attempt to parse the response into a list of type `J`, 
-/// using the initialiser definied in the `JSONConvertible` protocol.
-///
-/// The `Result` of the operation will always be a list, but the parser will handle both
-/// `JSONArray`s and single `JSONObject`s returned by the request. To use a single object,
-/// simply get the only object in the `Result`'s array.
-public class RequestOperation<J:JSONConvertible>: NetworkOperation<[J]> {
+/// `RequestOperation` will attempt to parse the response into a `Decodable` type.
+public class RequestOperation<D: Decodable>: NetworkOperation<D> {
     
     /// Create a new `RequestOperation`, parsing the response to a list of the given generic type.
     ///
     /// - Parameters:
     ///   - requestable: A requestable describing the web resource to fetch.
+    ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(_ requestable: Requestable, session: URLSession = URLSession.shared) {
+    public init(_ requestable: Requestable, decoder: JSONDecoder = JSONDecoder(), session: URLSession = URLSession.shared) {
         super.init()
         taskMaker = {
-            return session.dataTask(forRequest: requestable.request) { (result: Result<[J]>) in
+            return session.dataTask(forRequest: requestable.request, decoder: decoder) { (result: Result<D>) in
                 self.output = result
                 self.finish()
             }
@@ -138,7 +134,7 @@ public class DataOperation: NetworkOperation<Data> {
                     if let d = data {
                         self.output = Result { return d }
                     } else {
-                        self.output = Result { throw OperationError.noResult }
+                        self.output = Result { throw ResultError.noResult }
                     }
                 } catch {
                     self.output = Result { throw error }
@@ -166,7 +162,7 @@ public class ImageOperation: NetworkOperation<UIImage> {
                     if let d = data, let image = UIImage(data: d) {
                         self.output = Result { return image }
                     } else {
-                        self.output = Result { throw OperationError.noResult }
+                        self.output = Result { throw ResultError.noResult }
                     }
                 } catch {
                     self.output = Result { throw error }

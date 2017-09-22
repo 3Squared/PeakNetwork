@@ -11,8 +11,8 @@ import Foundation
 
 /// Used when an error occurs converting Data to JSON.
 public enum SerializationError: Error {
-    /// The provided data cannot be converted to JSON.
-    case invalid
+    /// The response contained no data.
+    case noData
 }
 
 
