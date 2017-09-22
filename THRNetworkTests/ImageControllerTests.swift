@@ -8,7 +8,7 @@
 
 import XCTest
 import OHHTTPStubs
-@testable import Network
+@testable import THRNetwork
 
 class ImageControllerTests: XCTestCase {
     
@@ -187,11 +187,15 @@ class ImageControllerTests: XCTestCase {
         
         
         ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView1, queue: queue) { image, view, source in
-            XCTAssertNil(imageView1.image)
+            DispatchQueue.main.async {
+                XCTAssertNil(imageView1.image)
+            }
         }
         
         ImageController.sharedInstance.getImage(URLRequestable(URL(string: "https://placehold.it/300")!), object: imageView2, queue: queue) { image, view, source in
-            XCTAssertNotNil(image)
+            DispatchQueue.main.async {
+                XCTAssertNotNil(image)
+            }
             expect.fulfill()
         }
         
