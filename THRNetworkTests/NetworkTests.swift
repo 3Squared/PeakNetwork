@@ -129,8 +129,8 @@ class NetworkTests: XCTestCase {
         
         networkOperation.addResultBlock { result in
             do {
-                let entities = try result.resolve()
-                XCTAssertEqual(entities.first?.name, "Sam")
+                let entity = try result.resolve()
+                XCTAssertEqual(entity.name, "Sam")
                 expect.fulfill()
             } catch {
                 XCTFail()
@@ -177,7 +177,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = RequestOperation<TestEntity>(URLRequestable(URL(string: "http://google.com")!))
+        let networkOperation = RequestOperation<[TestEntity]>(URLRequestable(URL(string: "http://google.com")!))
         
         networkOperation.addResultBlock { result in
             do {
@@ -203,7 +203,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = RequestOperation<TestEntity>(URLRequestable(URL(string: "http://google.com")!))
+        let networkOperation = RequestOperation<[TestEntity]>(URLRequestable(URL(string: "http://google.com")!))
         
         networkOperation.addResultBlock { result in
             do {
@@ -211,7 +211,7 @@ class NetworkTests: XCTestCase {
                 XCTFail()
             } catch {
                 switch error {
-                case DecodingError.typeMismatch(_, _):
+                case DecodingError.keyNotFound(_, _):
                     expect.fulfill()
                 default:
                     XCTFail()

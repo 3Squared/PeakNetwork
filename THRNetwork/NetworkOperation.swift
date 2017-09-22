@@ -73,12 +73,8 @@ public class BlockRequestable: Requestable {
 }
 
 /// A subclass of `NetworkOperation`.
-/// `RequestOperation` will attempt to parse the response into a list of a `Decodable` type.
-///
-/// The `Result` of the operation will always be a list, but the parser will handle both
-/// `JSONArray`s and single `JSONObject`s returned by the request. To use a single object,
-/// simply get the only object in the `Result`'s array.
-public class RequestOperation<D: Decodable>: NetworkOperation<[D]> {
+/// `RequestOperation` will attempt to parse the response into a `Decodable` type.
+public class RequestOperation<D: Decodable>: NetworkOperation<D> {
     
     /// Create a new `RequestOperation`, parsing the response to a list of the given generic type.
     ///
@@ -89,7 +85,7 @@ public class RequestOperation<D: Decodable>: NetworkOperation<[D]> {
     public init(_ requestable: Requestable, decoder: JSONDecoder = JSONDecoder(), session: URLSession = URLSession.shared) {
         super.init()
         taskMaker = {
-            return session.dataTask(forRequest: requestable.request, decoder: decoder) { (result: Result<[D]>) in
+            return session.dataTask(forRequest: requestable.request, decoder: decoder) { (result: Result<D>) in
                 self.output = result
                 self.finish()
             }
