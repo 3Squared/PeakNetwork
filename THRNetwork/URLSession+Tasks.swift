@@ -40,10 +40,11 @@ extension URLSession {
     /// Create a URLSessionTask for an array of `Decodable` objects.
     ///
     /// - parameter request: A URLRequest
+    /// - session: The `JSONDecoder` to use when decoding the response data (optional).
     /// - parameter completion: A completion block called with a Result containing an array of `Decodable`s.
     ///
     /// - returns: A new URLSessionTask.
-    func dataTask<T: Decodable>(forRequest request: URLRequest, decoder: JSONDecoder = JSONDecoder(), completion: @escaping (Result<[T]>) -> Void) -> URLSessionTask {
+    func dataTask<T: Decodable>(forRequest request: URLRequest, decoder: JSONDecoder, completion: @escaping (Result<[T]>) -> Void) -> URLSessionTask {
         let request = setHeaders(on: request)
         return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             switch self.valid(response: response, error: error) {

@@ -84,11 +84,12 @@ public class RequestOperation<D: Decodable>: NetworkOperation<[D]> {
     ///
     /// - Parameters:
     ///   - requestable: A requestable describing the web resource to fetch.
+    ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(_ requestable: Requestable, session: URLSession = URLSession.shared) {
+    public init(_ requestable: Requestable, decoder: JSONDecoder = JSONDecoder(), session: URLSession = URLSession.shared) {
         super.init()
         taskMaker = {
-            return session.dataTask(forRequest: requestable.request) { (result: Result<[D]>) in
+            return session.dataTask(forRequest: requestable.request, decoder: decoder) { (result: Result<[D]>) in
                 self.output = result
                 self.finish()
             }
