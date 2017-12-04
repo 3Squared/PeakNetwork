@@ -21,17 +21,22 @@ extension URLSession {
     func dataTask<T:URLResponse>(forRequest request: URLRequest, completion: @escaping (Result<(T, Data?)>) -> Void) -> URLSessionTask {
        let request = setHeaders(on: request)
         return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            switch self.valid(response: response, error: error) {
-            case .ok:
-                completion(Result {
-                    return (response as! T, data)
-                })
-            case .needsAuthentication:
-                completion(Result { throw ServerError.authentication })
-            case .server(let httpResponse):
-                completion(Result { throw ServerError.unknown(httpResponse) })
-            case .device(let error):
+            if let error = error {
                 completion(Result { throw error })
+            } else if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCodeEnum.isSuccess {
+                    completion(Result {
+                        return (response as! T, data)
+                    })
+                } else {
+                    completion(Result {
+                        throw ServerError.error(code: httpResponse.statusCodeEnum, response: httpResponse)
+                    })
+                }
+            } else {
+                completion(Result {
+                    throw ServerError.unknownResponse
+                })
             }
         }
     }
@@ -47,26 +52,34 @@ extension URLSession {
     func dataTask<T: Decodable>(forRequest request: URLRequest, decoder: JSONDecoder, completion: @escaping (Result<T>) -> Void) -> URLSessionTask {
         let request = setHeaders(on: request)
         return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            switch self.valid(response: response, error: error) {
-            case .ok:
-                if let data = data {
-                    completion(Result {
-                        return try decoder.decode(T.self, from: data)
-                    })
+            
+            if let error = error {
+                completion(Result { throw error })
+            } else if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCodeEnum.isSuccess {
+                    if let data = data {
+                        completion(Result {
+                            return try decoder.decode(T.self, from: data)
+                        })
+                    } else {
+                        completion(Result {
+                            throw SerializationError.noData
+                        })
+                    }
                 } else {
                     completion(Result {
-                        throw SerializationError.noData
+                        throw ServerError.error(code: httpResponse.statusCodeEnum, response: httpResponse)
                     })
                 }
-            case .needsAuthentication:
-                completion(Result { throw ServerError.authentication })
-            case .server(let httpResponse):
-                completion(Result { throw ServerError.unknown(httpResponse) })
-            case .device(let error):
-                completion(Result { throw error })
+            } else {
+                completion(Result {
+                    throw ServerError.unknownResponse
+                })
             }
         }
     }
+    
+    
     
     private func setHeaders(on request: URLRequest) -> URLRequest {
         
@@ -78,33 +91,6 @@ extension URLSession {
         }
         
         return request
-    }
-    
-    
-    func valid(response: URLResponse?, error: Error?) -> ResponseStatus {
-        if let e = error {
-            return .device(e)
-        }
-        
-        if let httpResponse = response as? HTTPURLResponse {
-            switch httpResponse.statusCode {
-            case 200..<300:
-                return .ok
-            case 401:
-                return .needsAuthentication
-            default:
-                return .server(httpResponse)
-            }
-        }
-        return .ok
-    }
-    
-    
-    enum ResponseStatus {
-        case ok
-        case needsAuthentication
-        case server(HTTPURLResponse)
-        case device(Error)
     }
 }
 
