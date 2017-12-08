@@ -247,6 +247,30 @@ class NetworkTests: XCTestCase {
         
         waitForExpectations(timeout: 100)
     }
+    
+    func testMockRequestOperation() {
+        let expect = expectation(description: "")
+        
+        let networkOperation = MockRequestOperation<[TestEntity]>(withFileName: "test")
+        
+        networkOperation.addResultBlock { result in
+            do {
+                let entity = try result.resolve()
+                XCTAssertEqual(entity[0].name, "Hello")
+                XCTAssertEqual(entity[1].name, "World")
+                XCTAssertEqual(entity[2].name, "!")
+                XCTAssertEqual(entity.count, 3)
+                expect.fulfill()
+            } catch {
+                XCTFail()
+            }
+        }
+        
+        networkOperation.enqueue()
+        
+        waitForExpectations(timeout: 1)
+    }
+
 
     public enum TestError: Error {
         case justATest

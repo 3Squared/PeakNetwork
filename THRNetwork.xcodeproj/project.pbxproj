@@ -24,6 +24,7 @@
 		CB2380F91F740DBD00F1B001 /* 300.png in Resources */ = {isa = PBXBuildFile; fileRef = CB2380EF1F740D7600F1B001 /* 300.png */; };
 		CB2380FA1F740DBD00F1B001 /* 600.png in Resources */ = {isa = PBXBuildFile; fileRef = CB2380F41F740D7600F1B001 /* 600.png */; };
 		CB2380FB1F740DBD00F1B001 /* github.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = CB2380F11F740D7600F1B001 /* github.com.cer */; };
+		CB3178731FDAA5AF00B063ED /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = CB3178721FDAA5AF00B063ED /* test.json */; };
 		CBFD4EE71F740C07008CD8AA /* THRNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBFD4EDD1F740C07008CD8AA /* THRNetwork.framework */; };
 		CBFD4EEE1F740C07008CD8AA /* THRNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = CBFD4EE01F740C07008CD8AA /* THRNetwork.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -58,6 +59,7 @@
 		CB2380F21F740D7600F1B001 /* CertificatePinningTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatePinningTests.swift; sourceTree = "<group>"; };
 		CB2380F31F740D7600F1B001 /* TestEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEntity.swift; sourceTree = "<group>"; };
 		CB2380F41F740D7600F1B001 /* 600.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 600.png; sourceTree = "<group>"; };
+		CB3178721FDAA5AF00B063ED /* test.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		CBFD4EDD1F740C07008CD8AA /* THRNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = THRNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBFD4EE01F740C07008CD8AA /* THRNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = THRNetwork.h; sourceTree = "<group>"; };
 		CBFD4EE11F740C07008CD8AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				CB2380EE1F740D7600F1B001 /* ImageControllerTests.swift */,
 				CB2380F01F740D7600F1B001 /* NetworkTests.swift */,
 				CB2380F31F740D7600F1B001 /* TestEntity.swift */,
+				CB3178721FDAA5AF00B063ED /* test.json */,
 			);
 			path = THRNetworkTests;
 			sourceTree = "<group>";
@@ -268,6 +271,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB2380FB1F740DBD00F1B001 /* github.com.cer in Resources */,
+				CB3178731FDAA5AF00B063ED /* test.json in Resources */,
 				CB2380FA1F740DBD00F1B001 /* 600.png in Resources */,
 				CB2380F91F740DBD00F1B001 /* 300.png in Resources */,
 			);
