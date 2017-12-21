@@ -49,7 +49,7 @@ public class URLRequestable: Requestable {
     
     /// :nodoc:
     public var request: URLRequest
-
+    
     /// Create a new `URLRequestable` with a given `URL`.
     ///
     /// - Parameter url: A `URL`.
@@ -174,3 +174,41 @@ public class ImageOperation: NetworkOperation<UIImage> {
     }
 }
 
+/// A subclass of `NetworkOperation`.
+/// `MockRequestOperation` will attempt to parse the contents of a file loaded from
+/// the main bundle into a `Decodable` type.
+public class MockRequestOperation<Output: Decodable>: NetworkOperation<Output> {
+    
+    let fileName: String
+    let decoder: JSONDecoder
+    let error: Error?
+    
+    /// Create a new `MockRequestOperation`.
+    /// To be used in tests and mocked builds with no network connectivity.
+    /// The provided file is loaded and parsed in the same manner as `RequestOperation`.
+    ///
+    /// - Parameters:
+    ///   - fileName: The name of a JSON file added to the main bundle.
+    ///   - decoder: A `JSONDecoder` configured appropriately.
+    ///   - error: An optional error that will be immediately thrown upon operation execution, for mocking network errors.
+    public init(withFileName fileName: String, decoder: JSONDecoder = JSONDecoder(), error: Error? = nil) {
+        self.fileName = fileName
+        self.decoder = decoder
+        self.error = error
+    }
+    
+    override open func execute() {
+        if let error = error {
+            self.output = Result { throw error }
+            self.finish()
+        } else {
+            DispatchQueue.main.async {
+                let path = Bundle.allBundles.path(forResource: self.fileName, ofType: "json")!
+                let jsonData = try! NSData(contentsOfFile: path) as Data
+                let decodedData = try! self.decoder.decode(Output.self, from: jsonData)
+                self.output = Result { decodedData }
+                self.finish()
+            }
+        }
+    }
+}
