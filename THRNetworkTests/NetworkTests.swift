@@ -19,50 +19,19 @@ class NetworkTests: XCTestCase {
     
     
     func testResponseValidation() {
-        
         let success = HTTPURLResponse(url: URL(string:"google.com")!, statusCode: 200, httpVersion: "1.1", headerFields: nil)
-        switch URLSession.shared.valid(response: success, error: nil) {
-        case .ok:
-            break
-        default:
-            XCTFail()
-        }
+        XCTAssertTrue(success!.statusCodeEnum.isSuccess)
         
         let serverFail = HTTPURLResponse(url: URL(string:"google.com")!, statusCode: 500, httpVersion: "1.1", headerFields: nil)
-        switch URLSession.shared.valid(response: serverFail, error: nil) {
-        case .server(let response):
-            XCTAssertEqual(response.statusCode, 500)
-            break
-        default:
-            XCTFail()
-        }
+        XCTAssertTrue(serverFail!.statusCodeEnum.isServerError)
+
         
         let notFound = HTTPURLResponse(url: URL(string:"google.com")!, statusCode: 404, httpVersion: "1.1", headerFields: nil)
-        switch URLSession.shared.valid(response: notFound, error: nil) {
-        case .server(let response):
-            XCTAssertEqual(response.statusCode, 404)
-            break
-        default:
-            XCTFail()
-        }
+        XCTAssertTrue(notFound!.statusCodeEnum.isClientError)
         
         let authentication = HTTPURLResponse(url: URL(string:"google.com")!, statusCode: 401, httpVersion: "1.1", headerFields: nil)
-        switch URLSession.shared.valid(response: authentication, error: nil) {
-        case .needsAuthentication:
-            break
-        default:
-            XCTFail()
-        }
-        
-        
-        let error = NSError(domain: "Hello", code: 1, userInfo: nil)
-        switch URLSession.shared.valid(response: nil, error: error) {
-        case .device(let anError as NSError):
-            XCTAssertEqual(anError, error)
-            break
-        default:
-            XCTFail()
-        }
+        XCTAssertTrue(authentication!.statusCodeEnum.isClientError)
+        XCTAssertTrue(authentication!.statusCodeEnum == .unauthorized)
     }
     
     
@@ -76,16 +45,11 @@ class NetworkTests: XCTestCase {
         let networkOperation = URLResponseOperation(URLRequestable(URL(string: "http://google.com")!))
         
         networkOperation.addResultBlock { result in
-            do {
-                let _ = try result.resolve()
+            switch result {
+            case .failure(ServerError.error(code: .internalServerError, response: _)):
+                expect.fulfill()
+            default:
                 XCTFail()
-            } catch {
-                switch error {
-                case ServerError.unknown(_):
-                    expect.fulfill()
-                default:
-                    XCTFail()
-                }
             }
         }
         

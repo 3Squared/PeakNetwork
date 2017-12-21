@@ -24,6 +24,7 @@
 		CB2380F91F740DBD00F1B001 /* 300.png in Resources */ = {isa = PBXBuildFile; fileRef = CB2380EF1F740D7600F1B001 /* 300.png */; };
 		CB2380FA1F740DBD00F1B001 /* 600.png in Resources */ = {isa = PBXBuildFile; fileRef = CB2380F41F740D7600F1B001 /* 600.png */; };
 		CB2380FB1F740DBD00F1B001 /* github.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = CB2380F11F740D7600F1B001 /* github.com.cer */; };
+		CB3AA6CA1FD5A5C9008EFC5C /* HTTPStatusCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */; };
 		CBFD4EE71F740C07008CD8AA /* THRNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBFD4EDD1F740C07008CD8AA /* THRNetwork.framework */; };
 		CBFD4EEE1F740C07008CD8AA /* THRNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = CBFD4EE01F740C07008CD8AA /* THRNetwork.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -58,6 +59,7 @@
 		CB2380F21F740D7600F1B001 /* CertificatePinningTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatePinningTests.swift; sourceTree = "<group>"; };
 		CB2380F31F740D7600F1B001 /* TestEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEntity.swift; sourceTree = "<group>"; };
 		CB2380F41F740D7600F1B001 /* 600.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 600.png; sourceTree = "<group>"; };
+		CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPStatusCodes.swift; sourceTree = "<group>"; };
 		CBFD4EDD1F740C07008CD8AA /* THRNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = THRNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBFD4EE01F740C07008CD8AA /* THRNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = THRNetwork.h; sourceTree = "<group>"; };
 		CBFD4EE11F740C07008CD8AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */,
 				CB2380DE1F740D1500F1B001 /* Operators.swift */,
 				CB2380DF1F740D1500F1B001 /* URLSession+Tasks.swift */,
+				CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */,
 			);
 			path = THRNetwork;
 			sourceTree = "<group>";
@@ -378,6 +381,7 @@
 				CB2380E61F740D1500F1B001 /* ImageController.swift in Sources */,
 				CB2380E81F740D1500F1B001 /* URLSession+Tasks.swift in Sources */,
 				CB2380EC1F740D1500F1B001 /* Errors.swift in Sources */,
+				CB3AA6CA1FD5A5C9008EFC5C /* HTTPStatusCodes.swift in Sources */,
 				CB2380EB1F740D1500F1B001 /* DeviceProfile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

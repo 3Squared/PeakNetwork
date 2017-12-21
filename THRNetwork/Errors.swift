@@ -15,11 +15,8 @@ public enum SerializationError: Error {
     case noData
 }
 
-
 /// Used when a server error occurs.
 public enum ServerError: Error {
-    /// The server responsed with a 401.
-    case authentication
-    /// The server responsed with a status code outside the range 200-300.
-    case unknown(HTTPURLResponse)
+    case error(code: HTTPStatusCode, response: HTTPURLResponse)
+    case unknownResponse
 }
