@@ -271,6 +271,26 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
+    func testMockRequestOperationError() {
+        let expect = expectation(description: "")
+        
+        let networkOperation = MockRequestOperation<[TestEntity]>(withFileName: "test", error: ServerError.authentication)
+        
+        networkOperation.addResultBlock { result in
+            do {
+                let _ = try result.resolve()
+                XCTFail()
+            } catch {
+                XCTAssertTrue(error.localizedDescription.contains("THRNetwork.ServerError error 1"))
+                expect.fulfill()
+            }
+        }
+        
+        networkOperation.enqueue()
+        
+        waitForExpectations(timeout: 1)
+    }
+
 
     public enum TestError: Error {
         case justATest
