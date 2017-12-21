@@ -4,6 +4,14 @@ The changelog for `THRNetwork`.
 
 --------------------------------------
 
+2.0.0
+-----
+- Update Operations library to 0.2.0
+
+1.0.0
+-----
+- Remove JSONConvertible and replace with Decodable
+
 0.2.1
 -----
 - Update Operations library to 0.2.0
