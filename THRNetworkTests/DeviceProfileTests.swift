@@ -15,8 +15,4 @@ class DeviceProfileTests: XCTestCase {
     func testDeviceName() {
         XCTAssertEqual(DeviceProfile.deviceName, "iPhone Simulator")
     }
-    
-    func testDeviceVersion() {
-        XCTAssertEqual(DeviceProfile.deviceVersion, "11.1")
-    }
 }
