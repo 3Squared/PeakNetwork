@@ -93,7 +93,7 @@ class NetworkTests: XCTestCase {
         
         networkOperation.addResultBlock { result in
             do {
-                let entity = try result.resolve()
+                let (entity, _) = try result.resolve()
                 XCTAssertEqual(entity.name, "Sam")
                 expect.fulfill()
             } catch {
@@ -105,6 +105,7 @@ class NetworkTests: XCTestCase {
         
         waitForExpectations(timeout: 1)
     }
+    
     
     func testRequestOperationParseFailure() {
         let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
@@ -134,6 +135,64 @@ class NetworkTests: XCTestCase {
     }
 
     
+    func testRequestOperationWithHeadersParseSuccess() {
+        let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
+            return OHHTTPStubsResponse(jsonObject: ["name" : "Sam"], statusCode: 200, headers: ["hello": "World!"])
+        }
+        
+        let expect = expectation(description: "")
+        
+        let networkOperation = RequestWithHeadersOperation<TestEntity, Headers>(URLRequestable(URL(string: "http://google.com")!))
+        
+        networkOperation.addResultBlock { result in
+            do {
+                let (entity, headers, _) = try result.resolve()
+                
+                XCTAssertEqual(entity.name, "Sam")
+                XCTAssertEqual(headers.hello, "World!")
+                
+                expect.fulfill()
+            } catch {
+                XCTFail()
+            }
+        }
+        
+        networkOperation.enqueue()
+        
+        waitForExpectations(timeout: 1)
+    }
+
+    
+    func testRequestOperationWithHeadersParseFailure() {
+        let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
+            return OHHTTPStubsResponse(jsonObject: ["name" : "Sam"], statusCode: 200, headers: ["missing": "key"])
+        }
+        
+        let expect = expectation(description: "")
+        
+        let networkOperation = RequestWithHeadersOperation<TestEntity, Headers>(URLRequestable(URL(string: "http://google.com")!))
+        
+        networkOperation.addResultBlock { result in
+            do {
+                let _ = try result.resolve()
+                XCTFail()
+            } catch {
+                switch error {
+                case TestError.justATest:
+                    expect.fulfill()
+                default:
+                    XCTFail()
+                }
+            }
+        }
+        
+        networkOperation.enqueue()
+        
+        waitForExpectations(timeout: 1)
+    }
+
+    
+    
     func testManyRequestOperationParseSuccess() {
         let _ = stub(condition: isHost("google.com")) { _ -> OHHTTPStubsResponse in
             return OHHTTPStubsResponse(jsonObject: [["name" : "Sam"], ["name" : "Ben"]], statusCode: 200, headers: [:])
@@ -145,7 +204,7 @@ class NetworkTests: XCTestCase {
         
         networkOperation.addResultBlock { result in
             do {
-                let entities = try result.resolve()
+                let (entities, _) = try result.resolve()
                 XCTAssertEqual(entities.count, 2)
                 XCTAssertEqual(entities[0].name, "Sam")
                 XCTAssertEqual(entities[1].name, "Ben")
@@ -255,6 +314,18 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
+    public struct Headers: HTTPHeaders {
+        
+        let hello: String
+        public init(withHeaders headers: [AnyHashable : Any]) throws {
+            guard let hello = headers["hello"] as? String else {
+                throw TestError.justATest
+            }
+            self.hello = hello
+        }
+
+        
+    }
 
     public enum TestError: Error {
         case justATest
