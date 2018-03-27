@@ -90,7 +90,7 @@ public class ImageController {
                 completion(nil, object, .network)
             } else {
                 do {
-                    let image = try result.resolve()
+                    let (image, _) = try result.resolve()
                     self.cache.setObject(image, forKey: url)
                     completion(image, object, .network)
                 } catch {

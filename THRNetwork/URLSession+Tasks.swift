@@ -18,7 +18,7 @@ extension URLSession {
     /// - parameter completion:  A completion block called with a Result containing a URLResponse and Data
     ///
     /// - returns: A new URLSessionTask.
-    func dataTask<T:URLResponse>(forRequest request: URLRequest, completion: @escaping (Result<(T, Data?)>) -> Void) -> URLSessionTask {
+    func dataTask<U: URLResponse>(forRequest request: URLRequest, completion: @escaping (Result<(Data?, U)>) -> Void) -> URLSessionTask {
        let request = setHeaders(on: request)
         return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             if let error = error {
@@ -26,7 +26,7 @@ extension URLSession {
             } else if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCodeEnum.isSuccess {
                     completion(Result {
-                        return (response as! T, data)
+                        return (data, response as! U)
                     })
                 } else {
                     completion(Result {
@@ -49,7 +49,7 @@ extension URLSession {
     /// - parameter completion: A completion block called with a Result containing an array of `Decodable`s.
     ///
     /// - returns: A new URLSessionTask.
-    func dataTask<T: Decodable>(forRequest request: URLRequest, decoder: JSONDecoder, completion: @escaping (Result<T>) -> Void) -> URLSessionTask {
+    func dataTask<D: Decodable, U: URLResponse>(forRequest request: URLRequest, decoder: JSONDecoder, completion: @escaping (Result<(D, U)>) -> Void) -> URLSessionTask {
         let request = setHeaders(on: request)
         return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             
@@ -59,7 +59,7 @@ extension URLSession {
                 if httpResponse.statusCodeEnum.isSuccess {
                     if let data = data {
                         completion(Result {
-                            return try decoder.decode(T.self, from: data)
+                            return (try decoder.decode(D.self, from: data), response as! U)
                         })
                     } else {
                         completion(Result {
