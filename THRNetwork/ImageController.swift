@@ -25,13 +25,13 @@ public class ImageController {
     let urlsToObjectsTable = NSMapTable<NSURL, NSMutableSet>.weakToStrongObjects()
 
     let cache = NSCache<NSURL, UIImage>()
-    let session: URLSession
+    let session: Session
     
     
     /// Create a new `ImageController`.
     ///
     /// - Parameter session: The `URLSession` in which to perform the fetches (optional).
-    public init(_ session: URLSession = URLSession.shared) {
+    public init(_ session: Session = URLSession.shared) {
         cache.totalCostLimit = 128 * 1024 * 1024;
         self.session = session
     }

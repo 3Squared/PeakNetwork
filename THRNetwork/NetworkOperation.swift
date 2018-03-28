@@ -82,7 +82,7 @@ public class RequestOperation<D: Decodable>: NetworkOperation<(D, HTTPURLRespons
     ///   - requestable: A requestable describing the web resource to fetch.
     ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(_ requestable: Requestable, decoder: JSONDecoder = JSONDecoder(), session: URLSession = URLSession.shared) {
+    public init(_ requestable: Requestable, decoder: JSONDecoder = JSONDecoder(), session: Session = URLSession.shared) {
         super.init()
         taskMaker = {
             return session.dataTask(forRequest: requestable.request, decoder: decoder) { (result: Result<(D, HTTPURLResponse)>) in
@@ -107,7 +107,7 @@ public class RequestWithHeadersOperation<D: Decodable, H: HTTPHeaders>: NetworkO
     ///   - requestable: A requestable describing the web resource to fetch.
     ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(_ requestable: Requestable, decoder: JSONDecoder = JSONDecoder(), session: URLSession = URLSession.shared) {
+    public init(_ requestable: Requestable, decoder: JSONDecoder = JSONDecoder(), session: Session = URLSession.shared) {
         super.init()
         taskMaker = {
             return session.dataTask(forRequest: requestable.request, decoder: decoder) { (result: Result<(D, HTTPURLResponse)>) in
@@ -131,7 +131,7 @@ public class URLResponseOperation: NetworkOperation<HTTPURLResponse> {
     /// - Parameters:
     ///   - requestable: A requestable describing the web resource to fetch.
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(_ requestable: Requestable, session: URLSession = URLSession.shared) {
+    public init(_ requestable: Requestable, session: Session = URLSession.shared) {
         super.init()
         taskMaker = {
             return session.dataTask(forRequest: requestable.request)  { (result: Result<(Data?, HTTPURLResponse)>) in
@@ -155,7 +155,7 @@ public class DataOperation: NetworkOperation<(Data, HTTPURLResponse)> {
     /// - Parameters:
     ///   - requestable: A requestable describing the web resource to fetch.
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(_ requestable: Requestable, session: URLSession = URLSession.shared) {
+    public init(_ requestable: Requestable, session: Session = URLSession.shared) {
         super.init()
         taskMaker = {
             return session.dataTask(forRequest: requestable.request)  { (result: Result<(Data?, HTTPURLResponse)>) in
@@ -183,7 +183,7 @@ public class ImageOperation: NetworkOperation<(UIImage, HTTPURLResponse)> {
     /// - Parameters:
     ///   - requestable: A requestable describing the web resource to fetch.
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(_ requestable: Requestable, session: URLSession = URLSession.shared) {
+    public init(_ requestable: Requestable, session: Session = URLSession.shared) {
         super.init()
         taskMaker = {
             return session.dataTask(forRequest: requestable.request)  { (result: Result<(Data?, HTTPURLResponse)>) in
@@ -205,16 +205,15 @@ public class ImageOperation: NetworkOperation<(UIImage, HTTPURLResponse)> {
 }
 
 /// A subclass of `NetworkOperation`.
-/// `MockRequestOperation` will attempt to parse the contents of a file loaded from
+/// `FileRequestOperation` will attempt to parse the contents of a file loaded from
 /// the main bundle into a `Decodable` type.
-public class MockRequestOperation<Output: Decodable>: NetworkOperation<Output> {
+public class FileRequestOperation<Output: Decodable>: NetworkOperation<Output> {
     
     let fileName: String
     let decoder: JSONDecoder
     let error: Error?
     
-    /// Create a new `MockRequestOperation`.
-    /// To be used in tests and mocked builds with no network connectivity.
+    /// Create a new `FileRequestOperation`.
     /// The provided file is loaded and parsed in the same manner as `RequestOperation`.
     ///
     /// - Parameters:

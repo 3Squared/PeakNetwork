@@ -14,7 +14,7 @@
 		CB2380E51F740D1500F1B001 /* CertificatePinningSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */; };
 		CB2380E61F740D1500F1B001 /* ImageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DD1F740D1500F1B001 /* ImageController.swift */; };
 		CB2380E71F740D1500F1B001 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DE1F740D1500F1B001 /* Operators.swift */; };
-		CB2380E81F740D1500F1B001 /* URLSession+Tasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DF1F740D1500F1B001 /* URLSession+Tasks.swift */; };
+		CB2380E81F740D1500F1B001 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DF1F740D1500F1B001 /* Session.swift */; };
 		CB2380E91F740D1500F1B001 /* HTTPMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380E01F740D1500F1B001 /* HTTPMethods.swift */; };
 		CB2380EB1F740D1500F1B001 /* DeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380E21F740D1500F1B001 /* DeviceProfile.swift */; };
 		CB2380EC1F740D1500F1B001 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380E31F740D1500F1B001 /* Errors.swift */; };
@@ -51,7 +51,7 @@
 		CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatePinningSessionDelegate.swift; sourceTree = "<group>"; };
 		CB2380DD1F740D1500F1B001 /* ImageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageController.swift; sourceTree = "<group>"; };
 		CB2380DE1F740D1500F1B001 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
-		CB2380DF1F740D1500F1B001 /* URLSession+Tasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Tasks.swift"; sourceTree = "<group>"; };
+		CB2380DF1F740D1500F1B001 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		CB2380E01F740D1500F1B001 /* HTTPMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethods.swift; sourceTree = "<group>"; };
 		CB2380E21F740D1500F1B001 /* DeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceProfile.swift; sourceTree = "<group>"; };
 		CB2380E31F740D1500F1B001 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
@@ -146,7 +146,7 @@
 				CB2380DD1F740D1500F1B001 /* ImageController.swift */,
 				CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */,
 				CB2380DE1F740D1500F1B001 /* Operators.swift */,
-				CB2380DF1F740D1500F1B001 /* URLSession+Tasks.swift */,
+				CB2380DF1F740D1500F1B001 /* Session.swift */,
 				CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */,
 			);
 			path = THRNetwork;
@@ -386,7 +386,7 @@
 				CB2380E91F740D1500F1B001 /* HTTPMethods.swift in Sources */,
 				CB2380E51F740D1500F1B001 /* CertificatePinningSessionDelegate.swift in Sources */,
 				CB2380E61F740D1500F1B001 /* ImageController.swift in Sources */,
-				CB2380E81F740D1500F1B001 /* URLSession+Tasks.swift in Sources */,
+				CB2380E81F740D1500F1B001 /* Session.swift in Sources */,
 				CB2380EC1F740D1500F1B001 /* Errors.swift in Sources */,
 				CB3AA6CA1FD5A5C9008EFC5C /* HTTPStatusCodes.swift in Sources */,
 				CB2380EB1F740D1500F1B001 /* DeviceProfile.swift in Sources */,
