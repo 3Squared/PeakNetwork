@@ -18,7 +18,7 @@ public protocol Session {
 
 
 /// This describes a mocked response.
-struct MockResponse {
+public struct MockResponse {
     let data: Data
     let error: Error?
     let statusCode: HTTPStatusCode
@@ -145,7 +145,7 @@ struct MockResponse {
 
 
 /// A mock object implementing a shared interface with URLSession.
-class MockSession: Session {
+public class MockSession: Session {
     
     typealias MockSessionConfigurationBlock = (MockSession) -> ()
     
@@ -167,7 +167,7 @@ class MockSession: Session {
         responses += [response]
     }
     
-    func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskCompletionHandler) -> URLSessionDataTask {
+    public func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskCompletionHandler) -> URLSessionDataTask {
         guard let response = (responses.first { $0.isValid(request) }),
             let index = (responses.index { $0.isValid(request) }) else {
             fatalError("No matching mock response found for the request (\(request))")
