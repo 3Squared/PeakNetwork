@@ -59,7 +59,6 @@ class NetworkTests: XCTestCase {
             session.queue(response: MockResponse(statusCode: .ok))
         }
 
-        
         let expect = expectation(description: "")
 
         let networkOperation = URLResponseOperation(URLRequestable(URL(string: "http://google.com")!), session: session)
