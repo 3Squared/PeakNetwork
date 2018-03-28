@@ -35,7 +35,7 @@ public struct MockResponse {
     ///   - responseHeaders: Headers to be returned in the response.
     ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
     ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
-    init<T: Encodable>(json: [T],
+    public init<T: Encodable>(json: [T],
                        statusCode: HTTPStatusCode = .ok,
                        responseHeaders: [String: String] = [:],
                        error: Error? = nil,
@@ -57,7 +57,7 @@ public struct MockResponse {
     ///   - responseHeaders: Headers to be returned in the response.
     ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
     ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
-    init<T: Encodable>(json: [String: T],
+    public init<T: Encodable>(json: [String: T],
                        statusCode: HTTPStatusCode = .ok,
                        responseHeaders: [String: String] = [:],
                        error: Error? = nil,
@@ -79,7 +79,7 @@ public struct MockResponse {
     ///   - responseHeaders: Headers to be returned in the response.
     ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
     ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
-    init(fileName: String,
+    public init(fileName: String,
          statusCode: HTTPStatusCode = .ok,
          responseHeaders: [String: String] = [:],
          error: Error? = nil,
@@ -103,7 +103,7 @@ public struct MockResponse {
     ///   - responseHeaders: Headers to be returned in the response.
     ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
     ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
-    init(jsonString: String,
+    public init(jsonString: String,
          statusCode: HTTPStatusCode = .ok,
          responseHeaders: [String: String] = [:],
          error: Error? = nil,
@@ -127,7 +127,7 @@ public struct MockResponse {
     ///   - responseHeaders: Headers to be returned in the response.
     ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
     ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
-    init(data: Data = Data(),
+    public init(data: Data = Data(),
          statusCode: HTTPStatusCode = .ok,
          responseHeaders: [String: String] = [:],
          error: Error? = nil,
@@ -147,7 +147,7 @@ public struct MockResponse {
 /// A mock object implementing a shared interface with URLSession.
 public class MockSession: Session {
     
-    typealias MockSessionConfigurationBlock = (MockSession) -> ()
+    public typealias MockSessionConfigurationBlock = (MockSession) -> ()
     
     private var responses: [MockResponse] = []
     
@@ -155,7 +155,7 @@ public class MockSession: Session {
     /// Create a new session.
     ///
     /// - Parameter configure: Configure the session.
-    init(configure: MockSessionConfigurationBlock? = nil) {
+    public init(configure: MockSessionConfigurationBlock? = nil) {
         configure?(self)
     }
     
@@ -163,7 +163,7 @@ public class MockSession: Session {
     /// Queue up a new response.
     ///
     /// - Parameter response: A MockResponse.
-    func queue(response: MockResponse) {
+    public func queue(response: MockResponse) {
         responses += [response]
     }
     
