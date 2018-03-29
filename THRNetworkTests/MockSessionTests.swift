@@ -180,4 +180,27 @@ class MockSessionTests: XCTestCase {
         
         waitForExpectations(timeout: 1)
     }
+    
+    func testFallbackSessionIsUsedIfNoMatchingResponse()  {
+        let expect = expectation(description: "")
+        expect.expectedFulfillmentCount = 1
+        
+        let fallback = MockSession { session in
+            session.queue(response: MockResponse(statusCode: .ok) { $0.url?.host == "reddit.com" })
+        }
+        
+        let session = MockSession(fallbackToSession: fallback) { session in
+            session.queue(response: MockResponse(statusCode: .ok) { $0.url?.host == "google.com" })
+        }
+        
+        let request = URLRequest(url: URL(string:"http://reddit.com")!)
+        
+        session.dataTask(with: request) { data, response, error in
+            XCTAssert((response as! HTTPURLResponse).statusCodeEnum == .ok)
+            expect.fulfill()
+        }.resume()
+
+        
+        waitForExpectations(timeout: 1)
+    }
 }

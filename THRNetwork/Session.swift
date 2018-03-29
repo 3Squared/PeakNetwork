@@ -36,18 +36,18 @@ public struct MockResponse {
     ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
     ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
     public init<T: Encodable>(json: [T],
-                       statusCode: HTTPStatusCode = .ok,
-                       responseHeaders: [String: String] = [:],
-                       error: Error? = nil,
-                       sticky: Bool = false,
-                       isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
+                              statusCode: HTTPStatusCode = .ok,
+                              responseHeaders: [String: String] = [:],
+                              error: Error? = nil,
+                              sticky: Bool = false,
+                              isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
         self.init(data: try! JSONEncoder().encode(json),
                   statusCode: statusCode,
                   responseHeaders: responseHeaders,
                   error: error,
                   isValid: isValid)
     }
-
+    
     /// Create a new `MockResponse` with a JSON-type object.
     ///
     /// - Parameters:
@@ -58,11 +58,11 @@ public struct MockResponse {
     ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
     ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
     public init<T: Encodable>(json: [String: T],
-                       statusCode: HTTPStatusCode = .ok,
-                       responseHeaders: [String: String] = [:],
-                       error: Error? = nil,
-                       sticky: Bool = false,
-                       isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
+                              statusCode: HTTPStatusCode = .ok,
+                              responseHeaders: [String: String] = [:],
+                              error: Error? = nil,
+                              sticky: Bool = false,
+                              isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
         self.init(data: try! JSONEncoder().encode(json),
                   statusCode: statusCode,
                   responseHeaders: responseHeaders,
@@ -80,11 +80,11 @@ public struct MockResponse {
     ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
     ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
     public init(fileName: String,
-         statusCode: HTTPStatusCode = .ok,
-         responseHeaders: [String: String] = [:],
-         error: Error? = nil,
-         sticky: Bool = false,
-         isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
+                statusCode: HTTPStatusCode = .ok,
+                responseHeaders: [String: String] = [:],
+                error: Error? = nil,
+                sticky: Bool = false,
+                isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
         let path = Bundle.allBundles.path(forResource: fileName, ofType: "json")!
         let data = try! NSData(contentsOfFile: path) as Data
         self.init(data: data,
@@ -93,7 +93,7 @@ public struct MockResponse {
                   error: error,
                   isValid: isValid)
     }
-
+    
     /// Create a new `MockResponse` from a JSON string.
     ///
     /// - Parameters:
@@ -104,11 +104,11 @@ public struct MockResponse {
     ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
     ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
     public init(jsonString: String,
-         statusCode: HTTPStatusCode = .ok,
-         responseHeaders: [String: String] = [:],
-         error: Error? = nil,
-         sticky: Bool = false,
-         isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
+                statusCode: HTTPStatusCode = .ok,
+                responseHeaders: [String: String] = [:],
+                error: Error? = nil,
+                sticky: Bool = false,
+                isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
         
         self.init(data: jsonString.data(using: .utf8)!,
                   statusCode: statusCode,
@@ -128,11 +128,11 @@ public struct MockResponse {
     ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
     ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
     public init(data: Data = Data(),
-         statusCode: HTTPStatusCode = .ok,
-         responseHeaders: [String: String] = [:],
-         error: Error? = nil,
-         sticky: Bool = false,
-         isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
+                statusCode: HTTPStatusCode = .ok,
+                responseHeaders: [String: String] = [:],
+                error: Error? = nil,
+                sticky: Bool = false,
+                isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
         self.data = data
         self.statusCode = statusCode
         self.responseHeaders = responseHeaders
@@ -150,13 +150,17 @@ public class MockSession: Session {
     public typealias MockSessionConfigurationBlock = (MockSession) -> ()
     
     private var responses: [MockResponse] = []
-    
+    private var fallbackSession: Session?
     
     /// Create a new session.
     ///
-    /// - Parameter configure: Configure the session.
-    public init(configure: MockSessionConfigurationBlock? = nil) {
+    /// - Parameters:
+    ///   - session: A session to fallback to, if no matching response is found.
+    ///              Pass URLSession.shared to mock some calls but allow others to hit the web.
+    ///   - configure: Configure the session.
+    public init(fallbackToSession session: Session? = nil, configure: MockSessionConfigurationBlock? = nil) {
         configure?(self)
+        fallbackSession = session
     }
     
     
@@ -170,7 +174,11 @@ public class MockSession: Session {
     public func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskCompletionHandler) -> URLSessionDataTask {
         guard let response = (responses.first { $0.isValid(request) }),
             let index = (responses.index { $0.isValid(request) }) else {
-            fatalError("No matching mock response found for the request (\(request))")
+                if let session = self.fallbackSession {
+                    return session.dataTask(with: request, completionHandler: completionHandler)
+                } else {
+                    fatalError("No matching mock response found for the request (\(request))")
+                }
         }
         
         if !response.sticky {
@@ -185,7 +193,7 @@ public class MockSession: Session {
         let completionHandler: DataTaskCompletionHandler
         let taskResponse: MockResponse
         let request: URLRequest
-
+        
         init(_ response: MockResponse, forRequest request: URLRequest, completionHandler: @escaping DataTaskCompletionHandler) {
             self.taskResponse = response
             self.request = request
@@ -197,7 +205,7 @@ public class MockSession: Session {
                                                             statusCode: taskResponse.statusCode,
                                                             httpVersion: "1.1",
                                                             headerFields: taskResponse.responseHeaders)
-
+            
             completionHandler(taskResponse.data, urlResponse, taskResponse.error)
         }
         
@@ -205,7 +213,7 @@ public class MockSession: Session {
             // no-op
         }
     }
-
+    
 }
 
 
@@ -222,7 +230,7 @@ extension Session {
     ///
     /// - returns: A new URLSessionTask.
     func dataTask<U: URLResponse>(forRequest request: URLRequest, completion: @escaping (Result<(Data?, U)>) -> Void) -> URLSessionTask {
-       let request = setHeaders(on: request)
+        let request = setHeaders(on: request)
         return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             if let error = error {
                 completion(Result { throw error })
@@ -243,7 +251,7 @@ extension Session {
             }
         }
     }
-
+    
     
     /// Create a URLSessionTask for a `Decodable` object.
     ///
