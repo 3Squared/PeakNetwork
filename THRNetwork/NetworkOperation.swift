@@ -73,8 +73,8 @@ public class BlockRequestable: Requestable {
 }
 
 /// A subclass of `NetworkOperation`.
-/// `RequestOperation` will attempt to parse the response into a `Decodable` type.
-public class RequestOperation<D: Decodable>: NetworkOperation<(D, HTTPURLResponse)> {
+/// `DecodableResponseOperation` will attempt to parse the response into a `Decodable` type.
+public class DecodableResponseOperation<D: Decodable>: NetworkOperation<(D, HTTPURLResponse)> {
     
     /// Create a new `RequestOperation`, parsing the response to a list of the given generic type.
     ///
@@ -98,10 +98,10 @@ public protocol HTTPHeaders {
 }
 
 /// A subclass of `NetworkOperation`.
-/// `RequestWithHeadersOperation` will attempt to parse the response into a `Decodable` type, and the header fields into a `Headers` type.
-public class RequestWithHeadersOperation<D: Decodable, H: HTTPHeaders>: NetworkOperation<(D, H, HTTPURLResponse)> {
+/// `DecodableResponseHeadersOperation` will attempt to parse the response into a `Decodable` type, and the header fields into a `Headers` type.
+public class DecodableResponseHeadersOperation<D: Decodable, H: HTTPHeaders>: NetworkOperation<(D, H, HTTPURLResponse)> {
     
-    /// Create a new `RequestWithHeadersOperation`, parsing the response to a list of the given generic type.
+    /// Create a new `DecodableResponseHeadersOperation`, parsing the response to a list of the given generic type.
     ///
     /// - Parameters:
     ///   - requestable: A requestable describing the web resource to fetch.
@@ -148,9 +148,9 @@ public class URLResponseOperation: NetworkOperation<HTTPURLResponse> {
 }
 
 /// A subclass of `NetworkOperation` which will return the response as `Data`.
-public class DataOperation: NetworkOperation<(Data, HTTPURLResponse)> {
+public class DataResponseOperation: NetworkOperation<(Data, HTTPURLResponse)> {
     
-    /// Create a new `DataOperation`.
+    /// Create a new `DataResponseOperation`.
     ///
     /// - Parameters:
     ///   - requestable: A requestable describing the web resource to fetch.
@@ -176,9 +176,9 @@ public class DataOperation: NetworkOperation<(Data, HTTPURLResponse)> {
 }
 
 /// A subclass of `NetworkOperation` which will return the response parsed as a `UIImage`.
-public class ImageOperation: NetworkOperation<(UIImage, HTTPURLResponse)> {
+public class ImageResponseOperation: NetworkOperation<(UIImage, HTTPURLResponse)> {
     
-    /// Create a new `ImageOperation`.
+    /// Create a new `ImageResponseOperation`.
     ///
     /// - Parameters:
     ///   - requestable: A requestable describing the web resource to fetch.
@@ -204,40 +204,34 @@ public class ImageOperation: NetworkOperation<(UIImage, HTTPURLResponse)> {
     }
 }
 
-/// A subclass of `NetworkOperation`.
-/// `FileRequestOperation` will attempt to parse the contents of a file loaded from
+
+/// `DecodableFileOperation` will attempt to parse the contents of a file loaded from
 /// the main bundle into a `Decodable` type.
-public class FileRequestOperation<Output: Decodable>: NetworkOperation<Output> {
+public class DecodableFileOperation<Output: Decodable>: ConcurrentOperation, ProducesResult {
     
+    public var output: Result<Output> = Result { throw ResultError.noResult }
+
     let fileName: String
     let decoder: JSONDecoder
-    let error: Error?
     
-    /// Create a new `FileRequestOperation`.
+    /// Create a new `DecodableFileOperation`.
     /// The provided file is loaded and parsed in the same manner as `RequestOperation`.
     ///
     /// - Parameters:
     ///   - fileName: The name of a JSON file added to the main bundle.
     ///   - decoder: A `JSONDecoder` configured appropriately.
-    ///   - error: An optional error that will be immediately thrown upon operation execution, for mocking network errors.
-    public init(withFileName fileName: String, decoder: JSONDecoder = JSONDecoder(), error: Error? = nil) {
+    public init(withFileName fileName: String, decoder: JSONDecoder = JSONDecoder()) {
         self.fileName = fileName
         self.decoder = decoder
-        self.error = error
     }
     
     override open func execute() {
-        if let error = error {
-            self.output = Result { throw error }
+        DispatchQueue.main.async {
+            let path = Bundle.allBundles.path(forResource: self.fileName, ofType: "json")!
+            let jsonData = try! NSData(contentsOfFile: path) as Data
+            let decodedData = try! self.decoder.decode(Output.self, from: jsonData)
+            self.output = Result { decodedData }
             self.finish()
-        } else {
-            DispatchQueue.main.async {
-                let path = Bundle.allBundles.path(forResource: self.fileName, ofType: "json")!
-                let jsonData = try! NSData(contentsOfFile: path) as Data
-                let decodedData = try! self.decoder.decode(Output.self, from: jsonData)
-                self.output = Result { decodedData }
-                self.finish()
-            }
         }
     }
 }

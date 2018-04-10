@@ -6,10 +6,15 @@ PODS:
 DEPENDENCIES:
   - THROperations
 
+SPEC REPOS:
+  "git@gitlab.3squared.com:iOSLibraries/CocoaPodSpecs.git":
+    - THROperations
+    - THRResult
+
 SPEC CHECKSUMS:
   THROperations: dd0f3b3b359f79edbfe2be1075d64ed5cde696f1
   THRResult: 296480bc05503d1de3329f1dc71e44ace12d9176
 
 PODFILE CHECKSUM: 66fd2c6f93fa4b9911d436b6524f2615a83edcd2
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.0

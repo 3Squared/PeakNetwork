@@ -85,7 +85,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = RequestOperation<TestEntity>(URLRequestable(URL(string: "http://google.com")!), session: session)
+        let networkOperation = DecodableResponseOperation<TestEntity>(URLRequestable(URL(string: "http://google.com")!), session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -110,7 +110,7 @@ class NetworkTests: XCTestCase {
 
         let expect = expectation(description: "")
         
-        let networkOperation = RequestOperation<TestEntity>(URLRequestable(URL(string: "http://google.com")!), session: session)
+        let networkOperation = DecodableResponseOperation<TestEntity>(URLRequestable(URL(string: "http://google.com")!), session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -139,7 +139,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = RequestWithHeadersOperation<TestEntity, Headers>(URLRequestable(URL(string: "http://google.com")!), session: session)
+        let networkOperation = DecodableResponseHeadersOperation<TestEntity, Headers>(URLRequestable(URL(string: "http://google.com")!), session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -167,7 +167,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = RequestWithHeadersOperation<TestEntity, Headers>(URLRequestable(URL(string: "http://google.com")!), session: session)
+        let networkOperation = DecodableResponseHeadersOperation<TestEntity, Headers>(URLRequestable(URL(string: "http://google.com")!), session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -197,7 +197,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = RequestOperation<[TestEntity]>(URLRequestable(URL(string: "http://google.com")!), session: session)
+        let networkOperation = DecodableResponseOperation<[TestEntity]>(URLRequestable(URL(string: "http://google.com")!), session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -220,11 +220,10 @@ class NetworkTests: XCTestCase {
         let session = MockSession { session in
             session.queue(response: MockResponse(json: [["wrong" : "key"], ["name" : "Ben"]], statusCode: .ok))
         }
-
         
         let expect = expectation(description: "")
         
-        let networkOperation = RequestOperation<[TestEntity]>(URLRequestable(URL(string: "http://google.com")!), session: session)
+        let networkOperation = DecodableResponseOperation<[TestEntity]>(URLRequestable(URL(string: "http://google.com")!), session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -272,7 +271,7 @@ class NetworkTests: XCTestCase {
     func testFileRequestOperation() {
         let expect = expectation(description: "")
         
-        let networkOperation = FileRequestOperation<[TestEntity]>(withFileName: "test")
+        let networkOperation = DecodableFileOperation<[TestEntity]>(withFileName: "test")
         
         networkOperation.addResultBlock { result in
             do {
@@ -292,26 +291,7 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
-    func testFileRequestOperationError() {
-        let expect = expectation(description: "")
-        
-        let networkOperation = FileRequestOperation<[TestEntity]>(withFileName: "test", error: ServerError.unknownResponse)
-        
-        networkOperation.addResultBlock { result in
-            do {
-                let _ = try result.resolve()
-                XCTFail()
-            } catch {
-                XCTAssertTrue(error.localizedDescription.contains("THRNetwork.ServerError error"))
-                expect.fulfill()
-            }
-        }
-        
-        networkOperation.enqueue()
-        
-        waitForExpectations(timeout: 1)
-    }
-
+    
     public struct Headers: HTTPHeaders {
         
         let hello: String
@@ -321,8 +301,6 @@ class NetworkTests: XCTestCase {
             }
             self.hello = hello
         }
-
-        
     }
 
     public enum TestError: Error {

@@ -20,7 +20,7 @@ public class ImageController {
     public static var sharedInstance = ImageController()
     
     let internalQueue = OperationQueue()
-    let urlToOperationTable = NSMapTable<NSURL, ImageOperation>.strongToWeakObjects()
+    let urlToOperationTable = NSMapTable<NSURL, ImageResponseOperation>.strongToWeakObjects()
     let objectToUrlTable = NSMapTable<NSObject, NSURL>.weakToStrongObjects()
     let urlsToObjectsTable = NSMapTable<NSURL, NSMutableSet>.weakToStrongObjects()
 
@@ -75,13 +75,13 @@ public class ImageController {
             return
         }
         
-        let imageOperation: ImageOperation
+        let imageOperation: ImageResponseOperation
         var usingExisting = false
         if let existingOperation = urlToOperationTable.object(forKey: url) {
             imageOperation = existingOperation
             usingExisting = true
         } else {
-            imageOperation = ImageOperation(requestable, session: session)
+            imageOperation = ImageResponseOperation(requestable, session: session)
         }
         
         // Create an operation to fetch the image data
