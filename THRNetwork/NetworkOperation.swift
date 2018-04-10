@@ -74,7 +74,7 @@ public class BlockRequestable: Requestable {
 
 /// A subclass of `NetworkOperation`.
 /// `RequestOperation` will attempt to parse the response into a `Decodable` type.
-public class RequestOperation<D: Decodable>: NetworkOperation<D> {
+public class RequestOperation<D: Decodable>: NetworkOperation<(D, HTTPURLResponse)> {
     
     /// Create a new `RequestOperation`, parsing the response to a list of the given generic type.
     ///
@@ -85,13 +85,43 @@ public class RequestOperation<D: Decodable>: NetworkOperation<D> {
     public init(_ requestable: Requestable, decoder: JSONDecoder = JSONDecoder(), session: URLSession = URLSession.shared) {
         super.init()
         taskMaker = {
-            return session.dataTask(forRequest: requestable.request, decoder: decoder) { (result: Result<D>) in
+            return session.dataTask(forRequest: requestable.request, decoder: decoder) { (result: Result<(D, HTTPURLResponse)>) in
                 self.output = result
                 self.finish()
             }
         }
     }
 }
+
+public protocol HTTPHeaders {
+    init(withHeaders headers: [AnyHashable: Any]) throws
+}
+
+/// A subclass of `NetworkOperation`.
+/// `RequestWithHeadersOperation` will attempt to parse the response into a `Decodable` type, and the header fields into a `Headers` type.
+public class RequestWithHeadersOperation<D: Decodable, H: HTTPHeaders>: NetworkOperation<(D, H, HTTPURLResponse)> {
+    
+    /// Create a new `RequestWithHeadersOperation`, parsing the response to a list of the given generic type.
+    ///
+    /// - Parameters:
+    ///   - requestable: A requestable describing the web resource to fetch.
+    ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
+    ///   - session: The `URLSession` in which to perform the fetch (optional).
+    public init(_ requestable: Requestable, decoder: JSONDecoder = JSONDecoder(), session: URLSession = URLSession.shared) {
+        super.init()
+        taskMaker = {
+            return session.dataTask(forRequest: requestable.request, decoder: decoder) { (result: Result<(D, HTTPURLResponse)>) in
+                self.output = Result {
+                    let (decoded, response) = try result.resolve()
+                    let headers = try H(withHeaders: response.allHeaderFields)
+                    return (decoded, headers, response)
+                }
+                self.finish()
+            }
+        }
+    }
+}
+
 
 /// A subclass of `NetworkOperation` which will return the basic response.
 public class URLResponseOperation: NetworkOperation<HTTPURLResponse> {
@@ -104,9 +134,9 @@ public class URLResponseOperation: NetworkOperation<HTTPURLResponse> {
     public init(_ requestable: Requestable, session: URLSession = URLSession.shared) {
         super.init()
         taskMaker = {
-            return session.dataTask(forRequest: requestable.request)  { (result: Result<(HTTPURLResponse, Data?)>) in
+            return session.dataTask(forRequest: requestable.request)  { (result: Result<(Data?, HTTPURLResponse)>) in
                 do {
-                    let (response, _) = try result.resolve()
+                    let (_, response) = try result.resolve()
                     self.output = Result { return response }
                 } catch {
                     self.output = Result { throw error }
@@ -118,7 +148,7 @@ public class URLResponseOperation: NetworkOperation<HTTPURLResponse> {
 }
 
 /// A subclass of `NetworkOperation` which will return the response as `Data`.
-public class DataOperation: NetworkOperation<Data> {
+public class DataOperation: NetworkOperation<(Data, HTTPURLResponse)> {
     
     /// Create a new `DataOperation`.
     ///
@@ -128,11 +158,11 @@ public class DataOperation: NetworkOperation<Data> {
     public init(_ requestable: Requestable, session: URLSession = URLSession.shared) {
         super.init()
         taskMaker = {
-            return session.dataTask(forRequest: requestable.request)  { (result: Result<(HTTPURLResponse, Data?)>) in
+            return session.dataTask(forRequest: requestable.request)  { (result: Result<(Data?, HTTPURLResponse)>) in
                 do {
-                    let (_, data) = try result.resolve()
+                    let (data, response) = try result.resolve()
                     if let d = data {
-                        self.output = Result { return d }
+                        self.output = Result { return (d, response) }
                     } else {
                         self.output = Result { throw ResultError.noResult }
                     }
@@ -146,7 +176,7 @@ public class DataOperation: NetworkOperation<Data> {
 }
 
 /// A subclass of `NetworkOperation` which will return the response parsed as a `UIImage`.
-public class ImageOperation: NetworkOperation<UIImage> {
+public class ImageOperation: NetworkOperation<(UIImage, HTTPURLResponse)> {
     
     /// Create a new `ImageOperation`.
     ///
@@ -156,11 +186,11 @@ public class ImageOperation: NetworkOperation<UIImage> {
     public init(_ requestable: Requestable, session: URLSession = URLSession.shared) {
         super.init()
         taskMaker = {
-            return session.dataTask(forRequest: requestable.request)  { (result: Result<(HTTPURLResponse, Data?)>) in
+            return session.dataTask(forRequest: requestable.request)  { (result: Result<(Data?, HTTPURLResponse)>) in
                 do {
-                    let (_, data) = try result.resolve()
+                    let (data, response) = try result.resolve()
                     if let d = data, let image = UIImage(data: d) {
-                        self.output = Result { return image }
+                        self.output = Result { return (image, response) }
                     } else {
                         self.output = Result { throw ResultError.noResult }
                     }
