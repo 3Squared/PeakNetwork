@@ -1,6 +1,6 @@
 //
-//  GetRepositoryProcedure.swift
-//  Hubble
+//  NetworkOperation.swift
+//  THRNetwork
 //
 //  Created by Sam Oakley on 10/10/2016.
 //  Copyright © 2016 Sam Oakley. All rights reserved.

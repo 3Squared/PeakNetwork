@@ -1,6 +1,6 @@
 //
 //  DeviceProfile.swift
-//  Network
+//  THRNetwork
 //
 //  Created by Chris Goldsmith on 02/02/2017.
 //  Copyright © 2017 3Squared. All rights reserved.
