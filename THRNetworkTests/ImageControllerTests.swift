@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import OHHTTPStubs
 @testable import THRNetwork
 
 class ImageControllerTests: XCTestCase {
@@ -15,26 +14,23 @@ class ImageControllerTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        let new = ImageController()
-        ImageController.sharedInstance = new
-
         let bundle = Bundle(for: type(of: self))
         let data300 = try! Data(contentsOf: bundle.url(forResource: "300", withExtension: "png")!)
-        let _ = stub(condition: isPath("/300")) { _ -> OHHTTPStubsResponse in
-            return OHHTTPStubsResponse(data: data300, statusCode: 200, headers: nil).responseTime(1)
+        let data600 = try! Data(contentsOf: bundle.url(forResource: "600", withExtension: "png")!)
+
+        let session = MockSession { session in
+            session.queue(response: MockResponse(data: data300, statusCode: .ok, sticky: true) { request in
+                return request.url?.path == "/300"
+            })
+            session.queue(response: MockResponse(data: data600, statusCode: .ok, sticky: true) { request in
+                return request.url?.path == "/600"
+            })
         }
         
-        let data600 = try! Data(contentsOf: bundle.url(forResource: "600", withExtension: "png")!)
-        let _ = stub(condition: isPath("/600")) { _ -> OHHTTPStubsResponse in
-            return OHHTTPStubsResponse(data: data600, statusCode: 200, headers: nil).responseTime(1)
-        }
+        let new = ImageController(session)
+        ImageController.sharedInstance = new
+    }
 
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-        OHHTTPStubs.removeAllStubs()
-    }
     
     func testSharedInstance() {
         XCTAssert(ImageController.sharedInstance === ImageController.sharedInstance)

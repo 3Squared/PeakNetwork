@@ -1,22 +1,27 @@
 PODS:
-  - THRNetwork (0.1.0):
-    - THROperations (~> 0.0.1)
-  - THROperations (0.0.2):
-    - THRResult (~> 0.0.1)
-  - THRResult (0.0.1)
+  - THRNetwork (2.0.0):
+    - THROperations
+  - THROperations (1.3.0):
+    - THRResult (~> 1.0.0)
+  - THRResult (1.0.0)
 
 DEPENDENCIES:
   - THRNetwork (from `../`)
+
+SPEC REPOS:
+  "git@gitlab.3squared.com:iOSLibraries/CocoaPodSpecs.git":
+    - THROperations
+    - THRResult
 
 EXTERNAL SOURCES:
   THRNetwork:
     :path: "../"
 
 SPEC CHECKSUMS:
-  THRNetwork: ff33c9df5410435cbb1821ba3aafcdd5d5d9a442
-  THROperations: c2a652d2425eb854c541f3dbeb37dbf25ea05516
-  THRResult: 173d7193812ef859e14c8fdbe8cd81e9deea5db4
+  THRNetwork: 17cc579518a1e9041a500b077df5b7dff2919cbe
+  THROperations: bcd3061d6574bf94f87f390ebf350d90f2f7e710
+  THRResult: 296480bc05503d1de3329f1dc71e44ace12d9176
 
 PODFILE CHECKSUM: eff8274b713db994baef2049334114d67609d38b
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.5.0

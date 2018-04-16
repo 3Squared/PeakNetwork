@@ -4,6 +4,14 @@ The changelog for `THRNetwork`.
 
 --------------------------------------
 
+3.0.0
+-----
+- Provide more explicit information for successful network requests
+- Add ability to mock requests at the session level using Session/MockSession
+- Removed MockRequestOperation
+- Add DecodableFileOperation
+- Improve consistency of operation names
+
 2.0.0
 -----
 - Update Operations library to 0.2.0

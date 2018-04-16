@@ -9,7 +9,5 @@ target 'THRNetwork' do
 			
 		target 'THRNetworkTests' do
 			inherit! :search_paths
-			pod 'OHHTTPStubs', '~> 5.2'
-			pod 'OHHTTPStubs/Swift', '~> 5.2'
 		end
 end

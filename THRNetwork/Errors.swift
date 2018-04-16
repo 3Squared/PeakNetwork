@@ -1,6 +1,6 @@
 //
 //  Errors.swift
-//  Hubble
+//  THRNetwork
 //
 //  Created by Sam Oakley on 13/10/2016.
 //  Copyright © 2016 Sam Oakley. All rights reserved.
