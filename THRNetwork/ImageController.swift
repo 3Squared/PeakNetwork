@@ -20,18 +20,18 @@ public class ImageController {
     public static var sharedInstance = ImageController()
     
     let internalQueue = OperationQueue()
-    let urlToOperationTable = NSMapTable<NSURL, ImageOperation>.strongToWeakObjects()
+    let urlToOperationTable = NSMapTable<NSURL, ImageResponseOperation>.strongToWeakObjects()
     let objectToUrlTable = NSMapTable<NSObject, NSURL>.weakToStrongObjects()
     let urlsToObjectsTable = NSMapTable<NSURL, NSMutableSet>.weakToStrongObjects()
 
     let cache = NSCache<NSURL, UIImage>()
-    let session: URLSession
+    let session: Session
     
     
     /// Create a new `ImageController`.
     ///
     /// - Parameter session: The `URLSession` in which to perform the fetches (optional).
-    public init(_ session: URLSession = URLSession.shared) {
+    public init(_ session: Session = URLSession.shared) {
         cache.totalCostLimit = 128 * 1024 * 1024;
         self.session = session
     }
@@ -75,13 +75,13 @@ public class ImageController {
             return
         }
         
-        let imageOperation: ImageOperation
+        let imageOperation: ImageResponseOperation
         var usingExisting = false
         if let existingOperation = urlToOperationTable.object(forKey: url) {
             imageOperation = existingOperation
             usingExisting = true
         } else {
-            imageOperation = ImageOperation(requestable, session: session)
+            imageOperation = ImageResponseOperation(requestable, session: session)
         }
         
         // Create an operation to fetch the image data
