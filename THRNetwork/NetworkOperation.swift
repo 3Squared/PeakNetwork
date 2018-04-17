@@ -73,35 +73,10 @@ public class BlockRequestable: Requestable {
 }
 
 /// A subclass of `NetworkOperation`.
-/// `DecodableResponseOperation` will attempt to parse the response into a `Decodable` type.
-public class DecodableResponseOperation<D: Decodable>: NetworkOperation<(D, HTTPURLResponse)> {
+/// `DecodableOperation` will attempt to parse the response into a `Decodable` type.
+public class DecodableOperation<D: Decodable>: NetworkOperation<D> {
     
-    /// Create a new `RequestOperation`, parsing the response to a list of the given generic type.
-    ///
-    /// - Parameters:
-    ///   - requestable: A requestable describing the web resource to fetch.
-    ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
-    ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(_ requestable: Requestable, decoder: JSONDecoder = JSONDecoder(), session: Session = URLSession.shared) {
-        super.init()
-        taskMaker = {
-            return session.dataTask(forRequest: requestable.request, decoder: decoder) { (result: Result<(D, HTTPURLResponse)>) in
-                self.output = result
-                self.finish()
-            }
-        }
-    }
-}
-
-public protocol HTTPHeaders {
-    init(withHeaders headers: [AnyHashable: Any]) throws
-}
-
-/// A subclass of `NetworkOperation`.
-/// `DecodableResponseHeadersOperation` will attempt to parse the response into a `Decodable` type, and the header fields into a `Headers` type.
-public class DecodableResponseHeadersOperation<D: Decodable, H: HTTPHeaders>: NetworkOperation<(D, H, HTTPURLResponse)> {
-    
-    /// Create a new `DecodableResponseHeadersOperation`, parsing the response to a list of the given generic type.
+    /// Create a new `DecodableResponseOperation`, parsing the response to a list of the given generic type.
     ///
     /// - Parameters:
     ///   - requestable: A requestable describing the web resource to fetch.
@@ -112,10 +87,30 @@ public class DecodableResponseHeadersOperation<D: Decodable, H: HTTPHeaders>: Ne
         taskMaker = {
             return session.dataTask(forRequest: requestable.request, decoder: decoder) { (result: Result<(D, HTTPURLResponse)>) in
                 self.output = Result {
-                    let (decoded, response) = try result.resolve()
-                    let headers = try H(withHeaders: response.allHeaderFields)
-                    return (decoded, headers, response)
+                    let (decoded, _) = try result.resolve()
+                    return decoded
                 }
+                self.finish()
+            }
+        }
+    }
+}
+
+/// A subclass of `NetworkOperation`.
+/// `DecodableResponseOperation` will attempt to parse the response into a `Decodable` type.
+public class DecodableResponseOperation<D: Decodable>: NetworkOperation<(D, HTTPURLResponse)> {
+    
+    /// Create a new `DecodableResponseOperation`, parsing the response to a list of the given generic type.
+    ///
+    /// - Parameters:
+    ///   - requestable: A requestable describing the web resource to fetch.
+    ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
+    ///   - session: The `URLSession` in which to perform the fetch (optional).
+    public init(_ requestable: Requestable, decoder: JSONDecoder = JSONDecoder(), session: Session = URLSession.shared) {
+        super.init()
+        taskMaker = {
+            return session.dataTask(forRequest: requestable.request, decoder: decoder) { (result: Result<(D, HTTPURLResponse)>) in
+                self.output = result
                 self.finish()
             }
         }

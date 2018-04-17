@@ -130,66 +130,7 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
-    
-    func testRequestOperationWithHeadersParseSuccess() {
-        let session = MockSession { session in
-            session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok, responseHeaders: ["hello": "World!"]))
-        }
-
         
-        let expect = expectation(description: "")
-        
-        let networkOperation = DecodableResponseHeadersOperation<TestEntity, Headers>(URLRequestable(URL(string: "http://google.com")!), session: session)
-        
-        networkOperation.addResultBlock { result in
-            do {
-                let (entity, headers, _) = try result.resolve()
-                
-                XCTAssertEqual(entity.name, "Sam")
-                XCTAssertEqual(headers.hello, "World!")
-                
-                expect.fulfill()
-            } catch {
-                XCTFail()
-            }
-        }
-        
-        networkOperation.enqueue()
-        
-        waitForExpectations(timeout: 1)
-    }
-
-    
-    func testRequestOperationWithHeadersParseFailure() {
-        let session = MockSession { session in
-            session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok, responseHeaders: ["missing": "key"]))
-        }
-        
-        let expect = expectation(description: "")
-        
-        let networkOperation = DecodableResponseHeadersOperation<TestEntity, Headers>(URLRequestable(URL(string: "http://google.com")!), session: session)
-        
-        networkOperation.addResultBlock { result in
-            do {
-                let _ = try result.resolve()
-                XCTFail()
-            } catch {
-                switch error {
-                case TestError.justATest:
-                    expect.fulfill()
-                default:
-                    XCTFail()
-                }
-            }
-        }
-        
-        networkOperation.enqueue()
-        
-        waitForExpectations(timeout: 1)
-    }
-
-    
-    
     func testManyRequestOperationParseSuccess() {
         let session = MockSession { session in
             session.queue(response: MockResponse(json: [["name" : "Sam"], ["name" : "Ben"]], statusCode: .ok))
@@ -291,17 +232,6 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
-    
-    public struct Headers: HTTPHeaders {
-        
-        let hello: String
-        public init(withHeaders headers: [AnyHashable : Any]) throws {
-            guard let hello = headers["hello"] as? String else {
-                throw TestError.justATest
-            }
-            self.hello = hello
-        }
-    }
 
     public enum TestError: Error {
         case justATest
