@@ -45,6 +45,7 @@ public struct MockResponse {
                   statusCode: statusCode,
                   responseHeaders: responseHeaders,
                   error: error,
+                  sticky: sticky,
                   isValid: isValid)
     }
     
@@ -67,6 +68,7 @@ public struct MockResponse {
                   statusCode: statusCode,
                   responseHeaders: responseHeaders,
                   error: error,
+                  sticky: sticky,
                   isValid: isValid)
     }
     
@@ -91,6 +93,7 @@ public struct MockResponse {
                   statusCode: statusCode,
                   responseHeaders: responseHeaders,
                   error: error,
+                  sticky: sticky,
                   isValid: isValid)
     }
     
@@ -114,6 +117,7 @@ public struct MockResponse {
                   statusCode: statusCode,
                   responseHeaders: responseHeaders,
                   error: error,
+                  sticky: sticky,
                   isValid: isValid)
     }
     
