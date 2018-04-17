@@ -4,6 +4,11 @@ The changelog for `THRNetwork`.
 
 --------------------------------------
 
+3.1.0
+-----
+- Add a variant of DecodableResponseOperation that does not have a URLRequest in the result
+- Remove Header parsing support
+
 3.0.0
 -----
 - Provide more explicit information for successful network requests
