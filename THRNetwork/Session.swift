@@ -176,8 +176,10 @@ public class MockSession: Session {
     }
     
     public func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskCompletionHandler) -> URLSessionDataTask {
-        guard let response = (responses.first { $0.isValid(request) }),
-            let index = (responses.index { $0.isValid(request) }) else {
+        
+        let isValid: (_ response: MockResponse) -> Bool = { return $0.isValid(request) }
+        
+        guard let response = responses.first(where: isValid), let index = responses.index(where: isValid) else {
                 if let session = self.fallbackSession {
                     return session.dataTask(with: request, completionHandler: completionHandler)
                 } else {
