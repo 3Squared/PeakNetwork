@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "THRNetwork"
-  s.version      = "3.0.1"
+  s.version      = "3.1.0"
   s.summary      = "A collection of classes to aid performing network operations."
   s.homepage     = "https://gitlab.3squared.com/iOSLibraries/THRNetwork"
   s.license      = { :type => 'Custom', :file => 'LICENCE' }
