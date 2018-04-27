@@ -4,6 +4,11 @@ The changelog for `THRNetwork`.
 
 --------------------------------------
 
+3.1.1
+-----
+- Set minimum deployment target to 10
+- Update THROperations
+
 3.1.0
 -----
 - Add a variant of DecodableResponseOperation that does not have a URLRequest in the result
