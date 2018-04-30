@@ -4,6 +4,10 @@ The changelog for `THRNetwork`.
 
 --------------------------------------
 
+3.1.2
+-----
+- Remove retain cycles.
+
 3.1.1
 -----
 - Set minimum deployment target to 10

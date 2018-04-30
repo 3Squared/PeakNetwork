@@ -1,5 +1,5 @@
 PODS:
-  - THRNetwork (3.1.0):
+  - THRNetwork (3.1.2):
     - THROperations
   - THROperations (1.4.1):
     - THRResult
@@ -18,7 +18,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  THRNetwork: 6bdb8d7210f1a3c80afff8a043358a9ce0a0e55c
+  THRNetwork: 722f690eed285cb210fac390b89e6c66fcc03cc6
   THROperations: d4f583316f131beee4375f2a197740477355b747
   THRResult: 1e24a2909fa3e56efdd5d5d12108b1d308a9f917
 
