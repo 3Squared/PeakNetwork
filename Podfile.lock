@@ -1,5 +1,5 @@
 PODS:
-  - THROperations (1.4.1):
+  - THROperations (1.4.2):
     - THRResult
   - THRResult (1.0.1)
 
@@ -12,7 +12,7 @@ SPEC REPOS:
     - THRResult
 
 SPEC CHECKSUMS:
-  THROperations: d4f583316f131beee4375f2a197740477355b747
+  THROperations: 0ef351d5197243b842cc12dbeb3147f957fdf37f
   THRResult: 1e24a2909fa3e56efdd5d5d12108b1d308a9f917
 
 PODFILE CHECKSUM: b08f2f57a58af7cf75ba6e53eec6b563cbe87581
