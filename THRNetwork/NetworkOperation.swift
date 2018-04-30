@@ -18,7 +18,6 @@ open class NetworkOperation<T>: RetryingOperation<T> {
     internal var task: URLSessionTask?
     internal var taskMaker: (() -> (URLSessionTask))!
     
-    
     /// Start the backing `URLSessionTask`.
     /// If retrying, the previous task will be cancelled first.
     open override func execute() {
@@ -26,7 +25,6 @@ open class NetworkOperation<T>: RetryingOperation<T> {
         task = taskMaker()
         task?.resume()
     }
-    
     
     /// Cancel the backing `URLSessionTask`.
     override open func cancel() {
@@ -84,13 +82,14 @@ public class DecodableOperation<D: Decodable>: NetworkOperation<D> {
     ///   - session: The `URLSession` in which to perform the fetch (optional).
     public init(_ requestable: Requestable, decoder: JSONDecoder = JSONDecoder(), session: Session = URLSession.shared) {
         super.init()
-        taskMaker = {
-            return session.dataTask(forRequest: requestable.request, decoder: decoder) { (result: Result<(D, HTTPURLResponse)>) in
-                self.output = Result {
+        taskMaker = { [weak self] in
+            return session.dataTask(forRequest: requestable.request, decoder: decoder) { [weak self] (result: Result<(D, HTTPURLResponse)>) in
+                guard let strongSelf = self else { return }
+                strongSelf.output = Result {
                     let (decoded, _) = try result.resolve()
                     return decoded
                 }
-                self.finish()
+                strongSelf.finish()
             }
         }
     }
@@ -108,15 +107,15 @@ public class DecodableResponseOperation<D: Decodable>: NetworkOperation<(D, HTTP
     ///   - session: The `URLSession` in which to perform the fetch (optional).
     public init(_ requestable: Requestable, decoder: JSONDecoder = JSONDecoder(), session: Session = URLSession.shared) {
         super.init()
-        taskMaker = {
-            return session.dataTask(forRequest: requestable.request, decoder: decoder) { (result: Result<(D, HTTPURLResponse)>) in
-                self.output = result
-                self.finish()
+        taskMaker = { [weak self] in
+            return session.dataTask(forRequest: requestable.request, decoder: decoder) { [weak self] (result: Result<(D, HTTPURLResponse)>) in
+                guard let strongSelf = self else { return }
+                strongSelf.output = result
+                strongSelf.finish()
             }
         }
     }
 }
-
 
 /// A subclass of `NetworkOperation` which will return the basic response.
 public class URLResponseOperation: NetworkOperation<HTTPURLResponse> {
@@ -128,15 +127,16 @@ public class URLResponseOperation: NetworkOperation<HTTPURLResponse> {
     ///   - session: The `URLSession` in which to perform the fetch (optional).
     public init(_ requestable: Requestable, session: Session = URLSession.shared) {
         super.init()
-        taskMaker = {
-            return session.dataTask(forRequest: requestable.request)  { (result: Result<(Data?, HTTPURLResponse)>) in
+        taskMaker = { [weak self] in
+            return session.dataTask(forRequest: requestable.request)  { [weak self] (result: Result<(Data?, HTTPURLResponse)>) in
+                guard let strongSelf = self else { return }
                 do {
                     let (_, response) = try result.resolve()
-                    self.output = Result { return response }
+                    strongSelf.output = Result { return response }
                 } catch {
-                    self.output = Result { throw error }
+                    strongSelf.output = Result { throw error }
                 }
-                self.finish()
+                strongSelf.finish()
             }
         }
     }
@@ -152,19 +152,20 @@ public class DataResponseOperation: NetworkOperation<(Data, HTTPURLResponse)> {
     ///   - session: The `URLSession` in which to perform the fetch (optional).
     public init(_ requestable: Requestable, session: Session = URLSession.shared) {
         super.init()
-        taskMaker = {
-            return session.dataTask(forRequest: requestable.request)  { (result: Result<(Data?, HTTPURLResponse)>) in
+        taskMaker = { [weak self] in
+            return session.dataTask(forRequest: requestable.request)  { [weak self] (result: Result<(Data?, HTTPURLResponse)>) in
+                guard let strongSelf = self else { return }
                 do {
                     let (data, response) = try result.resolve()
                     if let d = data {
-                        self.output = Result { return (d, response) }
+                        strongSelf.output = Result { return (d, response) }
                     } else {
-                        self.output = Result { throw ResultError.noResult }
+                        strongSelf.output = Result { throw ResultError.noResult }
                     }
                 } catch {
-                    self.output = Result { throw error }
+                    strongSelf.output = Result { throw error }
                 }
-                self.finish()
+                strongSelf.finish()
             }
         }
     }
@@ -180,20 +181,20 @@ public class ImageResponseOperation: NetworkOperation<(UIImage, HTTPURLResponse)
     ///   - session: The `URLSession` in which to perform the fetch (optional).
     public init(_ requestable: Requestable, session: Session = URLSession.shared) {
         super.init()
-        taskMaker = {
-            return session.dataTask(forRequest: requestable.request)  { (result: Result<(Data?, HTTPURLResponse)>) in
+        taskMaker = { [weak self] in
+            return session.dataTask(forRequest: requestable.request)  { [weak self] (result: Result<(Data?, HTTPURLResponse)>) in
+                guard let strongSelf = self else { return }
                 do {
                     let (data, response) = try result.resolve()
                     if let d = data, let image = UIImage(data: d) {
-                        self.output = Result { return (image, response) }
+                        strongSelf.output = Result { return (image, response) }
                     } else {
-                        self.output = Result { throw ResultError.noResult }
+                        strongSelf.output = Result { throw ResultError.noResult }
                     }
                 } catch {
-                    self.output = Result { throw error }
+                    strongSelf.output = Result { throw error }
                 }
-                
-                self.finish()
+                strongSelf.finish()
             }
         }
     }
