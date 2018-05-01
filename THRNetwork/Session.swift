@@ -40,8 +40,9 @@ public struct MockResponse {
                               responseHeaders: [String: String] = [:],
                               error: Error? = nil,
                               sticky: Bool = false,
+                              encoder: JSONEncoder = JSONEncoder(),
                               isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
-        self.init(data: try! JSONEncoder().encode(json),
+        self.init(data: try! encoder.encode(json),
                   statusCode: statusCode,
                   responseHeaders: responseHeaders,
                   error: error,
@@ -63,8 +64,9 @@ public struct MockResponse {
                               responseHeaders: [String: String] = [:],
                               error: Error? = nil,
                               sticky: Bool = false,
+                              encoder: JSONEncoder = JSONEncoder(),
                               isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
-        self.init(data: try! JSONEncoder().encode(json),
+        self.init(data: try! encoder.encode(json),
                   statusCode: statusCode,
                   responseHeaders: responseHeaders,
                   error: error,
