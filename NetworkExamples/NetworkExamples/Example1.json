@@ -1,0 +1,22 @@
+[
+ {
+ "description": "Example 1",
+ "url": "3squared.com",
+ "imageURL": "https://unsplash.it/100/100/?random=1"
+ },
+ {
+ "description": "Example 2",
+ "url": "3squared.com",
+ "imageURL": "https://unsplash.it/100/100/?random=2"
+ },
+ {
+ "description": "Example 3",
+ "url": "3squared.com",
+ "imageURL": "https://unsplash.it/100/100/?random=3"
+ },
+ {
+ "description": "Example 4",
+ "url": "3squared.com",
+ "imageURL": "https://unsplash.it/100/100/?random=4"
+ }
+]

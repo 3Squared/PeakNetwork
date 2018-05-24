@@ -13,6 +13,12 @@
 		CB104F9C1E41EE3700F4C562 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB104F9A1E41EE3700F4C562 /* Main.storyboard */; };
 		CB104F9E1E41EE3700F4C562 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CB104F9D1E41EE3700F4C562 /* Assets.xcassets */; };
 		CB104FA11E41EE3700F4C562 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB104F9F1E41EE3700F4C562 /* LaunchScreen.storyboard */; };
+		CB90688A20B5A5B400B98F4E /* WebService+API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90688720B5A5B300B98F4E /* WebService+API.swift */; };
+		CB90688B20B5A5B400B98F4E /* WebService+Requests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90688820B5A5B400B98F4E /* WebService+Requests.swift */; };
+		CB90688C20B5A5B400B98F4E /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90688920B5A5B400B98F4E /* WebService.swift */; };
+		CB90688F20B5A77A00B98F4E /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90688E20B5A77A00B98F4E /* SearchResult.swift */; };
+		CB90689220B5AC1D00B98F4E /* Example1.json in Resources */ = {isa = PBXBuildFile; fileRef = CB90689020B5AB6F00B98F4E /* Example1.json */; };
+		CB90689420B5ADA700B98F4E /* Example2.json in Resources */ = {isa = PBXBuildFile; fileRef = CB90689320B5ADA700B98F4E /* Example2.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +31,12 @@
 		CB104F9D1E41EE3700F4C562 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CB104FA01E41EE3700F4C562 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CB104FA21E41EE3700F4C562 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CB90688720B5A5B300B98F4E /* WebService+API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "WebService+API.swift"; sourceTree = "<group>"; };
+		CB90688820B5A5B400B98F4E /* WebService+Requests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "WebService+Requests.swift"; sourceTree = "<group>"; };
+		CB90688920B5A5B400B98F4E /* WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebService.swift; sourceTree = "<group>"; };
+		CB90688E20B5A77A00B98F4E /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
+		CB90689020B5AB6F00B98F4E /* Example1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Example1.json; sourceTree = "<group>"; };
+		CB90689320B5ADA700B98F4E /* Example2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Example2.json; sourceTree = "<group>"; };
 		E2962CF4965790BD6402D0C9 /* Pods-NetworkExamples.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetworkExamples.release.xcconfig"; path = "Pods/Target Support Files/Pods-NetworkExamples/Pods-NetworkExamples.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,12 +92,26 @@
 			children = (
 				CB104F961E41EE3700F4C562 /* AppDelegate.swift */,
 				CB104F981E41EE3700F4C562 /* ViewController.swift */,
+				CB90688D20B5A76800B98F4E /* WebService */,
 				CB104F9A1E41EE3700F4C562 /* Main.storyboard */,
 				CB104F9D1E41EE3700F4C562 /* Assets.xcassets */,
 				CB104F9F1E41EE3700F4C562 /* LaunchScreen.storyboard */,
 				CB104FA21E41EE3700F4C562 /* Info.plist */,
+				CB90689020B5AB6F00B98F4E /* Example1.json */,
+				CB90689320B5ADA700B98F4E /* Example2.json */,
 			);
 			path = NetworkExamples;
+			sourceTree = "<group>";
+		};
+		CB90688D20B5A76800B98F4E /* WebService */ = {
+			isa = PBXGroup;
+			children = (
+				CB90688920B5A5B400B98F4E /* WebService.swift */,
+				CB90688720B5A5B300B98F4E /* WebService+API.swift */,
+				CB90688820B5A5B400B98F4E /* WebService+Requests.swift */,
+				CB90688E20B5A77A00B98F4E /* SearchResult.swift */,
+			);
+			path = WebService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -149,6 +175,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB90689220B5AC1D00B98F4E /* Example1.json in Resources */,
+				CB90689420B5ADA700B98F4E /* Example2.json in Resources */,
 				CB104FA11E41EE3700F4C562 /* LaunchScreen.storyboard in Resources */,
 				CB104F9E1E41EE3700F4C562 /* Assets.xcassets in Resources */,
 				CB104F9C1E41EE3700F4C562 /* Main.storyboard in Resources */,
@@ -205,7 +233,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB90688A20B5A5B400B98F4E /* WebService+API.swift in Sources */,
 				CB104F991E41EE3700F4C562 /* ViewController.swift in Sources */,
+				CB90688B20B5A5B400B98F4E /* WebService+Requests.swift in Sources */,
+				CB90688C20B5A5B400B98F4E /* WebService.swift in Sources */,
+				CB90688F20B5A77A00B98F4E /* SearchResult.swift in Sources */,
 				CB104F971E41EE3700F4C562 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
