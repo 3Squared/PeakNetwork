@@ -31,11 +31,11 @@ class ViewController: UITableViewController {
                 case .success((let searchResults, _)):
                     self.searchResults = searchResults
                 case .failure(ServerError.error(code: .internalServerError, response: _)):
-                    let alert = UIAlertController(title: "Custom Error", message: "A server error occurred.", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Internal Server Error", message: "A server error occurred.", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default))
                     self.present(alert, animated: true)
                 case .failure(let error):
-                    let alert = UIAlertController(title: "Generic Error", message: error.localizedDescription, preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default))
                     self.present(alert, animated: true)
                 }

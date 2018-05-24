@@ -38,10 +38,22 @@ class WebService {
         self.queue = queue
         self.session = MockSession(fallbackToSession: session, configure: { session in
             session.queue(response: MockResponse(fileName: "Example1"))
+            session.queue(response: MockResponse(error: RuntimeError("All these responses are mocked. This error was queued in \(#file) on line \(#line).")))
             session.queue(response: MockResponse(fileName: "Example2"))
             session.queue(response: MockResponse(statusCode: .internalServerError))
-            session.queue(response: MockResponse(statusCode: .unauthorized))
             session.queue(response: MockResponse(fileName: "Example1", sticky: true))
         })
+    }
+}
+
+struct RuntimeError: LocalizedError {
+    let message: String
+    
+    init(_ message: String) {
+        self.message = message
+    }
+    
+    public var errorDescription: String? {
+        return message
     }
 }
