@@ -14,7 +14,7 @@ class WebService {
     static let shared = WebService()
     
     struct Constants {
-        static let baseURL = "https://3squared.com/"
+        static let baseURL = "https://example.com/"
     }
     
     var session: Session
