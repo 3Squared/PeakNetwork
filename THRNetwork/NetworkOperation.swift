@@ -38,7 +38,7 @@ open class NetworkOperation<T>: RetryingOperation<T> {
         task?.cancel()
     }
     
-    open func createTask(in session: Session) -> URLSessionTask {
+    open func createTask(in session: Session) -> URLSessionTask? {
         fatalError("Subclasses must implement `createTask`.")
     }
 }
