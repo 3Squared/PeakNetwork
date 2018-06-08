@@ -42,7 +42,7 @@ class NetworkTests: XCTestCase {
         
         networkOperation.addResultBlock { result in
             switch result {
-            case .failure(ServerError.error(code: .internalServerError, response: _)):
+            case .failure(ServerError.error(code: .internalServerError, data: _, response: _)):
                 expect.fulfill()
             default:
                 XCTFail()
@@ -53,6 +53,34 @@ class NetworkTests: XCTestCase {
         
         waitForExpectations(timeout: 1)
     }
+    
+    func testNetworkOperationFailureWithResponseBody() {
+        let session = MockSession { session in
+            session.queue(response: MockResponse(json: ["hello": "world"], statusCode: .internalServerError))
+        }
+        
+        let request = URLRequestable(URL(string: "http://google.com")!)
+        
+        let expect = expectation(description: "")
+        
+        let networkOperation = URLResponseOperation(request, session: session)
+        
+        networkOperation.addResultBlock { result in
+            switch result {
+            case .failure(ServerError.error(code: .internalServerError, data: let data, response: _)):
+                let responseString = String(data: data!, encoding: .utf8)
+                XCTAssertEqual("{\"hello\":\"world\"}", responseString)
+                expect.fulfill()
+            default:
+                XCTFail()
+            }
+        }
+        
+        networkOperation.enqueue()
+        
+        waitForExpectations(timeout: 1)
+    }
+
     
     func testNetworkOperationSuccess() {
         let session = MockSession { session in

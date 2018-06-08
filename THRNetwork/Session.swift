@@ -249,7 +249,7 @@ public extension Session {
                     })
                 } else {
                     completion(Result {
-                        throw ServerError.error(code: httpResponse.statusCodeEnum, response: httpResponse)
+                        throw ServerError.error(code: httpResponse.statusCodeEnum, data: data, response: httpResponse)
                     })
                 }
             } else {
@@ -287,7 +287,7 @@ public extension Session {
                     }
                 } else {
                     completion(Result {
-                        throw ServerError.error(code: httpResponse.statusCodeEnum, response: httpResponse)
+                        throw ServerError.error(code: httpResponse.statusCodeEnum, data: data, response: httpResponse)
                     })
                 }
             } else {

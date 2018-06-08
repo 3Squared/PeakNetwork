@@ -17,6 +17,6 @@ public enum SerializationError: Error {
 
 /// Used when a server error occurs.
 public enum ServerError: Error {
-    case error(code: HTTPStatusCode, response: HTTPURLResponse)
+    case error(code: HTTPStatusCode, data: Data?, response: HTTPURLResponse)
     case unknownResponse
 }
