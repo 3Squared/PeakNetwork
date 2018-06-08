@@ -100,7 +100,7 @@ public class DecodableOperation<D: Decodable>: NetworkOperation<D> {
     }
     
     public override func createTask(in session: Session) -> URLSessionTask {
-        return session.dataTask(forRequest: requestable.request, decoder: decoder) { [weak self] (result: Result<(D, HTTPURLResponse)>) in
+        return session.dataTask(with: requestable.request, decoder: decoder) { [weak self] (result: Result<(D, HTTPURLResponse)>) in
             guard let strongSelf = self else { return }
             strongSelf.output = Result {
                 let (decoded, _) = try result.resolve()
@@ -131,7 +131,7 @@ public class DecodableResponseOperation<D: Decodable>: NetworkOperation<(D, HTTP
     }
     
     public override func createTask(in session: Session) -> URLSessionTask {
-        return session.dataTask(forRequest: requestable.request, decoder: decoder) { [weak self] (result: Result<(D, HTTPURLResponse)>) in
+        return session.dataTask(with: requestable.request, decoder: decoder) { [weak self] (result: Result<(D, HTTPURLResponse)>) in
             guard let strongSelf = self else { return }
             strongSelf.output = result
             strongSelf.finish()
@@ -155,7 +155,7 @@ public class URLResponseOperation: NetworkOperation<HTTPURLResponse> {
     }
     
     public override func createTask(in session: Session) -> URLSessionTask {
-        return session.dataTask(forRequest: requestable.request)  { [weak self] (result: Result<(Data?, HTTPURLResponse)>) in
+        return session.dataTask(with: requestable.request)  { [weak self] (result: Result<(Data?, HTTPURLResponse)>) in
             guard let strongSelf = self else { return }
             do {
                 let (_, response) = try result.resolve()
@@ -184,7 +184,7 @@ public class DataResponseOperation: NetworkOperation<(Data, HTTPURLResponse)> {
     }
     
     public override func createTask(in session: Session) -> URLSessionTask {
-        return session.dataTask(forRequest: requestable.request)  { [weak self] (result: Result<(Data?, HTTPURLResponse)>) in
+        return session.dataTask(with: requestable.request)  { [weak self] (result: Result<(Data?, HTTPURLResponse)>) in
             guard let strongSelf = self else { return }
             do {
                 let (data, response) = try result.resolve()
@@ -217,7 +217,7 @@ public class ImageResponseOperation: NetworkOperation<(UIImage, HTTPURLResponse)
     }
     
     public override func createTask(in session: Session) -> URLSessionTask {
-        return session.dataTask(forRequest: requestable.request)  { [weak self] (result: Result<(Data?, HTTPURLResponse)>) in
+        return session.dataTask(with: requestable.request)  { [weak self] (result: Result<(Data?, HTTPURLResponse)>) in
             guard let strongSelf = self else { return }
             do {
                 let (data, response) = try result.resolve()
