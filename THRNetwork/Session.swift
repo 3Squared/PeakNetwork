@@ -237,7 +237,7 @@ public extension Session {
     /// - parameter completion:  A completion block called with a Result containing a URLResponse and Data
     ///
     /// - returns: A new URLSessionTask.
-    public func dataTask<U: URLResponse>(forRequest request: URLRequest, completion: @escaping (Result<(Data?, U)>) -> Void) -> URLSessionTask {
+    public func dataTask<U: URLResponse>(with request: URLRequest, completion: @escaping (Result<(Data?, U)>) -> Void) -> URLSessionTask {
         let request = setHeaders(on: request)
         return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             if let error = error {
@@ -268,7 +268,7 @@ public extension Session {
     /// - parameter completion: A completion block called with a Result containing an array of `Decodable`s.
     ///
     /// - returns: A new URLSessionTask.
-    public func dataTask<D: Decodable, U: URLResponse>(forRequest request: URLRequest, decoder: JSONDecoder, completion: @escaping (Result<(D, U)>) -> Void) -> URLSessionTask {
+    public func dataTask<D: Decodable, U: URLResponse>(with request: URLRequest, decoder: JSONDecoder, completion: @escaping (Result<(D, U)>) -> Void) -> URLSessionTask {
         let request = setHeaders(on: request)
         return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             
