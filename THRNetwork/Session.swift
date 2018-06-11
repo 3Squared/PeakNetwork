@@ -21,7 +21,7 @@ public protocol Session {
 public struct MockResponse {
     let data: Data
     let error: Error?
-    let statusCode: HTTPStatusCode
+    let statusCode: HTTPStatusCode?
     let responseHeaders: [String: String]
     let sticky: Bool
     let isValid: (URLRequest) -> Bool
@@ -36,7 +36,7 @@ public struct MockResponse {
     ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
     ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
     public init<T: Encodable>(json: [T],
-                              statusCode: HTTPStatusCode = .ok,
+                              statusCode: HTTPStatusCode? = .ok,
                               responseHeaders: [String: String] = [:],
                               error: Error? = nil,
                               sticky: Bool = false,
@@ -60,7 +60,7 @@ public struct MockResponse {
     ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
     ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
     public init<T: Encodable>(json: [String: T],
-                              statusCode: HTTPStatusCode = .ok,
+                              statusCode: HTTPStatusCode? = .ok,
                               responseHeaders: [String: String] = [:],
                               error: Error? = nil,
                               sticky: Bool = false,
@@ -84,7 +84,7 @@ public struct MockResponse {
     ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
     ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
     public init(fileName: String,
-                statusCode: HTTPStatusCode = .ok,
+                statusCode: HTTPStatusCode? = .ok,
                 responseHeaders: [String: String] = [:],
                 error: Error? = nil,
                 sticky: Bool = false,
@@ -109,7 +109,7 @@ public struct MockResponse {
     ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
     ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
     public init(jsonString: String,
-                statusCode: HTTPStatusCode = .ok,
+                statusCode: HTTPStatusCode? = .ok,
                 responseHeaders: [String: String] = [:],
                 error: Error? = nil,
                 sticky: Bool = false,
@@ -134,7 +134,7 @@ public struct MockResponse {
     ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
     ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
     public init(data: Data = Data(),
-                statusCode: HTTPStatusCode = .ok,
+                statusCode: HTTPStatusCode? = .ok,
                 responseHeaders: [String: String] = [:],
                 error: Error? = nil,
                 sticky: Bool = false,
@@ -209,12 +209,15 @@ public class MockSession: Session {
         }
         
         override func resume() {
-            let urlResponse: URLResponse? = HTTPURLResponse(url: request.url!,
-                                                            statusCode: taskResponse.statusCode,
+            if let statusCode = taskResponse.statusCode {
+                let urlResponse = HTTPURLResponse(url: request.url!,
+                                                            statusCode: statusCode,
                                                             httpVersion: "1.1",
                                                             headerFields: taskResponse.responseHeaders)
-            
-            completionHandler(taskResponse.data, urlResponse, taskResponse.error)
+                completionHandler(taskResponse.data, urlResponse, taskResponse.error)
+            } else {
+                completionHandler(taskResponse.data, nil, taskResponse.error)
+            }
         }
         
         override func cancel() {
@@ -226,7 +229,6 @@ public class MockSession: Session {
 
 
 extension URLSession: Session { }
-
 
 // MARK: - Convenience methods on URLSession to return configured data tasks, used internally.
 public extension Session {
