@@ -73,8 +73,7 @@ open class BasicLogger: Logger {
     open func request(_ request: URLRequest) {
         guard shouldLog(request.url) else { return }
         
-        print("⬆️ Request")
-        print("\(request.httpMethod!.uppercased()) \(request.url!.absoluteString)")
+        print("⬆️ Request (\(request.httpMethod!.uppercased()) \(request.url!.absoluteString))")
         logBody(data: request.httpBody)
         logHeaders(request.allHTTPHeaderFields)
         print("\n")
@@ -84,16 +83,14 @@ open class BasicLogger: Logger {
         guard shouldLog(response?.url) else { return }
 
         if let httpResponse = response as? HTTPURLResponse {
-            print("\(httpResponse.statusCodeEnum.isSuccess && error == nil ? "✅" : "❌") Response")
+            print("\(httpResponse.statusCodeEnum.isSuccess && error == nil ? "✅" : "❌") Response (\(httpResponse.url?.absoluteString ?? "no URL"))")
             print("Code: \(httpResponse.statusCodeEnum)")
             logHeaders(httpResponse.allHeaderFields)
         } else {
-            print("\(error == nil ? "✅" : "❌") Response")
+            print("\(error == nil ? "✅" : "❌") Response (\(response?.url?.absoluteString ?? "no URL"))")
         }
 
-        if let response = response {
-            print("\(response.url!.absoluteString)")
-        }
+
         
         if let error = error {
             print("Error:\n\t\(error)")
