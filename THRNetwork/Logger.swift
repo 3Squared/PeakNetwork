@@ -26,10 +26,11 @@ public class LoggingSession: Session {
     }
     
     public func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskCompletionHandler) -> URLSessionDataTask {
-        logger.request(request)
+        let id = UUID()
+        logger.log(id: id, request: request)
         return session.dataTask(with: request) { [weak self] data, response, error in
             guard let strongSelf = self else { return }
-            strongSelf.logger.response(data: data, response: response, error: error)
+            strongSelf.logger.log(id: id, data: data, response: response, error: error)
             completionHandler(data, response, error)
         }
     }
@@ -42,7 +43,7 @@ public protocol Logger {
     /// Called when a request is made.
     ///
     /// - Parameter request
-    func request(_ request: URLRequest)
+    func log(id: UUID, request: URLRequest)
     
     
     /// Called when a response is received.
@@ -51,7 +52,7 @@ public protocol Logger {
     ///   - data
     ///   - response
     ///   - error
-    func response(data: Data?, response: URLResponse?, error: Error?)
+    func log(id: UUID, data: Data?, response: URLResponse?, error: Error?)
 }
 
 
@@ -70,28 +71,34 @@ open class BasicLogger: Logger {
         self.shouldLog = shouldLog
     }
     
-    open func request(_ request: URLRequest) {
+    open func log(id: UUID, request: URLRequest) {
         guard shouldLog(request.url) else { return }
         
-        print("⬆️ Request (\(request.httpMethod!.uppercased()) \(request.url!.absoluteString))")
+        print("⬆️ Request (\(id.uuidString))")
+        print("Method: \(request.httpMethod!.uppercased())")
+        print("URL: \(request.url!.absoluteString)")
         logBody(data: request.httpBody)
         logHeaders(request.allHTTPHeaderFields)
         print("\n")
     }
     
-    open func response(data: Data?, response: URLResponse?, error: Error?) {
+    open func log(id: UUID, data: Data?, response: URLResponse?, error: Error?) {
         guard shouldLog(response?.url) else { return }
 
         if let httpResponse = response as? HTTPURLResponse {
-            print("\(httpResponse.statusCodeEnum.isSuccess && error == nil ? "✅" : "❌") Response (\(httpResponse.url?.absoluteString ?? "no URL"))")
-            print("Code: \(httpResponse.statusCodeEnum)")
-            logHeaders(httpResponse.allHeaderFields)
+            print("\(httpResponse.statusCodeEnum.isSuccess && error == nil ? "✅" : "❌") Response (\(id.uuidString))")
         } else {
-            print("\(error == nil ? "✅" : "❌") Response (\(response?.url?.absoluteString ?? "no URL"))")
+            print("\(error == nil ? "✅" : "❌") Response (\(id.uuidString))")
+        }
+        
+        if let url = response?.url {
+            print("URL: \(url.absoluteString)")
         }
 
-
-        
+        if let httpResponse = response as? HTTPURLResponse {
+            print("Code: \(httpResponse.statusCodeEnum)")
+            logHeaders(httpResponse.allHeaderFields)
+        }
         if let error = error {
             print("Error:\n\t\(error)")
         }
