@@ -27,10 +27,12 @@ public class LoggingSession: Session {
     
     public func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskCompletionHandler) -> URLSessionDataTask {
         let id = UUID()
-        logger.log(id: id, request: request)
+        let requestDate = Date()
+        logger.log(id: id, requestDate: requestDate, request: request)
         return session.dataTask(with: request) { [weak self] data, response, error in
             guard let strongSelf = self else { return }
-            strongSelf.logger.log(id: id, data: data, response: response, error: error)
+            let responseDate = Date()
+            strongSelf.logger.log(id: id, requestDate: requestDate, responseDate: responseDate, data: data, response: response, error: error)
             completionHandler(data, response, error)
         }
     }
@@ -43,7 +45,7 @@ public protocol Logger {
     /// Called when a request is made.
     ///
     /// - Parameter request
-    func log(id: UUID, request: URLRequest)
+    func log(id: UUID, requestDate: Date, request: URLRequest)
     
     
     /// Called when a response is received.
@@ -52,7 +54,7 @@ public protocol Logger {
     ///   - data
     ///   - response
     ///   - error
-    func log(id: UUID, data: Data?, response: URLResponse?, error: Error?)
+    func log(id: UUID, requestDate: Date, responseDate: Date, data: Data?, response: URLResponse?, error: Error?)
 }
 
 
@@ -62,6 +64,12 @@ open class BasicLogger: Logger {
     
     let shouldLog: (URL?) -> Bool
     
+    lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        return formatter
+    }()
     
     /// Create a new BasicLogger.
     ///
@@ -71,29 +79,36 @@ open class BasicLogger: Logger {
         self.shouldLog = shouldLog
     }
     
-    open func log(id: UUID, request: URLRequest) {
+    open func log(id: UUID, requestDate: Date, request: URLRequest) {
         guard shouldLog(request.url) else { return }
         
-        print("⬆️ Request (\(id.uuidString))")
-        print("Method: \(request.httpMethod!.uppercased())")
+        print("⬆️ Request")
         print("URL: \(request.url!.absoluteString)")
+        print("ID: \(id.uuidString)")
+        print("Request date: \(dateFormatter.string(from: requestDate))")
+        print("Method: \(request.httpMethod!.uppercased())")
         logBody(data: request.httpBody)
         logHeaders(request.allHTTPHeaderFields)
         print("\n")
     }
     
-    open func log(id: UUID, data: Data?, response: URLResponse?, error: Error?) {
+    open func log(id: UUID, requestDate: Date, responseDate: Date, data: Data?, response: URLResponse?, error: Error?) {
         guard shouldLog(response?.url) else { return }
 
         if let httpResponse = response as? HTTPURLResponse {
-            print("\(httpResponse.statusCodeEnum.isSuccess && error == nil ? "✅" : "❌") Response (\(id.uuidString))")
+            print("\(httpResponse.statusCodeEnum.isSuccess && error == nil ? "✅" : "❌") Response")
         } else {
-            print("\(error == nil ? "✅" : "❌") Response (\(id.uuidString))")
+            print("\(error == nil ? "✅" : "❌") Response")
         }
         
         if let url = response?.url {
             print("URL: \(url.absoluteString)")
         }
+
+        print("ID: \(id.uuidString)")
+        print("Request date: \(dateFormatter.string(from: requestDate))")
+        print("Response date: \(dateFormatter.string(from: responseDate))")
+        print("Execution time: \(String(format: "%.5f", responseDate.timeIntervalSince(requestDate))) seconds")
 
         if let httpResponse = response as? HTTPURLResponse {
             print("Code: \(httpResponse.statusCodeEnum)")
