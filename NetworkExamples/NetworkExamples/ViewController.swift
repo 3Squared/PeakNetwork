@@ -30,7 +30,7 @@ class ViewController: UITableViewController {
                 switch (result) {
                 case .success((let searchResults, _)):
                     self.searchResults = searchResults
-                case .failure(ServerError.error(code: .internalServerError, response: _)):
+                case .failure(ServerError.error(code: .internalServerError, data: _, response: _)):
                     let alert = UIAlertController(title: "Internal Server Error", message: "A server error occurred.", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default))
                     self.present(alert, animated: true)

@@ -36,12 +36,14 @@ class WebService {
     
     init(session: Session = URLSession.shared, queue: OperationQueue = OperationQueue()) {
         self.queue = queue
-        self.session = MockSession(fallbackToSession: session, configure: { session in
-            session.queue(response: MockResponse(fileName: "Example1"))
-            session.queue(response: MockResponse(error: RuntimeError("All these responses are mocked. This error was queued in \(#file) on line \(#line).")))
+        self.session = LoggingSession(with: MockSession(fallbackToSession: session, configure: { session in
+            session.queue(response: MockResponse(fileName: "Example1", responseHeaders: ["X-CustomHeader" : "This is a header"]))
+            session.queue(response: MockResponse(statusCode: nil, error: RuntimeError("All these responses are mocked. This error was queued in \(#file) on line \(#line).")))
             session.queue(response: MockResponse(fileName: "Example2"))
-            session.queue(response: MockResponse(statusCode: .internalServerError))
+            session.queue(response: MockResponse(json: ["errorMessage": "Hello World!"], statusCode: .internalServerError))
             session.queue(response: MockResponse(fileName: "Example1", sticky: true))
+        }), logger: JSONLogger() { url in
+            return url?.absoluteString.contains("example.com") ?? true
         })
     }
 }

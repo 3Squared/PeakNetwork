@@ -17,7 +17,7 @@ extension WebService {
 
         private var path: String {
             switch self {
-            case .search(_): return "/search"
+            case .search(_): return "search"
             }
         }
         
