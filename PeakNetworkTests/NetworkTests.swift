@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import THRResult
+import PeakResult
 @testable import PeakNetwork
 
 class NetworkTests: XCTestCase {

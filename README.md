@@ -1,6 +1,6 @@
-# PeakNetwork 
+![Peak Network](PeakNetwork.png "Peak Network")
 
-A collection of classes to aid performing network operations.
+PeakNetwork is a Swift microframework providing a collection of classes to aid performing network operations. It is part of the [Peak Framework](#peak-framework).
 
 ## Installation
 

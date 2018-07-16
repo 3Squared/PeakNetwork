@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import THROperations
-import THRResult
+import PeakOperations
+import PeakResult
 
 
 /// A subclass of `RetryingOperation` which wraps a `URLSessionTask`.

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import THRResult
+import PeakResult
 
 /// Allow remote images to be easilty set on UIImageViews.
 /// Manages starting, cancellung, and mapping  of download operations.

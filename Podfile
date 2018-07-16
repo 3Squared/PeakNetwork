@@ -6,7 +6,7 @@ source 'git@gitlab.3squared.com:iOSLibraries/CocoaPodSpecs.git'
 target 'PeakNetwork' do
 	use_frameworks!
 
-	pod 'THROperations'
+	pod 'PeakOperation', :path => '../PeakOperation'
 			
 	target 'PeakNetworkTests' do
 		inherit! :search_paths

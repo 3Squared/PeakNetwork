@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "10.0"
   s.source       = { :git => "git@gitlab.3squared.com:iOSLibraries/PeakNetwork.git", :tag => s.version.to_s }
   s.source_files = "PeakNetwork", "PeakNetwork/**/*.{h,m,swift}"
-	s.dependency 'THROperations'
+	s.dependency 'PeakOperations'
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4' }
 
 end
