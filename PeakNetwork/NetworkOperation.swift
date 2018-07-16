@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import PeakOperations
+import PeakOperation
 import PeakResult
 
 

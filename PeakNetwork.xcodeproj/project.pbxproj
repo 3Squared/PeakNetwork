@@ -309,13 +309,13 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-PeakNetworkTests/Pods-PeakNetworkTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/THROperations/THROperations.framework",
-				"${BUILT_PRODUCTS_DIR}/THRResult/THRResult.framework",
+				"${BUILT_PRODUCTS_DIR}/PeakOperation/PeakOperation.framework",
+				"${BUILT_PRODUCTS_DIR}/PeakResult/PeakResult.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/THROperations.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/THRResult.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PeakOperation.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PeakResult.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

@@ -1,20 +1,23 @@
 PODS:
-  - THROperations (1.4.2):
-    - THRResult
-  - THRResult (1.0.1)
+  - PeakOperation (2.0.0):
+    - PeakResult
+  - PeakResult (2.0.0)
 
 DEPENDENCIES:
-  - THROperations
+  - PeakOperation (from `../PeakOperation`)
 
 SPEC REPOS:
   "git@gitlab.3squared.com:iOSLibraries/CocoaPodSpecs.git":
-    - THROperations
-    - THRResult
+    - PeakResult
+
+EXTERNAL SOURCES:
+  PeakOperation:
+    :path: "../PeakOperation"
 
 SPEC CHECKSUMS:
-  THROperations: 0ef351d5197243b842cc12dbeb3147f957fdf37f
-  THRResult: 1e24a2909fa3e56efdd5d5d12108b1d308a9f917
+  PeakOperation: 36c6e37776e77e832c6f5f10ef81f0b2e5ccafb9
+  PeakResult: 7243100254ac19e7da4a1d9f3e49fab5b4772f4a
 
-PODFILE CHECKSUM: 3c81466690ff1f42f55af015a0abb7e5bc47f750
+PODFILE CHECKSUM: cce053c3aa6efe73c41df1ac3cec3255afe008fd
 
 COCOAPODS: 1.5.3
