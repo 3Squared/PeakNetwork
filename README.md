@@ -246,7 +246,6 @@ Please see the tests for further examples.
 ### Installing
 
 - Using Cocoapods, add `pod 'PeakNetwork'` to your Podfile.
-
 - `import PeakNetwork` where necessary.
 
 ## Contributing
