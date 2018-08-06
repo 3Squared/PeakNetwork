@@ -4,20 +4,17 @@ PODS:
   - PeakResult (2.0.0)
 
 DEPENDENCIES:
-  - PeakOperation (from `../PeakOperation`)
+  - PeakOperation
 
 SPEC REPOS:
   "git@gitlab.3squared.com:iOSLibraries/CocoaPodSpecs.git":
+    - PeakOperation
     - PeakResult
-
-EXTERNAL SOURCES:
-  PeakOperation:
-    :path: "../PeakOperation"
 
 SPEC CHECKSUMS:
   PeakOperation: 36c6e37776e77e832c6f5f10ef81f0b2e5ccafb9
   PeakResult: 7243100254ac19e7da4a1d9f3e49fab5b4772f4a
 
-PODFILE CHECKSUM: cce053c3aa6efe73c41df1ac3cec3255afe008fd
+PODFILE CHECKSUM: c46eb47d18e75c37e242c41e932c7fbcdad7d38f
 
 COCOAPODS: 1.5.3
