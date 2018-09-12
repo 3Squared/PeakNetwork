@@ -1,5 +1,5 @@
 import UIKit
-import Network
+import PeakNetwork
 import PlaygroundSupport
 
 extension UIImage {

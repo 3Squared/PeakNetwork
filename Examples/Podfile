@@ -3,12 +3,8 @@ platform :ios, '10.0'
 source 'https://github.com/CocoaPods/Specs.git'
 source 'git@gitlab.3squared.com:iOSLibraries/CocoaPodSpecs.git'
 
-target 'PeakNetwork' do
-	use_frameworks!
+target 'PeakNetworkExamples' do
+  use_frameworks!
 
-	pod 'PeakOperation'
-			
-	target 'PeakNetworkTests' do
-		inherit! :search_paths
-	end
+  pod 'PeakNetwork', :path => '../'
 end
