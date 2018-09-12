@@ -131,28 +131,6 @@ public enum Source {
     case network
 }
 
-
-/// Describes the AnimationOptions to be used when setting an image on a view.
-public struct AnimationOptions {
-    
-    /// The duration of the animation.
-    public let duration: TimeInterval
-    /// The animation options.
-    public let options: UIViewAnimationOptions
-    
-    
-    /// Create a new `AnimationOptions`.
-    ///
-    /// - Parameters:
-    ///   - duration: The duration of the animation.
-    ///   - options: The animation options.
-    public init(duration: TimeInterval, options: UIViewAnimationOptions) {
-        self.duration = duration
-        self.options = options
-    }
-}
-
-
 public extension UIImageView {
     
     /// Set the image available at the given URL as the `UIImageView`'s image.
@@ -162,8 +140,8 @@ public extension UIImageView {
     ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
     ///   - animation: The animation options (optional).
     ///   - completion: A completion block indicating success or failure.
-    public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
-        self.setImage(URLRequestable(url), queue: queue, animation: animation, completion: completion)
+    public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
+        self.setImage(URLRequestable(url), queue: queue, animation: animation, duration: duration, completion: completion)
     }
     
     /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
@@ -173,7 +151,7 @@ public extension UIImageView {
     ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
     ///   - animation: The animation options (optional).
     ///   - completion: A completion block indicating success or failure.
-    public func setImage(_ requestable: Requestable, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
+    public func setImage(_ requestable: Requestable, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
         ImageController.sharedInstance.getImage(requestable, object: self, queue: queue) { image, imageView, source in
             OperationQueue.main.addOperation {
                 if image == nil {
@@ -182,8 +160,8 @@ public extension UIImageView {
                 }
                 if source == .network, let animationOptions = animation {
                     UIView.transition(with: imageView,
-                                      duration: animationOptions.duration,
-                                      options: animationOptions.options,
+                                      duration: duration,
+                                      options: animationOptions,
                                       animations: {
                                         imageView.image = image
                     }, completion: nil)
@@ -213,7 +191,7 @@ public extension UIButton {
     ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
     ///   - animation: The animation options (optional).
     ///   - completion: A completion block indicating success or failure.
-    public func setImage(_ url: URL, for state: UIControlState, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
+    public func setImage(_ url: URL, for state: UIControl.State, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
         self.setImage(URLRequestable(url), for: state, queue: queue, animation: animation, completion: completion)
     }
     
@@ -227,7 +205,7 @@ public extension UIButton {
     ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
     ///   - animation: The animation options (optional).
     ///   - completion: A completion block indicating success or failure.
-    public func setImage(_ requestable: Requestable, for state: UIControlState, queue: OperationQueue? = nil, animation: AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
+    public func setImage(_ requestable: Requestable, for state: UIControl.State, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
         // Cannot use self as the object, as you may want to request multiple images - one for each state
         let object: NSString = NSString.init(format: "%d%d", self.hash, state.rawValue)
         ImageController.sharedInstance.getImage(requestable, object: object, queue: queue) { image, button, source in
@@ -238,8 +216,8 @@ public extension UIButton {
                 }
                 if source == .network, let animationOptions = animation {
                     UIView.transition(with: self,
-                                      duration: animationOptions.duration,
-                                      options: animationOptions.options,
+                                      duration: duration,
+                                      options: animationOptions,
                                       animations: {
                                         self.setImage(image, for: state)
                     }, completion: nil)
