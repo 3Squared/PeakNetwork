@@ -77,9 +77,8 @@ class ImageControllerTests: XCTestCase {
     func testSetImageWithAnimation() {
         let expect = expectation(description: "")
         let imageView = UIImageView(frame: CGRect.zero)
-        
         XCTAssertNil(imageView.image)
-        imageView.setImage(URL(string: "https://placehold.it/300")!, animation: AnimationOptions(duration: 0.1, options: .transitionCrossDissolve)) { success in
+        imageView.setImage(URL(string: "https://placehold.it/300")!, animation: [.transitionCrossDissolve], duration: 0.1) { success in
             XCTAssertNotNil(imageView.image)
             XCTAssertTrue(success)
             expect.fulfill()
