@@ -1,8 +1,12 @@
 # CHANGELOG
 
-The changelog for `THRNetwork`.
+The changelog for `PeakNetwork`.
 
 --------------------------------------
+
+4.0.0
+-----
+- Rename from `THRNetwork` to `PeakNetwork`.
 
 3.1.2
 -----
