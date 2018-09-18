@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "PeakNetwork"
-  s.version      = "4.0.0"
+  s.version      = "4.1.0"
   s.summary      = "A collection of classes to aid performing network operations."
   s.homepage     = "https://gitlab.3squared.com/MobileTeam/PeakNetwork"
   s.license      = { :type => 'Custom', :file => 'LICENSE.md' }
