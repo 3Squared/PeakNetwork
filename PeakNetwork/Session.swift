@@ -240,7 +240,6 @@ public extension Session {
     ///
     /// - returns: A new URLSessionTask.
     public func dataTask<U: URLResponse>(with request: URLRequest, completion: @escaping (Result<(Data?, U)>) -> Void) -> URLSessionTask {
-        let request = setHeaders(on: request)
         return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             if let error = error {
                 completion(Result { throw error })
@@ -271,7 +270,6 @@ public extension Session {
     ///
     /// - returns: A new URLSessionTask.
     public func dataTask<D: Decodable, U: URLResponse>(with request: URLRequest, decoder: JSONDecoder, completion: @escaping (Result<(D, U)>) -> Void) -> URLSessionTask {
-        let request = setHeaders(on: request)
         return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             
             if let error = error {
@@ -299,20 +297,4 @@ public extension Session {
             }
         }
     }
-    
-    
-    
-    private func setHeaders(on request: URLRequest) -> URLRequest {
-        
-        var request = request
-        request.addValue(DeviceProfile.deviceName, forHTTPHeaderField: "X-Device")
-        request.addValue(DeviceProfile.deviceVersion, forHTTPHeaderField: "X-DeviceVersion")
-        if let appVersion = DeviceProfile.applicationVersion {
-            request.addValue(appVersion, forHTTPHeaderField: "X-SoftwareVersion")
-        }
-        
-        return request
-    }
 }
-
-

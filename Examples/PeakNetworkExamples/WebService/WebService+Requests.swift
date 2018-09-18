@@ -8,8 +8,8 @@
 
 import Foundation
 import PeakNetwork
-import THRResult
-import THROperations
+import PeakResult
+import PeakOperation
 
 extension WebService {
     
