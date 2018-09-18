@@ -7,7 +7,7 @@
 //
 
 import PeakNetwork
-import THRResult
+import PeakResult
 
 class WebService {
     
