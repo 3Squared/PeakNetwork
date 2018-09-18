@@ -154,6 +154,7 @@
 				TargetAttributes = {
 					CB104F921E41EE3700F4C562 = {
 						CreatedOnToolsVersion = 8.2.1;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -218,14 +219,14 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-PeakNetworkExamples/Pods-PeakNetworkExamples-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/PeakNetwork/PeakNetwork.framework",
-				"${BUILT_PRODUCTS_DIR}/THROperations/THROperations.framework",
-				"${BUILT_PRODUCTS_DIR}/THRResult/THRResult.framework",
+				"${BUILT_PRODUCTS_DIR}/PeakOperation/PeakOperation.framework",
+				"${BUILT_PRODUCTS_DIR}/PeakResult/PeakResult.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PeakNetwork.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/THROperations.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/THRResult.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PeakOperation.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PeakResult.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -386,7 +387,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.3squared.PeakNetworkExamples;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -399,7 +400,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.3squared.PeakNetworkExamples;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

@@ -9,14 +9,12 @@
 /* Begin PBXBuildFile section */
 		365C1534ACFB8B7D2A6D7477 /* Pods_PeakNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 450800132F542CC89914D595 /* Pods_PeakNetwork.framework */; };
 		8002D361C4EDC44976558A99 /* Pods_PeakNetworkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79A3212C11E25C67963A7ADE /* Pods_PeakNetworkTests.framework */; };
-		CB098981200D09CB00CB554C /* DeviceProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB098980200D09CB00CB554C /* DeviceProfileTests.swift */; };
 		CB2380E41F740D1500F1B001 /* NetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */; };
 		CB2380E51F740D1500F1B001 /* CertificatePinningSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */; };
 		CB2380E61F740D1500F1B001 /* ImageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DD1F740D1500F1B001 /* ImageController.swift */; };
 		CB2380E71F740D1500F1B001 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DE1F740D1500F1B001 /* Operators.swift */; };
 		CB2380E81F740D1500F1B001 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DF1F740D1500F1B001 /* Session.swift */; };
 		CB2380E91F740D1500F1B001 /* HTTPMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380E01F740D1500F1B001 /* HTTPMethods.swift */; };
-		CB2380EB1F740D1500F1B001 /* DeviceProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380E21F740D1500F1B001 /* DeviceProfile.swift */; };
 		CB2380EC1F740D1500F1B001 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380E31F740D1500F1B001 /* Errors.swift */; };
 		CB2380F51F740D9C00F1B001 /* CertificatePinningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380F21F740D7600F1B001 /* CertificatePinningTests.swift */; };
 		CB2380F61F740D9C00F1B001 /* ImageControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380EE1F740D7600F1B001 /* ImageControllerTests.swift */; };
@@ -53,14 +51,12 @@
 		79A3212C11E25C67963A7ADE /* Pods_PeakNetworkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PeakNetworkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		79BF5C2CD7B26FAEAA77717B /* Pods-THRNetworkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-THRNetworkTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-THRNetworkTests/Pods-THRNetworkTests.release.xcconfig"; sourceTree = "<group>"; };
 		96DFF5E1E8C98D27BB7D052F /* Pods-PeakNetworkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetworkTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetworkTests/Pods-PeakNetworkTests.debug.xcconfig"; sourceTree = "<group>"; };
-		CB098980200D09CB00CB554C /* DeviceProfileTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceProfileTests.swift; sourceTree = "<group>"; };
 		CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkOperation.swift; sourceTree = "<group>"; };
 		CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatePinningSessionDelegate.swift; sourceTree = "<group>"; };
 		CB2380DD1F740D1500F1B001 /* ImageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageController.swift; sourceTree = "<group>"; };
 		CB2380DE1F740D1500F1B001 /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		CB2380DF1F740D1500F1B001 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		CB2380E01F740D1500F1B001 /* HTTPMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethods.swift; sourceTree = "<group>"; };
-		CB2380E21F740D1500F1B001 /* DeviceProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceProfile.swift; sourceTree = "<group>"; };
 		CB2380E31F740D1500F1B001 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		CB2380EE1F740D7600F1B001 /* ImageControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageControllerTests.swift; sourceTree = "<group>"; };
 		CB2380EF1F740D7600F1B001 /* 300.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 300.png; sourceTree = "<group>"; };
@@ -156,7 +152,6 @@
 				CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */,
 				CBFD4EE11F740C07008CD8AA /* Info.plist */,
 				CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */,
-				CB2380E21F740D1500F1B001 /* DeviceProfile.swift */,
 				CB2380E31F740D1500F1B001 /* Errors.swift */,
 				CB2380E01F740D1500F1B001 /* HTTPMethods.swift */,
 				CB2380DD1F740D1500F1B001 /* ImageController.swift */,
@@ -180,7 +175,6 @@
 				CB2380F11F740D7600F1B001 /* github.com.cer */,
 				CB2380EE1F740D7600F1B001 /* ImageControllerTests.swift */,
 				CB2380F01F740D7600F1B001 /* NetworkTests.swift */,
-				CB098980200D09CB00CB554C /* DeviceProfileTests.swift */,
 				CB2380F31F740D7600F1B001 /* TestEntity.swift */,
 				CB3178721FDAA5AF00B063ED /* test.json */,
 			);
@@ -374,7 +368,6 @@
 				CB2380E81F740D1500F1B001 /* Session.swift in Sources */,
 				CB2380EC1F740D1500F1B001 /* Errors.swift in Sources */,
 				CB3AA6CA1FD5A5C9008EFC5C /* HTTPStatusCodes.swift in Sources */,
-				CB2380EB1F740D1500F1B001 /* DeviceProfile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,7 +380,6 @@
 				CB2380F51F740D9C00F1B001 /* CertificatePinningTests.swift in Sources */,
 				CB2380F61F740D9C00F1B001 /* ImageControllerTests.swift in Sources */,
 				CB5F252A206BD4A30023FB7F /* MockSessionTests.swift in Sources */,
-				CB098981200D09CB00CB554C /* DeviceProfileTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

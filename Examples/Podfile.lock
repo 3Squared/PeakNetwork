@@ -1,26 +1,26 @@
 PODS:
-  - PeakNetwork (3.1.2):
-    - THROperations
-  - THROperations (1.4.3):
-    - THRResult
-  - THRResult (1.0.1)
+  - PeakNetwork (4.1.0):
+    - PeakOperation
+  - PeakOperation (2.1.0):
+    - PeakResult
+  - PeakResult (2.1.0)
 
 DEPENDENCIES:
   - PeakNetwork (from `../`)
 
 SPEC REPOS:
   "git@gitlab.3squared.com:iOSLibraries/CocoaPodSpecs.git":
-    - THROperations
-    - THRResult
+    - PeakOperation
+    - PeakResult
 
 EXTERNAL SOURCES:
   PeakNetwork:
     :path: "../"
 
 SPEC CHECKSUMS:
-  PeakNetwork: dd4cdb2a45ed89886d09c53ea1565b914e6ae1b3
-  THROperations: c3cdb51c2687fc74f6e4eef66ec725ab83202fae
-  THRResult: 1e24a2909fa3e56efdd5d5d12108b1d308a9f917
+  PeakNetwork: c971529d5b4f0aab62dc9abf1b9d8f9f3d8e5cf0
+  PeakOperation: 7c2d9adcfaadc1b8c847c5a7313fd466caaec42a
+  PeakResult: 4b8d79159f0bb20dc9715c73fd4ed642c15a24ea
 
 PODFILE CHECKSUM: 1ba7eb7b5ec1e6601a0201f475e55b5955b69ff0
 
