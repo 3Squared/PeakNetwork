@@ -23,22 +23,33 @@ public class RecordingJSONLogger: Logger {
     }
     
     public func log(id: UUID, requestDate: Date, responseDate: Date, data: Data?, response: URLResponse?, error: Error?) {
-        // TODO: Error handling
         guard
             let requestURL = idToRequestURL[id],
-            let host = requestURL.host,
-            let jsonData = data,
-            let json = try? JSONSerialization.jsonObject(with: jsonData, options: .allowFragments),
-            let prettyJSONData = try? JSONSerialization.data(withJSONObject: json, options: [.sortedKeys, .prettyPrinted]),
-            let jsonString = String(data: prettyJSONData, encoding: String.Encoding.utf8)
+            let host = requestURL.host
             else { return }
+        
+        let toWrite = fileContents(from: data, response: response)
         
         let queryAppend = requestURL.query.flatMap { "-" + $0 } ?? ""
         
         let filename = (host + "-" + requestURL.path + queryAppend)
             .replacingOccurrences(of: "/", with: "-")
             .replacingOccurrences(of: "&", with: "-")
-        fileWriter.write(jsonString, toFileNamed: filename)
+        
+        fileWriter.write(toWrite, toFileNamed: filename)
+    }
+    
+    private func fileContents(from data: Data?, response: URLResponse?) -> String {
+        if let rawData = data,
+            let json = try? JSONSerialization.jsonObject(with: rawData, options: .allowFragments),
+            let prettyJSONData = try? JSONSerialization.data(withJSONObject: json, options: [.sortedKeys, .prettyPrinted]),
+            let jsonString = String(data: prettyJSONData, encoding: String.Encoding.utf8) {
+            return jsonString
+        }
+        else if let httpResponse = response as? HTTPURLResponse  {
+            return "Returned with HTTP Status Code \(httpResponse.statusCode)"
+        }
+        return "Unknown Response"
     }
 }
 

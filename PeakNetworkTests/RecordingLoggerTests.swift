@@ -134,6 +134,46 @@ class RecordingLoggerTests: XCTestCase {
         
         waitForExpectations(timeout: 1.0, handler: nil)
     }
+    
+    func testWithoutJSON() {
+        let expect = expectation(description: "\(#function)")
+        
+        let request = URLRequest(url: URL(string:"https://api.3squared.com/path/to/method")!)
+        let id = UUID()
+        let requestDate = Date()
+        let responseDate = Date()
+        let response = HTTPURLResponse(url: request.url!, statusCode: .ok, httpVersion: nil, headerFields: nil)
+        
+        let logger = RecordingJSONLogger(fileWriter: MockFileWriter { fileContents, _ in
+            XCTAssertEqual(fileContents, "Returned with HTTP Status Code 200")
+            expect.fulfill()
+        })
+        
+        logger.log(id: id, requestDate: requestDate, request: request)
+        logger.log(id: id, requestDate: requestDate, responseDate: responseDate, data: nil, response: response, error: nil)
+        
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
+    
+    func testFailedHTTPCode () {
+        let expect = expectation(description: "\(#function)")
+        
+        let request = URLRequest(url: URL(string:"https://api.3squared.com/path/to/method")!)
+        let id = UUID()
+        let requestDate = Date()
+        let responseDate = Date()
+        let response = HTTPURLResponse(url: request.url!, statusCode: .internalServerError, httpVersion: nil, headerFields: nil)
+        
+        let logger = RecordingJSONLogger(fileWriter: MockFileWriter { fileContents, _ in
+            XCTAssertEqual(fileContents, "Returned with HTTP Status Code 500")
+            expect.fulfill()
+        })
+        
+        logger.log(id: id, requestDate: requestDate, request: request)
+        logger.log(id: id, requestDate: requestDate, responseDate: responseDate, data: nil, response: response, error: nil)
+        
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
 }
 
 
