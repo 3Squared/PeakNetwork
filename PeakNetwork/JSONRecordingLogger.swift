@@ -27,14 +27,15 @@ public class RecordingJSONLogger: Logger {
         guard
             let requestURL = idToRequestURL[id],
             let host = requestURL.host,
-            let query = requestURL.query,
             let jsonData = data,
             let json = try? JSONSerialization.jsonObject(with: jsonData, options: .allowFragments),
             let prettyJSONData = try? JSONSerialization.data(withJSONObject: json, options: [.sortedKeys, .prettyPrinted]),
             let jsonString = String(data: prettyJSONData, encoding: String.Encoding.utf8)
             else { return }
         
-        let filename = (host + "-" + requestURL.path + "-" + query)
+        let queryAppend = requestURL.query.flatMap { "-" + $0 } ?? ""
+        
+        let filename = (host + "-" + requestURL.path + queryAppend)
             .replacingOccurrences(of: "/", with: "-")
             .replacingOccurrences(of: "&", with: "-")
         fileWriter.write(jsonString, toFileNamed: filename)
