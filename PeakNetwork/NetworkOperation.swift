@@ -140,14 +140,14 @@ public class DecodableResponseOperation<D: Decodable>: NetworkOperation<(D, HTTP
 }
 
 /// A subclass of `NetworkOperation`.
-/// `DynamicRequestableOperation` will attempt to parse the response into a `Decodable` type.
-/// You may set or override `requestable` to add dynamic behaviour.
-open class DynamicRequestableOperation<D: Decodable>: NetworkOperation<(D, HTTPURLResponse)> {
+/// `CustomNetworkInputOperation` will attempt to parse the response into a `Decodable` type.
+/// You may override `requestableFrom` and `outputFrom` to add custom behaviour.
+open class CustomNetworkInputOperation<D: Decodable, O, I>: NetworkOperation<O>, ConsumesResult {
     
-    public var requestable: Requestable!
+    public var input: Result<I> = Result { throw ResultError.noResult }
     private let decoder: JSONDecoder
     
-    /// Create a new `DecodableResponseOperation`, parsing the response to a list of the given generic type.
+    /// Create a new `DynamicRequestableOperation`, parsing the response to a list of the given generic type.
     ///
     /// - Parameters:
     ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
@@ -157,14 +157,38 @@ open class DynamicRequestableOperation<D: Decodable>: NetworkOperation<(D, HTTPU
         super.init(with: session)
     }
     
-    open override func createTask(in session: Session) -> URLSessionTask {
-        return session.dataTask(with: requestable.request, decoder: decoder) { [weak self] (result: Result<(D, HTTPURLResponse)>) in
-            guard let strongSelf = self else { return }
-            strongSelf.output = result
-            strongSelf.finish()
+    open override func createTask(in session: Session) -> URLSessionTask? {
+        if let requestable = requestableFrom(input) {
+            return session.dataTask(with: requestable.request, decoder: decoder) { [weak self] (result: Result<(D, HTTPURLResponse)>) in
+                guard let strongSelf = self else { return }
+                strongSelf.output = strongSelf.outputFrom(result)
+                strongSelf.finish()
+            }
+        } else {
+            finish()
+            return nil
         }
     }
+    
+    /// Create a requestable to be performed, using the input to the operation.
+    /// Must be overridden.
+    ///
+    /// - Parameter input: The input to this operation
+    /// - Returns: A requestable to be performed
+    open func requestableFrom(_ input: Result<I>) -> Requestable? {
+        fatalError("Subclasses must implement `requestableFrom(:)`.")
+    }
+    
+    /// Create the output result of the operation using the result of executing the requestable.
+    /// Must be overridden.
+    ///
+    /// - Parameter result: The result of executing the requestable
+    /// - Returns: The result to be used as output
+    open func outputFrom(_ result: Result<(D, HTTPURLResponse)>) -> Result<O> {
+        fatalError("Subclasses must implement `outputFrom(:)`.")
+    }
 }
+
 
 /// A subclass of `NetworkOperation`.
 /// `RequestableInputOperation` will take a `Requestable` input, call it, and attempt to parse the response into a `Decodable` type.
