@@ -274,7 +274,7 @@ class NetworkTests: XCTestCase {
         
         networkOperation.addResultBlock { result in
             do {
-                let (entity, _) = try result.resolve()
+                let entity = try result.resolve()
                 XCTAssertEqual(entity.name, "Sam")
                 expect.fulfill()
             } catch {
