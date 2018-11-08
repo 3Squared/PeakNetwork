@@ -13,7 +13,7 @@ public class RecordingJSONLogger: Logger {
     
     let fileWriter: WriteFile
     
-    init(fileWriter: WriteFile = FileWriter()) {
+    public init(fileWriter: WriteFile = FileWriter()) {
         self.fileWriter = fileWriter
     }
     
@@ -53,17 +53,23 @@ public class RecordingJSONLogger: Logger {
     }
 }
 
-protocol WriteFile {
+public protocol WriteFile {
     func write(_ string: String, toFileNamed filename: String)
 }
 
-struct FileWriter: WriteFile {
-    func write(_ string: String, toFileNamed filename: String) {
+public struct FileWriter: WriteFile {
+    public init() {
+        // DO nothing
+    }
+    
+    public func write(_ string: String, toFileNamed filename: String) {
         if let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             
+            // Add filetype
             let fileURL = documents.appendingPathComponent(filename)
             
             do {
+                print(fileURL)
                 try string.write(to: fileURL, atomically: false, encoding: .utf8)
             }
             catch {
