@@ -35,7 +35,7 @@ class RecordingLoggerTests: XCTestCase {
             
             switch writeCount {
             case 0:
-                XCTAssertEqual(filename, "api.3squared.com--path-to-method-first=string-second=true-third=0")
+                XCTAssertEqual(filename, "api.3squared.com--path-to-method-first=string-second=true-third=0.txt")
                 XCTAssertEqual(fileContents,
                 """
                 {
@@ -45,7 +45,7 @@ class RecordingLoggerTests: XCTestCase {
                 """
                 )
             case 1:
-                XCTAssertEqual(filename, "api.3squared.com--path-to-another-first=1")
+                XCTAssertEqual(filename, "api.3squared.com--path-to-another-first=1.txt")
                 XCTAssertEqual(fileContents,
                 """
                 {
@@ -78,7 +78,7 @@ class RecordingLoggerTests: XCTestCase {
         let jsonData = try! JSONSerialization.data(withJSONObject: ["name": "Peak", "type": "Network"], options: .prettyPrinted)
         
         let logger = RecordingJSONLogger(fileWriter: MockFileWriter { _, filename in
-            XCTAssertEqual(filename, "api.3squared.com--path-to-method-first=string-second=true-third=0")
+            XCTAssertEqual(filename, "api.3squared.com--path-to-method-first=string-second=true-third=0.txt")
             expect.fulfill()
         })
         
@@ -98,7 +98,7 @@ class RecordingLoggerTests: XCTestCase {
         let jsonData = try! JSONSerialization.data(withJSONObject: ["name": "Peak", "type": "Network"], options: .prettyPrinted)
         
         let logger = RecordingJSONLogger(fileWriter: MockFileWriter { _, filename in
-            XCTAssertEqual(filename, "api.3squared.com--path-to-method")
+            XCTAssertEqual(filename, "api.3squared.com--path-to-method.txt")
             expect.fulfill()
         })
         

@@ -32,7 +32,7 @@ public class RecordingJSONLogger: Logger {
         
         let queryAppend = requestURL.query.flatMap { "-" + $0 } ?? ""
         
-        let filename = (host + "-" + requestURL.path + queryAppend)
+        let filename = (host + "-" + requestURL.path + queryAppend + ".txt")
             .replacingOccurrences(of: "/", with: "-")
             .replacingOccurrences(of: "&", with: "-")
         
@@ -40,8 +40,10 @@ public class RecordingJSONLogger: Logger {
     }
     
     private func fileContents(from data: Data?, response: URLResponse?) -> String {
+        
         if let rawData = data,
             let json = try? JSONSerialization.jsonObject(with: rawData, options: .allowFragments),
+//             TODO: Check json is Array of Dictionary
             let prettyJSONData = try? JSONSerialization.data(withJSONObject: json, options: [.sortedKeys, .prettyPrinted]),
             let jsonString = String(data: prettyJSONData, encoding: String.Encoding.utf8) {
             return jsonString
@@ -65,11 +67,9 @@ public struct FileWriter: WriteFile {
     public func write(_ string: String, toFileNamed filename: String) {
         if let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             
-            // Add filetype
             let fileURL = documents.appendingPathComponent(filename)
             
             do {
-                print(fileURL)
                 try string.write(to: fileURL, atomically: false, encoding: .utf8)
             }
             catch {
