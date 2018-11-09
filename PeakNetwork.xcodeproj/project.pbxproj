@@ -29,8 +29,9 @@
 		CBF2179720CAC63700515DB2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2179620CAC63700515DB2 /* Logger.swift */; };
 		CBFD4EE71F740C07008CD8AA /* PeakNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBFD4EDD1F740C07008CD8AA /* PeakNetwork.framework */; };
 		CBFD4EEE1F740C07008CD8AA /* PeakNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F543AEF2216293E50002268F /* RecordingLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F543AEF1216293E50002268F /* RecordingLoggerTests.swift */; };
+		F543AEF2216293E50002268F /* RecordingJSONLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F543AEF1216293E50002268F /* RecordingJSONLoggerTests.swift */; };
 		F543AEF4216294D30002268F /* JSONRecordingLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F543AEF3216294D30002268F /* JSONRecordingLogger.swift */; };
+		F55203C321958710007168D4 /* RecordingJSONLoggerIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55203C221958710007168D4 /* RecordingJSONLoggerIntegrationTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,8 +78,9 @@
 		CBFD4EE61F740C07008CD8AA /* PeakNetworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PeakNetworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBFD4EED1F740C07008CD8AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D7914CA2B0F027445D579BB3 /* Pods-PeakNetwork.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork/Pods-PeakNetwork.debug.xcconfig"; sourceTree = "<group>"; };
-		F543AEF1216293E50002268F /* RecordingLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingLoggerTests.swift; sourceTree = "<group>"; };
+		F543AEF1216293E50002268F /* RecordingJSONLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingJSONLoggerTests.swift; sourceTree = "<group>"; };
 		F543AEF3216294D30002268F /* JSONRecordingLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONRecordingLogger.swift; sourceTree = "<group>"; };
+		F55203C221958710007168D4 /* RecordingJSONLoggerIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingJSONLoggerIntegrationTests.swift; sourceTree = "<group>"; };
 		F98484FDF8BBF3665AC24752 /* Pods_THRNetworkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_THRNetworkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBBDEF4E51FC83F903C547C2 /* Pods-THRNetwork.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-THRNetwork.release.xcconfig"; path = "Pods/Target Support Files/Pods-THRNetwork/Pods-THRNetwork.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -175,7 +177,8 @@
 				CBFD4EED1F740C07008CD8AA /* Info.plist */,
 				CB2380EF1F740D7600F1B001 /* 300.png */,
 				CB2380F41F740D7600F1B001 /* 600.png */,
-				F543AEF1216293E50002268F /* RecordingLoggerTests.swift */,
+				F543AEF1216293E50002268F /* RecordingJSONLoggerTests.swift */,
+				F55203C221958710007168D4 /* RecordingJSONLoggerIntegrationTests.swift */,
 				CB2380F21F740D7600F1B001 /* CertificatePinningTests.swift */,
 				CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */,
 				CB2380F11F740D7600F1B001 /* github.com.cer */,
@@ -384,10 +387,11 @@
 			files = (
 				CB2380F81F740D9C00F1B001 /* TestEntity.swift in Sources */,
 				CB2380F71F740D9C00F1B001 /* NetworkTests.swift in Sources */,
+				F55203C321958710007168D4 /* RecordingJSONLoggerIntegrationTests.swift in Sources */,
 				CB2380F51F740D9C00F1B001 /* CertificatePinningTests.swift in Sources */,
 				CB2380F61F740D9C00F1B001 /* ImageControllerTests.swift in Sources */,
 				CB5F252A206BD4A30023FB7F /* MockSessionTests.swift in Sources */,
-				F543AEF2216293E50002268F /* RecordingLoggerTests.swift in Sources */,
+				F543AEF2216293E50002268F /* RecordingJSONLoggerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
