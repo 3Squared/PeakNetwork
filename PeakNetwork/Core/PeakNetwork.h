@@ -6,7 +6,15 @@
 //  Copyright © 2017 3Squared. All rights reserved.
 //
 
+#if TARGET_OS_IPHONE
+
 #import <UIKit/UIKit.h>
+
+#elif TARGET_OS_MAC
+
+#import <Cocoa/Cocoa.h>
+
+#endif
 
 //! Project version number for PeakNetwork.
 FOUNDATION_EXPORT double PeakNetworkVersionNumber;
