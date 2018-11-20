@@ -271,5 +271,6 @@ The Peak Framework is a collection of open-source microframeworks created by the
 
 |Name|Description|
 |:--|:--|
+|[PeakCoreData](https://github.com/3squared/PeakCoreData)|Provides enhances and conveniences to `Core Data`.|
 |[PeakResult](https://github.com/3squared/PeakResult)|A simple `Result` type.|
 |[PeakOperation](https://github.com/3squared/PeakOperation)|Provides enhancement and conveniences to `Operation`, making use of the `Result` type.|
