@@ -133,17 +133,6 @@ public enum Source {
 
 public extension UIImageView {
     
-    /// Set the image available at the given URL as the `UIImageView`'s image.
-    ///
-    /// - Parameters:
-    ///   - url: The URL of an image.
-    ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
-    ///   - animation: The animation options (optional).
-    ///   - completion: A completion block indicating success or failure.
-    public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
-        self.setImage(URLRequestable(url), queue: queue, animation: animation, duration: duration, completion: completion)
-    }
-    
     /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
     ///
     /// - Parameters:
@@ -180,21 +169,7 @@ public extension UIImageView {
 }
 
 
-public extension UIButton {
-
-    /// Set the image available at the given URL as the `UIButton`'s image, for the given state.
-    /// You may set multiple images, one for each state, on a `UIButton` - only images for the same state will clash.
-    ///
-    /// - Parameters:
-    ///   - url: The URL of an image.
-    ///   - state: The `UIControlState` for which the image be displayed.
-    ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
-    ///   - animation: The animation options (optional).
-    ///   - completion: A completion block indicating success or failure.
-    public func setImage(_ url: URL, for state: UIControl.State, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
-        self.setImage(URLRequestable(url), for: state, queue: queue, animation: animation, completion: completion)
-    }
-    
+public extension UIButton {    
     
     /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
     /// You may set multiple images, one for each state, on a `UIButton` - only images for the same state will clash.

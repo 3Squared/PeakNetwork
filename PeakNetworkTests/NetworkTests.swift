@@ -35,7 +35,7 @@ class NetworkTests: XCTestCase {
             session.queue(response: MockResponse(statusCode: .internalServerError))
         }
 
-        let request = URLRequestable(URL(string: "http://google.com")!)
+        let request = URL(string: "http://google.com")!
 
         let expect = expectation(description: "")
         
@@ -60,7 +60,7 @@ class NetworkTests: XCTestCase {
             session.queue(response: MockResponse(json: ["hello": "world"], statusCode: .internalServerError))
         }
         
-        let request = URLRequestable(URL(string: "http://google.com")!)
+        let request = URL(string: "http://google.com")!
         
         let expect = expectation(description: "")
         
@@ -90,7 +90,7 @@ class NetworkTests: XCTestCase {
 
         let expect = expectation(description: "")
 
-        let networkOperation = URLResponseOperation(URLRequestable(URL(string: "http://google.com")!), session: session)
+        let networkOperation = URLResponseOperation(URL(string: "http://google.com")!, session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -114,7 +114,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = DecodableResponseOperation<TestEntity>(URLRequestable(URL(string: "http://google.com")!), session: session)
+        let networkOperation = DecodableResponseOperation<TestEntity>(URL(string: "http://google.com")!, session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -139,7 +139,7 @@ class NetworkTests: XCTestCase {
 
         let expect = expectation(description: "")
         
-        let networkOperation = DecodableResponseOperation<TestEntity>(URLRequestable(URL(string: "http://google.com")!), session: session)
+        let networkOperation = DecodableResponseOperation<TestEntity>(URL(string: "http://google.com")!, session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -167,7 +167,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = DecodableResponseOperation<[TestEntity]>(URLRequestable(URL(string: "http://google.com")!), session: session)
+        let networkOperation = DecodableResponseOperation<[TestEntity]>(URL(string: "http://google.com")!, session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -193,7 +193,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = DecodableResponseOperation<[TestEntity]>(URLRequestable(URL(string: "http://google.com")!), session: session)
+        let networkOperation = DecodableResponseOperation<[TestEntity]>(URL(string: "http://google.com")!, session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -220,7 +220,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = URLResponseOperation(URLRequestable(URL(string: "http://google.com")!), session: session)
+        let networkOperation = URLResponseOperation(URL(string: "http://google.com")!, session: session)
         
         var runCount = 0
         networkOperation.retryStrategy = { failureCount in
@@ -270,7 +270,7 @@ class NetworkTests: XCTestCase {
         let expect = expectation(description: "")
         
         let networkOperation = RequestableInputOperation<TestEntity>(session: session)
-        networkOperation.input = Result { URLRequestable(URL(string: "http://google.com")!) }
+        networkOperation.input = Result { URL(string: "http://google.com")! }
         
         networkOperation.addResultBlock { result in
             do {
@@ -321,7 +321,7 @@ class NetworkTests: XCTestCase {
         let expect = expectation(description: "")
 
         let networkOperation = RequestableInputOperation<TestEntity>(session: session)
-        networkOperation.input = Result { URLRequestable(URL(string: "http://google.com")!) }
+        networkOperation.input = Result { URL(string: "http://google.com")! }
 
         networkOperation.addResultBlock { result in
             do {
