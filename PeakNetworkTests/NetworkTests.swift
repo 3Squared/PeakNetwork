@@ -8,6 +8,7 @@
 
 import XCTest
 import PeakResult
+import PeakOperation
 @testable import PeakNetwork
 
 class NetworkTests: XCTestCase {
@@ -257,6 +258,86 @@ class NetworkTests: XCTestCase {
         
         networkOperation.enqueue()
         
+        waitForExpectations(timeout: 1)
+    }
+
+    
+    func testRequestableInputOperationParseSuccess() {
+        let session = MockSession { session in
+            session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok))
+        }
+        
+        let expect = expectation(description: "")
+        
+        let networkOperation = RequestableInputOperation<TestEntity>(session: session)
+        networkOperation.input = Result { URLRequestable(URL(string: "http://google.com")!) }
+        
+        networkOperation.addResultBlock { result in
+            do {
+                let entity = try result.resolve()
+                XCTAssertEqual(entity.name, "Sam")
+                expect.fulfill()
+            } catch {
+                XCTFail()
+            }
+        }
+        
+        networkOperation.enqueue()
+        
+        waitForExpectations(timeout: 1)
+    }
+    
+    func testRequestableInputOperationNoInput() {
+        let session = MockSession { _ in }
+
+        let expect = expectation(description: "")
+        
+        let networkOperation = RequestableInputOperation<TestEntity>(session: session)
+
+        networkOperation.addResultBlock { result in
+            do {
+                let _ = try result.resolve()
+                XCTFail()
+            } catch {
+                switch error {
+                case ResultError.noResult:
+                    expect.fulfill()
+                default:
+                    XCTFail()
+                }
+            }
+        }
+        
+        networkOperation.enqueue()
+        waitForExpectations(timeout: 1)
+    }
+    
+    
+    func testRequestableInputOperationParseFailure() {
+        let session = MockSession { session in
+            session.queue(response: MockResponse(json: ["wrong" : "key"], statusCode: .ok))
+        }
+
+        let expect = expectation(description: "")
+
+        let networkOperation = RequestableInputOperation<TestEntity>(session: session)
+        networkOperation.input = Result { URLRequestable(URL(string: "http://google.com")!) }
+
+        networkOperation.addResultBlock { result in
+            do {
+                let _ = try result.resolve()
+                XCTFail()
+            } catch {
+                switch error {
+                case DecodingError.keyNotFound(_, _):
+                    expect.fulfill()
+                default:
+                    XCTFail()
+                }
+            }
+        }
+
+        networkOperation.enqueue()
         waitForExpectations(timeout: 1)
     }
 
