@@ -11,14 +11,14 @@ import Foundation
 import XCTest
 @testable import PeakNetwork
 
-class InterceptorTests: XCTestCase {
+class RequestInterceptorSessionTests: XCTestCase {
     
     func testSingleInterceptor()  {
         let baseSession = MockSession { session in
             session.queue(response: MockResponse(statusCode: .ok))
         }
         
-        let session = InterceptorSession(with: baseSession) { request in
+        let session = RequestInterceptorSession(with: baseSession) { request in
             request.setValue("intercepted", forHTTPHeaderField: "request")
         }
         
@@ -33,7 +33,7 @@ class InterceptorTests: XCTestCase {
             session.queue(response: MockResponse(statusCode: .ok))
         }
         
-        let session = InterceptorSession(with: baseSession, interceptors: [
+        let session = RequestInterceptorSession(with: baseSession, interceptors: [
             { request in
                 request.setValue("1", forHTTPHeaderField: "a")
             },
@@ -54,7 +54,7 @@ class InterceptorTests: XCTestCase {
             session.queue(response: MockResponse(statusCode: .ok))
         }
         
-        let session = InterceptorSession(with: baseSession) { request in
+        let session = RequestInterceptorSession(with: baseSession) { request in
             request.setValue("1", forHTTPHeaderField: "a")
         }
         

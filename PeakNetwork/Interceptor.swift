@@ -1,5 +1,5 @@
 //
-//  InterceptorSession.swift
+//  RequestInterceptorSession.swift
 //  PeakNetwork
 //
 //  Created by Sam Oakley on 21/11/2018.
@@ -10,7 +10,7 @@ import Foundation
 
 public typealias RequestInterceptor = (inout URLRequest) -> Void
 
-public class InterceptorSession: Session {
+public class RequestInterceptorSession: Session {
     
     private let session: Session
     private var interceptors: [RequestInterceptor] = []
