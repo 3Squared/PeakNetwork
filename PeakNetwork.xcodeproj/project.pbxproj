@@ -25,6 +25,7 @@
 		CB2380FB1F740DBD00F1B001 /* github.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = CB2380F11F740D7600F1B001 /* github.com.cer */; };
 		CB3178731FDAA5AF00B063ED /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = CB3178721FDAA5AF00B063ED /* test.json */; };
 		CB3AA6CA1FD5A5C9008EFC5C /* HTTPStatusCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */; };
+		CB489E1B21A56AFC00569B18 /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB489E1A21A56AFC00569B18 /* Requestable.swift */; };
 		CB5F252A206BD4A30023FB7F /* MockSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */; };
 		CBF2179720CAC63700515DB2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2179620CAC63700515DB2 /* Logger.swift */; };
 		CBFD4EE71F740C07008CD8AA /* PeakNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBFD4EDD1F740C07008CD8AA /* PeakNetwork.framework */; };
@@ -67,6 +68,7 @@
 		CB2380F41F740D7600F1B001 /* 600.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 600.png; sourceTree = "<group>"; };
 		CB3178721FDAA5AF00B063ED /* test.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPStatusCodes.swift; sourceTree = "<group>"; };
+		CB489E1A21A56AFC00569B18 /* Requestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requestable.swift; sourceTree = "<group>"; };
 		CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSessionTests.swift; sourceTree = "<group>"; };
 		CBF2179620CAC63700515DB2 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		CBFD4EDD1F740C07008CD8AA /* PeakNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PeakNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -156,6 +158,7 @@
 				CB2380E01F740D1500F1B001 /* HTTPMethods.swift */,
 				CB2380DD1F740D1500F1B001 /* ImageController.swift */,
 				CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */,
+				CB489E1A21A56AFC00569B18 /* Requestable.swift */,
 				CB2380DE1F740D1500F1B001 /* Operators.swift */,
 				CB2380DF1F740D1500F1B001 /* Session.swift */,
 				CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */,
@@ -364,6 +367,7 @@
 				CB2380E91F740D1500F1B001 /* HTTPMethods.swift in Sources */,
 				CB2380E51F740D1500F1B001 /* CertificatePinningSessionDelegate.swift in Sources */,
 				CB2380E61F740D1500F1B001 /* ImageController.swift in Sources */,
+				CB489E1B21A56AFC00569B18 /* Requestable.swift in Sources */,
 				CBF2179720CAC63700515DB2 /* Logger.swift in Sources */,
 				CB2380E81F740D1500F1B001 /* Session.swift in Sources */,
 				CB2380EC1F740D1500F1B001 /* Errors.swift in Sources */,
