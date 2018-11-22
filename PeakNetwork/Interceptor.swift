@@ -15,7 +15,7 @@ public class RequestInterceptorSession: Session {
     private let session: Session
     private var interceptors: [RequestInterceptor] = []
     
-    /// Create a new InterceptorSession.
+    /// Create a new RequestInterceptorSession.
     ///
     /// - Parameters:
     ///   - session:
@@ -25,7 +25,7 @@ public class RequestInterceptorSession: Session {
         self.interceptors = interceptors
     }
     
-    /// Create a new InterceptorSession.
+    /// Create a new RequestInterceptorSession.
     ///
     /// - Parameters:
     ///   - session:
@@ -46,6 +46,49 @@ public class RequestInterceptorSession: Session {
     }
     
     public func add(interceptor: @escaping RequestInterceptor) {
+        interceptors.append(interceptor)
+    }
+}
+
+
+public typealias ErrorInterceptor = (Data?, URLResponse?, Error) -> Void
+
+public class ErrorInterceptorSession: Session {
+    
+    private let session: Session
+    private var interceptors: [ErrorInterceptor] = []
+    
+    /// Create a new ErrorInterceptorSession.
+    ///
+    /// - Parameters:
+    ///   - session:
+    ///   - interceptors: An array of ErrorInterceptors to execute on each error received.
+    public init(with session: Session, interceptors: [ErrorInterceptor]) {
+        self.session = session
+        self.interceptors = interceptors
+    }
+    
+    /// Create a new ErrorInterceptorSession.
+    ///
+    /// - Parameters:
+    ///   - session:
+    ///   - interceptors: An ErrorInterceptor to execute on each error received.
+    public init(with session: Session, interceptor: @escaping ErrorInterceptor) {
+        self.session = session
+        self.interceptors = [interceptor]
+    }
+    
+    public func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskCompletionHandler) -> URLSessionDataTask {
+        
+        return session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                self.interceptors.forEach { $0(data, response, error) }
+            }
+            completionHandler(data, response, error)
+        }
+    }
+    
+    public func add(interceptor: @escaping ErrorInterceptor) {
         interceptors.append(interceptor)
     }
 }
