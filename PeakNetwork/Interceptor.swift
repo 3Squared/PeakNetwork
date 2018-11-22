@@ -36,7 +36,6 @@ public class RequestInterceptorSession: Session {
     }
     
     public func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskCompletionHandler) -> URLSessionDataTask {
-        
         var request = request
         interceptors.forEach { $0(&request) }
         
