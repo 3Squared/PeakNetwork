@@ -19,6 +19,8 @@
 		1830B16A219D8F9E00AC862F /* NetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */; };
 		1830B16B219D8F9E00AC862F /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DE1F740D1500F1B001 /* Operators.swift */; };
 		1830B16C219DBE6A00AC862F /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DF1F740D1500F1B001 /* Session.swift */; };
+		18F2DFF321A81ABD007098FB /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2DFF221A81ABD007098FB /* Requestable.swift */; };
+		18F2DFF421A81ABD007098FB /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2DFF221A81ABD007098FB /* Requestable.swift */; };
 		485CCFDF7EBFC46D152B152E /* Pods_PeakNetwork_iOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E59BFB14844214015DA0BE4 /* Pods_PeakNetwork_iOSTests.framework */; };
 		62BB842F1FAD29DD8FE3BABA /* Pods_PeakNetwork_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1DDCE234BFE5707BB3758C1 /* Pods_PeakNetwork_macOS.framework */; };
 		959CF72ACAB8E084238DD74E /* Pods_PeakNetwork_macOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007BFEAC71F34423EC5C77CB /* Pods_PeakNetwork_macOSTests.framework */; };
@@ -70,6 +72,7 @@
 		1830B142219D8ED600AC862F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1830B147219D8ED600AC862F /* PeakNetwork_macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PeakNetwork_macOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1830B14E219D8ED600AC862F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18F2DFF221A81ABD007098FB /* Requestable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Requestable.swift; sourceTree = "<group>"; };
 		19F67A4308912F1015036221 /* Pods-PeakNetwork-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-macOS/Pods-PeakNetwork-macOS.release.xcconfig"; sourceTree = "<group>"; };
 		3F9F5BFD151A18FBA00DF18B /* Pods-PeakNetwork-macOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-macOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-macOSTests/Pods-PeakNetwork-macOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		73AF6A0F3F1AF9D6A6612758 /* Pods-PeakNetwork-iOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-iOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-iOSTests/Pods-PeakNetwork-iOSTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -156,6 +159,7 @@
 		1830B136219D8E3400AC862F /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				18F2DFF221A81ABD007098FB /* Requestable.swift */,
 				CB2380DF1F740D1500F1B001 /* Session.swift */,
 				CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */,
 				CB2380E31F740D1500F1B001 /* Errors.swift */,
@@ -626,6 +630,7 @@
 				1830B169219D8F9E00AC862F /* Logger.swift in Sources */,
 				1830B165219D8F9E00AC862F /* Errors.swift in Sources */,
 				1830B164219D8F9E00AC862F /* CertificatePinningSessionDelegate.swift in Sources */,
+				18F2DFF421A81ABD007098FB /* Requestable.swift in Sources */,
 				1830B167219D8F9E00AC862F /* HTTPStatusCodes.swift in Sources */,
 				1830B166219D8F9E00AC862F /* HTTPMethods.swift in Sources */,
 				1830B16A219D8F9E00AC862F /* NetworkOperation.swift in Sources */,
@@ -649,6 +654,7 @@
 				CB2380E91F740D1500F1B001 /* HTTPMethods.swift in Sources */,
 				CB2380E51F740D1500F1B001 /* CertificatePinningSessionDelegate.swift in Sources */,
 				CB2380E61F740D1500F1B001 /* ImageController.swift in Sources */,
+				18F2DFF321A81ABD007098FB /* Requestable.swift in Sources */,
 				CBF2179720CAC63700515DB2 /* Logger.swift in Sources */,
 				CB2380E81F740D1500F1B001 /* Session.swift in Sources */,
 				CB2380EC1F740D1500F1B001 /* Errors.swift in Sources */,
