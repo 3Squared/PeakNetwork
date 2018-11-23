@@ -68,7 +68,7 @@
 		182C4825219DC70900B03F9F /* PeakNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeakNetwork.h; sourceTree = "<group>"; };
 		1830B13F219D8ED600AC862F /* PeakNetwork_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PeakNetwork_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1830B142219D8ED600AC862F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1830B147219D8ED600AC862F /* PeakNetwork-macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PeakNetwork-macOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1830B147219D8ED600AC862F /* PeakNetwork_macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PeakNetwork_macOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1830B14E219D8ED600AC862F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		19F67A4308912F1015036221 /* Pods-PeakNetwork-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-macOS/Pods-PeakNetwork-macOS.release.xcconfig"; sourceTree = "<group>"; };
 		3F9F5BFD151A18FBA00DF18B /* Pods-PeakNetwork-macOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-macOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-macOSTests/Pods-PeakNetwork-macOSTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -98,7 +98,7 @@
 		CBFD4EDD1F740C07008CD8AA /* PeakNetwork_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PeakNetwork_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PeakNetwork.h; sourceTree = "<group>"; };
 		CBFD4EE11F740C07008CD8AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CBFD4EE61F740C07008CD8AA /* PeakNetwork-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PeakNetwork-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBFD4EE61F740C07008CD8AA /* PeakNetwork_iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PeakNetwork_iOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBFD4EED1F740C07008CD8AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D1DDCE234BFE5707BB3758C1 /* Pods_PeakNetwork_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PeakNetwork_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F97A8322DDD435542D70EBE4 /* Pods-PeakNetwork-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-iOS/Pods-PeakNetwork-iOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -267,9 +267,9 @@
 			isa = PBXGroup;
 			children = (
 				CBFD4EDD1F740C07008CD8AA /* PeakNetwork_iOS.framework */,
-				CBFD4EE61F740C07008CD8AA /* PeakNetwork-iOSTests.xctest */,
+				CBFD4EE61F740C07008CD8AA /* PeakNetwork_iOSTests.xctest */,
 				1830B13F219D8ED600AC862F /* PeakNetwork_macOS.framework */,
-				1830B147219D8ED600AC862F /* PeakNetwork-macOSTests.xctest */,
+				1830B147219D8ED600AC862F /* PeakNetwork_macOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -350,7 +350,7 @@
 			);
 			name = "PeakNetwork-macOSTests";
 			productName = "PeakNetwork-macOSTests";
-			productReference = 1830B147219D8ED600AC862F /* PeakNetwork-macOSTests.xctest */;
+			productReference = 1830B147219D8ED600AC862F /* PeakNetwork_macOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		CBFD4EDC1F740C07008CD8AA /* PeakNetwork-iOS */ = {
@@ -389,7 +389,7 @@
 			);
 			name = "PeakNetwork-iOSTests";
 			productName = THRNetworkTests;
-			productReference = CBFD4EE61F740C07008CD8AA /* PeakNetwork-iOSTests.xctest */;
+			productReference = CBFD4EE61F740C07008CD8AA /* PeakNetwork_iOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -752,7 +752,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.3squared.PeakNetwork-macOSTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 4.2;
 			};
@@ -772,7 +772,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.3squared.PeakNetwork-macOSTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 4.2;
 			};
@@ -957,7 +957,7 @@
 				INFOPLIST_FILE = "Unit Tests/Platforms/iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.3squared.PeakNetworkTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -975,7 +975,7 @@
 				INFOPLIST_FILE = "Unit Tests/Platforms/iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.3squared.PeakNetworkTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
