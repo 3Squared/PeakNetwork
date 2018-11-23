@@ -14,5 +14,8 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '10.0'
   s.osx.deployment_target = '10.13'
+  s.source_files = "PeakNetwork", "PeakNetwork/Core/**/*.{h,m,swift}"
+  s.ios.source_files = "PeakNetwork/Platforms/iOS/**/*.{h,m,swift}"
+  s.osx.source_files = "PeakNetwork/Platforms/macOS/**/*.{h,m,swift}"
 
 end

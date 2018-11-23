@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		182C4826219DC70900B03F9F /* PeakNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 182C4825219DC70900B03F9F /* PeakNetwork.h */; };
+		182C4827219DC70D00B03F9F /* PeakNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */; };
 		1830B148219D8ED600AC862F /* PeakNetwork_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1830B13F219D8ED600AC862F /* PeakNetwork_macOS.framework */; };
-		1830B15B219D8F6400AC862F /* PeakNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */; };
 		1830B164219D8F9E00AC862F /* CertificatePinningSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */; };
 		1830B165219D8F9E00AC862F /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380E31F740D1500F1B001 /* Errors.swift */; };
 		1830B166219D8F9E00AC862F /* HTTPMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380E01F740D1500F1B001 /* HTTPMethods.swift */; };
@@ -41,7 +42,6 @@
 		CB5F252A206BD4A30023FB7F /* MockSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */; };
 		CBF2179720CAC63700515DB2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2179620CAC63700515DB2 /* Logger.swift */; };
 		CBFD4EE71F740C07008CD8AA /* PeakNetwork_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBFD4EDD1F740C07008CD8AA /* PeakNetwork_iOS.framework */; };
-		CBFD4EEE1F740C07008CD8AA /* PeakNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +65,7 @@
 		007BFEAC71F34423EC5C77CB /* Pods_PeakNetwork_macOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PeakNetwork_macOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		056D1377BC3154B39DE0DF12 /* Pods-PeakNetwork-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-macOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-macOS/Pods-PeakNetwork-macOS.debug.xcconfig"; sourceTree = "<group>"; };
 		1181CBF1635E348B99C9CBA8 /* Pods-PeakNetwork-iOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-iOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-iOSTests/Pods-PeakNetwork-iOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		182C4825219DC70900B03F9F /* PeakNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeakNetwork.h; sourceTree = "<group>"; };
 		1830B13F219D8ED600AC862F /* PeakNetwork_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PeakNetwork_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1830B142219D8ED600AC862F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1830B147219D8ED600AC862F /* PeakNetwork-macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PeakNetwork-macOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -164,7 +165,6 @@
 				CBF2179620CAC63700515DB2 /* Logger.swift */,
 				CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */,
 				CB2380DE1F740D1500F1B001 /* Operators.swift */,
-				CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -181,6 +181,7 @@
 		1830B138219D8E4100AC862F /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */,
 				CBFD4EE11F740C07008CD8AA /* Info.plist */,
 			);
 			path = iOS;
@@ -189,6 +190,7 @@
 		1830B139219D8E4600AC862F /* macOS */ = {
 			isa = PBXGroup;
 			children = (
+				182C4825219DC70900B03F9F /* PeakNetwork.h */,
 				1830B142219D8ED600AC862F /* Info.plist */,
 			);
 			path = macOS;
@@ -297,7 +299,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1830B15B219D8F6400AC862F /* PeakNetwork.h in Headers */,
+				182C4826219DC70900B03F9F /* PeakNetwork.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,7 +307,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CBFD4EEE1F740C07008CD8AA /* PeakNetwork.h in Headers */,
+				182C4827219DC70D00B03F9F /* PeakNetwork.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
