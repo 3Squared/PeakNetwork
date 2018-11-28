@@ -202,6 +202,9 @@ public class MockSession: Session {
         let taskResponse: MockResponse
         let request: URLRequest
         
+        override var originalRequest: URLRequest { return request }
+        override var currentRequest: URLRequest { return request }
+
         init(_ response: MockResponse, forRequest request: URLRequest, completionHandler: @escaping DataTaskCompletionHandler) {
             self.taskResponse = response
             self.request = request
