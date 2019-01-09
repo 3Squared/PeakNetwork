@@ -14,7 +14,7 @@ enum ApiEndpoint {
     case search(query: String)
 }
 
-extension ApiEndpoinds: Requestable {
+extension ApiEndpoints: Requestable {
     var request: URLRequest {
         switch self {
         case .search(let query):
