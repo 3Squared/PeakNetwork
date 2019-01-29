@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CBFD4EE51F740C07008CD8AA"
-               BuildableName = "PeakNetwork-iOSTests.xctest"
+               BuildableName = "PeakNetwork_iOSTests.xctest"
                BlueprintName = "PeakNetwork-iOSTests"
                ReferencedContainer = "container:PeakNetwork.xcodeproj">
             </BuildableReference>
