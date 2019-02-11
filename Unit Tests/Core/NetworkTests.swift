@@ -8,7 +8,7 @@
 
 import XCTest
 import PeakResult
-<<<<<<< HEAD:Unit Tests/Core/NetworkTests.swift
+import PeakOperation
 
 #if os(iOS)
 
@@ -19,10 +19,6 @@ import PeakResult
 @testable import PeakNetwork_macOS
 
 #endif
-=======
-import PeakOperation
-@testable import PeakNetwork
->>>>>>> origin/develop:PeakNetworkTests/NetworkTests.swift
 
 class NetworkTests: XCTestCase {
     
