@@ -7,7 +7,16 @@
 //
 
 import XCTest
-@testable import PeakNetwork
+
+#if os(iOS)
+
+@testable import PeakNetwork_iOS
+
+#else
+
+@testable import PeakNetwork_macOS
+
+#endif
 
 class ImageControllerTests: XCTestCase {
     

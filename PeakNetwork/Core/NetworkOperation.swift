@@ -6,7 +6,11 @@
 //  Copyright © 2016 3Squared. All rights reserved.
 //
 
+#if os(iOS) || os(tvOS)
 import UIKit
+#else
+import AppKit
+#endif
 import PeakOperation
 import PeakResult
 
@@ -241,10 +245,10 @@ public class DataResponseOperation: NetworkOperation<(Data, HTTPURLResponse)> {
 }
 
 /// A subclass of `NetworkOperation` which will return the response parsed as a `UIImage`.
-public class ImageResponseOperation: NetworkOperation<(UIImage, HTTPURLResponse)> {
+public class ImageResponseOperation: NetworkOperation<(PeakImage, HTTPURLResponse)> {
     
-    public override func decode(data: Data, response: HTTPURLResponse) -> Result<(UIImage, HTTPURLResponse)> {
-        if let image = UIImage(data: data) {
+    public override func decode(data: Data, response: HTTPURLResponse) -> Result<(PeakImage, HTTPURLResponse)> {
+        if let image = PeakImage(data: data) {
             return Result { return (image, response) }
         } else {
             return Result { throw ImageResponseOperationError.invalidData }
