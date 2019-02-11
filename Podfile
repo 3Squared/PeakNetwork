@@ -4,8 +4,6 @@ target 'PeakNetwork-iOS' do
 
 	platform :ios, '10.0'
 
-	use_frameworks!
-
 	pod 'PeakOperation'
 	pod 'PeakResult'
 		
@@ -18,8 +16,6 @@ end
 target 'PeakNetwork-macOS' do
 
 	platform :osx, '10.13'
-
-	use_frameworks!
 
 	pod 'PeakOperation'
 	pod 'PeakResult'
