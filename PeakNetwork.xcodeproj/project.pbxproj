@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		365C1534ACFB8B7D2A6D7477 /* Pods_PeakNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 450800132F542CC89914D595 /* Pods_PeakNetwork.framework */; };
-		8002D361C4EDC44976558A99 /* Pods_PeakNetworkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79A3212C11E25C67963A7ADE /* Pods_PeakNetworkTests.framework */; };
+		582D945C9D8CB999869F291E /* libPods-PeakNetworkTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11217750910DDC42FF53E2AB /* libPods-PeakNetworkTests.a */; };
+		6A2D52267D359EF75A411207 /* libPods-PeakNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7763CF28A0D8A5A57153D5D5 /* libPods-PeakNetwork.a */; };
 		CB2380E41F740D1500F1B001 /* NetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */; };
 		CB2380E51F740D1500F1B001 /* CertificatePinningSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */; };
 		CB2380E61F740D1500F1B001 /* ImageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DD1F740D1500F1B001 /* ImageController.swift */; };
@@ -25,10 +25,10 @@
 		CB2380FB1F740DBD00F1B001 /* github.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = CB2380F11F740D7600F1B001 /* github.com.cer */; };
 		CB3178731FDAA5AF00B063ED /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = CB3178721FDAA5AF00B063ED /* test.json */; };
 		CB3AA6CA1FD5A5C9008EFC5C /* HTTPStatusCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */; };
+		CB489E1B21A56AFC00569B18 /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB489E1A21A56AFC00569B18 /* Requestable.swift */; };
 		CB489E2121A57CB800569B18 /* Interceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB489E2021A57CB800569B18 /* Interceptor.swift */; };
 		CB489E2321A57DD300569B18 /* RequestInterceptorSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB489E2221A57DD300569B18 /* RequestInterceptorSessionTests.swift */; };
 		CB489E2B21A6FB4D00569B18 /* ErrorInterceptorSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB489E2A21A6FB4D00569B18 /* ErrorInterceptorSessionTests.swift */; };
-		CB489E1B21A56AFC00569B18 /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB489E1A21A56AFC00569B18 /* Requestable.swift */; };
 		CB5F252A206BD4A30023FB7F /* MockSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */; };
 		CBF2179720CAC63700515DB2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2179620CAC63700515DB2 /* Logger.swift */; };
 		CBFD4EE71F740C07008CD8AA /* PeakNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBFD4EDD1F740C07008CD8AA /* PeakNetwork.framework */; };
@@ -46,13 +46,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		11217750910DDC42FF53E2AB /* libPods-PeakNetworkTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetworkTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		18AB99D475B878DDB5BB7405 /* Pods-THRNetworkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-THRNetworkTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-THRNetworkTests/Pods-THRNetworkTests.debug.xcconfig"; sourceTree = "<group>"; };
 		35AA087B88B2E4EBD1C3853F /* Pods-PeakNetwork.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork.release.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork/Pods-PeakNetwork.release.xcconfig"; sourceTree = "<group>"; };
 		3CABC5806B6047F3DEE48372 /* Pods-THRNetwork.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-THRNetwork.debug.xcconfig"; path = "Pods/Target Support Files/Pods-THRNetwork/Pods-THRNetwork.debug.xcconfig"; sourceTree = "<group>"; };
-		450800132F542CC89914D595 /* Pods_PeakNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PeakNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		512D8F92E3141C5B84991322 /* Pods-PeakNetworkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetworkTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetworkTests/Pods-PeakNetworkTests.release.xcconfig"; sourceTree = "<group>"; };
 		52D1507C5C209C6E861D99FB /* Pods_THRNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_THRNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		79A3212C11E25C67963A7ADE /* Pods_PeakNetworkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PeakNetworkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7763CF28A0D8A5A57153D5D5 /* libPods-PeakNetwork.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetwork.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		79BF5C2CD7B26FAEAA77717B /* Pods-THRNetworkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-THRNetworkTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-THRNetworkTests/Pods-THRNetworkTests.release.xcconfig"; sourceTree = "<group>"; };
 		96DFF5E1E8C98D27BB7D052F /* Pods-PeakNetworkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetworkTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetworkTests/Pods-PeakNetworkTests.debug.xcconfig"; sourceTree = "<group>"; };
 		CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkOperation.swift; sourceTree = "<group>"; };
@@ -71,10 +71,10 @@
 		CB2380F41F740D7600F1B001 /* 600.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 600.png; sourceTree = "<group>"; };
 		CB3178721FDAA5AF00B063ED /* test.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPStatusCodes.swift; sourceTree = "<group>"; };
+		CB489E1A21A56AFC00569B18 /* Requestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requestable.swift; sourceTree = "<group>"; };
 		CB489E2021A57CB800569B18 /* Interceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interceptor.swift; sourceTree = "<group>"; };
 		CB489E2221A57DD300569B18 /* RequestInterceptorSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestInterceptorSessionTests.swift; sourceTree = "<group>"; };
 		CB489E2A21A6FB4D00569B18 /* ErrorInterceptorSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorInterceptorSessionTests.swift; sourceTree = "<group>"; };
-		CB489E1A21A56AFC00569B18 /* Requestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requestable.swift; sourceTree = "<group>"; };
 		CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSessionTests.swift; sourceTree = "<group>"; };
 		CBF2179620CAC63700515DB2 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		CBFD4EDD1F740C07008CD8AA /* PeakNetwork.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PeakNetwork.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -92,7 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				365C1534ACFB8B7D2A6D7477 /* Pods_PeakNetwork.framework in Frameworks */,
+				6A2D52267D359EF75A411207 /* libPods-PeakNetwork.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,7 +101,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CBFD4EE71F740C07008CD8AA /* PeakNetwork.framework in Frameworks */,
-				8002D361C4EDC44976558A99 /* Pods_PeakNetworkTests.framework in Frameworks */,
+				582D945C9D8CB999869F291E /* libPods-PeakNetworkTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,8 +113,8 @@
 			children = (
 				52D1507C5C209C6E861D99FB /* Pods_THRNetwork.framework */,
 				F98484FDF8BBF3665AC24752 /* Pods_THRNetworkTests.framework */,
-				450800132F542CC89914D595 /* Pods_PeakNetwork.framework */,
-				79A3212C11E25C67963A7ADE /* Pods_PeakNetworkTests.framework */,
+				7763CF28A0D8A5A57153D5D5 /* libPods-PeakNetwork.a */,
+				11217750910DDC42FF53E2AB /* libPods-PeakNetworkTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -234,7 +234,6 @@
 				CBFD4EE21F740C07008CD8AA /* Sources */,
 				CBFD4EE31F740C07008CD8AA /* Frameworks */,
 				CBFD4EE41F740C07008CD8AA /* Resources */,
-				275CC5D2B6FDCA4D751D7ECA /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -308,26 +307,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		275CC5D2B6FDCA4D751D7ECA /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-PeakNetworkTests/Pods-PeakNetworkTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/PeakOperation/PeakOperation.framework",
-				"${BUILT_PRODUCTS_DIR}/PeakResult/PeakResult.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PeakOperation.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PeakResult.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PeakNetworkTests/Pods-PeakNetworkTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		4452F50FD344D4ED8E5D7984 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

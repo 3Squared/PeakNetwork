@@ -3,8 +3,6 @@ platform :ios, '10.0'
 source 'https://github.com/CocoaPods/Specs.git'
 
 target 'PeakNetwork' do
-	use_frameworks!
-
 	pod 'PeakOperation'
 			
 	target 'PeakNetworkTests' do

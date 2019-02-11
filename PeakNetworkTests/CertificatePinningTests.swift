@@ -21,7 +21,7 @@ class CertificatePinningTests: XCTestCase {
         
         let networkOperation = URLResponseOperation(BlockRequestable {
             return URLRequest(url: URL(string: "https://google.com")!)
-        }, session: urlSession)
+        }, using: urlSession)
         
         networkOperation.addResultBlock { result in
             do {
@@ -48,7 +48,7 @@ class CertificatePinningTests: XCTestCase {
         
         let networkOperation = URLResponseOperation(BlockRequestable {
             return URLRequest(url: URL(string: "https://github.com")!)
-        }, session: urlSession)
+        }, using: urlSession)
         
         networkOperation.addResultBlock { result in
             do {

@@ -81,7 +81,7 @@ public class ImageController {
             imageOperation = existingOperation
             usingExisting = true
         } else {
-            imageOperation = ImageResponseOperation(requestable, session: session)
+            imageOperation = ImageResponseOperation(requestable, using: session)
         }
         
         // Create an operation to fetch the image data

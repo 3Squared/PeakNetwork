@@ -18,9 +18,11 @@ import PeakResult
 open class NetworkOperation<T>: RetryingOperation<T> {
     internal var task: URLSessionTask?
     internal var session: Session
+    internal var requestable: Requestable!
 
-    public init(with session: Session) {
+    public init(_ requestable: Requestable? = nil, using session: Session) {
         self.session = session
+        self.requestable = requestable
         super.init()
     }
     
@@ -39,7 +41,37 @@ open class NetworkOperation<T>: RetryingOperation<T> {
     }
     
     open func createTask(in session: Session) -> URLSessionTask? {
-        fatalError("Subclasses must implement `createTask`.")
+        return session.dataTask(with: requestable.request) { [weak self] data, response, error in
+            guard let strongSelf = self else { return }
+            
+            if let error = error {
+                strongSelf.output = Result { throw error }
+            } else if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCodeEnum.isSuccess {
+                    if let data = data {
+                        strongSelf.output = strongSelf.decode(data: data, response: httpResponse)
+                    } else {
+                        strongSelf.output = Result {
+                            throw SerializationError.noData
+                        }
+                    }
+                } else {
+                    strongSelf.output = Result {
+                        throw ServerError.error(code: httpResponse.statusCodeEnum, data: data, response: httpResponse)
+                    }
+                }
+            } else {
+                strongSelf.output = Result {
+                    throw ServerError.unknownResponse
+                }
+            }
+            
+            strongSelf.finish()
+        }
+    }
+    
+    open func decode(data: Data, response: HTTPURLResponse) -> Result<T> {
+        fatalError("Override me!")
     }
 }
 
@@ -47,7 +79,6 @@ open class NetworkOperation<T>: RetryingOperation<T> {
 /// `DecodableOperation` will attempt to parse the response into a `Decodable` type.
 public class DecodableOperation<D: Decodable>: NetworkOperation<D> {
     
-    private let requestable: Requestable
     private let decoder: JSONDecoder
 
     /// Create a new `DecodableResponseOperation`, parsing the response to a list of the given generic type.
@@ -56,20 +87,14 @@ public class DecodableOperation<D: Decodable>: NetworkOperation<D> {
     ///   - requestable: A requestable describing the web resource to fetch.
     ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(_ requestable: Requestable, decoder: JSONDecoder = JSONDecoder(), session: Session = URLSession.shared) {
-        self.requestable = requestable
+    public init(_ requestable: Requestable?, decoder: JSONDecoder = JSONDecoder(), using session: Session = URLSession.shared) {
         self.decoder = decoder
-        super.init(with: session)
+        super.init(requestable, using: session)
     }
     
-    public override func createTask(in session: Session) -> URLSessionTask {
-        return session.dataTask(with: requestable.request, decoder: decoder) { [weak self] (result: Result<(D, HTTPURLResponse)>) in
-            guard let strongSelf = self else { return }
-            strongSelf.output = Result {
-                let (decoded, _) = try result.resolve()
-                return decoded
-            }
-            strongSelf.finish()
+    public override func decode(data: Data, response: HTTPURLResponse) -> Result<D> {
+        return Result {
+            return try decoder.decode(D.self, from: data)
         }
     }
 }
@@ -78,7 +103,6 @@ public class DecodableOperation<D: Decodable>: NetworkOperation<D> {
 /// `DecodableResponseOperation` will attempt to parse the response into a `Decodable` type.
 public class DecodableResponseOperation<D: Decodable>: NetworkOperation<(D, HTTPURLResponse)> {
     
-    private let requestable: Requestable
     private let decoder: JSONDecoder
 
     /// Create a new `DecodableResponseOperation`, parsing the response to a list of the given generic type.
@@ -87,17 +111,14 @@ public class DecodableResponseOperation<D: Decodable>: NetworkOperation<(D, HTTP
     ///   - requestable: A requestable describing the web resource to fetch.
     ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(_ requestable: Requestable, decoder: JSONDecoder = JSONDecoder(), session: Session = URLSession.shared) {
-        self.requestable = requestable
+    public init(_ requestable: Requestable?, decoder: JSONDecoder = JSONDecoder(), using session: Session = URLSession.shared) {
         self.decoder = decoder
-        super.init(with: session)
+        super.init(requestable, using: session)
     }
     
-    public override func createTask(in session: Session) -> URLSessionTask {
-        return session.dataTask(with: requestable.request, decoder: decoder) { [weak self] (result: Result<(D, HTTPURLResponse)>) in
-            guard let strongSelf = self else { return }
-            strongSelf.output = result
-            strongSelf.finish()
+    public override func decode(data: Data, response: HTTPURLResponse) -> Result<(D, HTTPURLResponse)> {
+        return Result {
+            return (try decoder.decode(D.self, from: data), response)
         }
     }
 }
@@ -115,22 +136,25 @@ open class CustomNetworkInputOperation<D: Decodable, O, I>: NetworkOperation<O>,
     /// - Parameters:
     ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(decoder: JSONDecoder = JSONDecoder(), session: Session = URLSession.shared) {
+    public init(decoder: JSONDecoder = JSONDecoder(), using session: Session = URLSession.shared) {
         self.decoder = decoder
-        super.init(with: session)
+        super.init(using: session)
     }
     
     open override func createTask(in session: Session) -> URLSessionTask? {
         if let requestable = requestableFrom(input) {
-            return session.dataTask(with: requestable.request, decoder: decoder) { [weak self] (result: Result<(D, HTTPURLResponse)>) in
-                guard let strongSelf = self else { return }
-                strongSelf.output = strongSelf.outputFrom(result)
-                strongSelf.finish()
-            }
+            self.requestable = requestable
+            return super.createTask(in: session)
         } else {
             finish()
             return nil
         }
+    }
+    
+    open override func decode(data: Data, response: HTTPURLResponse) -> Result<O> {
+        return outputFrom(Result {
+            return (try decoder.decode(D.self, from: data), response)
+        })
     }
     
     /// Create a requestable to be performed, using the input to the operation.
@@ -155,32 +179,19 @@ open class CustomNetworkInputOperation<D: Decodable, O, I>: NetworkOperation<O>,
 
 /// A subclass of `NetworkOperation`.
 /// `RequestableInputOperation` will take a `Requestable` input, call it, and attempt to parse the response into a `Decodable` type.
-public class RequestableInputOperation<D: Decodable>: NetworkOperation<D>, ConsumesResult {
+public class RequestableInputOperation<D: Decodable>: DecodableOperation<D>, ConsumesResult {
     
     public var input: Result<Requestable> = Result { throw ResultError.noResult }
-    private let decoder: JSONDecoder
     
-    /// Create a new `RequestableInputOperation`, parsing the response to a list of the given generic type.
-    ///
-    /// - Parameters:
-    ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
-    ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(decoder: JSONDecoder = JSONDecoder(), session: Session = URLSession.shared) {
-        self.decoder = decoder
-        super.init(with: session)
+    public init(decoder: JSONDecoder = JSONDecoder(), using session: Session = URLSession.shared) {
+        super.init(nil, decoder: decoder, using: session)
     }
     
     public override func createTask(in session: Session) -> URLSessionTask? {
         switch input {
         case .success(let requestable):
-            return session.dataTask(with: requestable.request, decoder: decoder) { [weak self] (result: Result<(D, HTTPURLResponse)>) in
-                guard let strongSelf = self else { return }
-                strongSelf.output = Result {
-                    let (decoded, _) = try result.resolve()
-                    return decoded
-                }
-                strongSelf.finish()
-            }
+            self.requestable = requestable
+            return super.createTask(in: session)
         case .failure(let error):
             output = Result { throw error }
             finish()
@@ -191,29 +202,19 @@ public class RequestableInputOperation<D: Decodable>: NetworkOperation<D>, Consu
 
 /// A subclass of `NetworkOperation`.
 /// `RequestableInputResponseOperation` will take a `Requestable` input, call it, and attempt to parse the response into a `Decodable` type.
-public class RequestableInputResponseOperation<D: Decodable>: NetworkOperation<(D, HTTPURLResponse)>, ConsumesResult {
+public class RequestableInputResponseOperation<D: Decodable>: DecodableResponseOperation<D>, ConsumesResult {
     
     public var input: Result<Requestable> = Result { throw ResultError.noResult }
-    private let decoder: JSONDecoder
     
-    /// Create a new `RequestableInputResponseOperation`, parsing the response to a list of the given generic type.
-    ///
-    /// - Parameters:
-    ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
-    ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(decoder: JSONDecoder = JSONDecoder(), session: Session = URLSession.shared) {
-        self.decoder = decoder
-        super.init(with: session)
+    public init(decoder: JSONDecoder = JSONDecoder(), using session: Session = URLSession.shared) {
+        super.init(nil, decoder: decoder, using: session)
     }
     
     public override func createTask(in session: Session) -> URLSessionTask? {
         switch input {
         case .success(let requestable):
-            return session.dataTask(with: requestable.request, decoder: decoder) { [weak self] (result: Result<(D, HTTPURLResponse)>) in
-                guard let strongSelf = self else { return }
-                strongSelf.output = result
-                strongSelf.finish()
-            }
+            self.requestable = requestable
+            return super.createTask(in: session)
         case .failure(let error):
             output = Result { throw error }
             finish()
@@ -226,95 +227,33 @@ public class RequestableInputResponseOperation<D: Decodable>: NetworkOperation<(
 /// A subclass of `NetworkOperation` which will return the basic response.
 public class URLResponseOperation: NetworkOperation<HTTPURLResponse> {
     
-    private let requestable: Requestable
-
-    /// Create a new `URLResponseOperation`.
-    ///
-    /// - Parameters:
-    ///   - requestable: A requestable describing the web resource to fetch.
-    ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(_ requestable: Requestable, session: Session = URLSession.shared) {
-        self.requestable = requestable
-        super.init(with: session)
-    }
-    
-    public override func createTask(in session: Session) -> URLSessionTask {
-        return session.dataTask(with: requestable.request)  { [weak self] (result: Result<(Data?, HTTPURLResponse)>) in
-            guard let strongSelf = self else { return }
-            do {
-                let (_, response) = try result.resolve()
-                strongSelf.output = Result { return response }
-            } catch {
-                strongSelf.output = Result { throw error }
-            }
-            strongSelf.finish()
-        }
+    public override func decode(data: Data, response: HTTPURLResponse) -> Result<HTTPURLResponse> {
+        return .success(response)
     }
 }
 
 /// A subclass of `NetworkOperation` which will return the response as `Data`.
 public class DataResponseOperation: NetworkOperation<(Data, HTTPURLResponse)> {
     
-    private let requestable: Requestable
-
-    /// Create a new `DataResponseOperation`.
-    ///
-    /// - Parameters:
-    ///   - requestable: A requestable describing the web resource to fetch.
-    ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(_ requestable: Requestable, session: Session = URLSession.shared) {
-        self.requestable = requestable
-        super.init(with: session)
-    }
-    
-    public override func createTask(in session: Session) -> URLSessionTask {
-        return session.dataTask(with: requestable.request)  { [weak self] (result: Result<(Data?, HTTPURLResponse)>) in
-            guard let strongSelf = self else { return }
-            do {
-                let (data, response) = try result.resolve()
-                if let d = data {
-                    strongSelf.output = Result { return (d, response) }
-                } else {
-                    strongSelf.output = Result { throw ResultError.noResult }
-                }
-            } catch {
-                strongSelf.output = Result { throw error }
-            }
-            strongSelf.finish()
-        }
+    public override func decode(data: Data, response: HTTPURLResponse) -> Result<(Data, HTTPURLResponse)> {
+        return .success((data, response))
     }
 }
 
 /// A subclass of `NetworkOperation` which will return the response parsed as a `UIImage`.
 public class ImageResponseOperation: NetworkOperation<(UIImage, HTTPURLResponse)> {
     
-    private let requestable: Requestable
-
-    /// Create a new `ImageResponseOperation`.
-    ///
-    /// - Parameters:
-    ///   - requestable: A requestable describing the web resource to fetch.
-    ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(_ requestable: Requestable, session: Session = URLSession.shared) {
-        self.requestable = requestable
-        super.init(with: session)
+    public override func decode(data: Data, response: HTTPURLResponse) -> Result<(UIImage, HTTPURLResponse)> {
+        if let image = UIImage(data: data) {
+            return Result { return (image, response) }
+        } else {
+            return Result { throw ImageResponseOperationError.invalidData }
+        }
     }
     
-    public override func createTask(in session: Session) -> URLSessionTask {
-        return session.dataTask(with: requestable.request)  { [weak self] (result: Result<(Data?, HTTPURLResponse)>) in
-            guard let strongSelf = self else { return }
-            do {
-                let (data, response) = try result.resolve()
-                if let d = data, let image = UIImage(data: d) {
-                    strongSelf.output = Result { return (image, response) }
-                } else {
-                    strongSelf.output = Result { throw ResultError.noResult }
-                }
-            } catch {
-                strongSelf.output = Result { throw error }
-            }
-            strongSelf.finish()
-        }
+    public enum ImageResponseOperationError: Error {
+        /// Could not initialize the image from the specified data.
+        case invalidData
     }
 }
 
