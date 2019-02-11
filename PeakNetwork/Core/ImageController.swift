@@ -6,7 +6,6 @@
 //  Copyright © 2016 3Squared. All rights reserved.
 //
 
-import UIKit
 import PeakResult
 
 /// Allow remote images to be easilty set on UIImageViews.
@@ -24,7 +23,7 @@ public class ImageController {
     let objectToUrlTable = NSMapTable<NSObject, NSURL>.weakToStrongObjects()
     let urlsToObjectsTable = NSMapTable<NSURL, NSMutableSet>.weakToStrongObjects()
 
-    let cache = NSCache<NSURL, UIImage>()
+    let cache = NSCache<NSURL, PeakImage>()
     let session: Session
     
     
@@ -63,7 +62,7 @@ public class ImageController {
     
     
     /// Get an image available at the URL described by a Requestable. object is a unique key, such as an ImageView.
-    public func getImage<T: NSObject>(_ requestable: Requestable, object: T, queue: OperationQueue? = nil, completion: @escaping (UIImage?, T, Source) -> ()) {
+    public func getImage<T: NSObject>(_ requestable: Requestable, object: T, queue: OperationQueue? = nil, completion: @escaping (PeakImage?, T, Source) -> ()) {
         
         // Cancel any in-flight operation for the same object
         cancelOperation(forObject: object)
@@ -131,7 +130,9 @@ public enum Source {
     case network
 }
 
-public extension UIImageView {
+#if os(iOS) || os(tvOS)
+
+public extension PeakImageView {
     
     /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
     ///
@@ -169,7 +170,7 @@ public extension UIImageView {
 }
 
 
-public extension UIButton {    
+public extension UIButton {
     
     /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
     /// You may set multiple images, one for each state, on a `UIButton` - only images for the same state will clash.
@@ -210,3 +211,5 @@ public extension UIButton {
         ImageController.sharedInstance.cancelOperation(forObject: self)
     }
 }
+
+#endif

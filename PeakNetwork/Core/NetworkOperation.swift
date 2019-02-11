@@ -6,7 +6,6 @@
 //  Copyright © 2016 3Squared. All rights reserved.
 //
 
-import UIKit
 import PeakOperation
 import PeakResult
 
@@ -286,7 +285,7 @@ public class DataResponseOperation: NetworkOperation<(Data, HTTPURLResponse)> {
 }
 
 /// A subclass of `NetworkOperation` which will return the response parsed as a `UIImage`.
-public class ImageResponseOperation: NetworkOperation<(UIImage, HTTPURLResponse)> {
+public class ImageResponseOperation: NetworkOperation<(PeakImage, HTTPURLResponse)> {
     
     private let requestable: Requestable
 
@@ -305,7 +304,7 @@ public class ImageResponseOperation: NetworkOperation<(UIImage, HTTPURLResponse)
             guard let strongSelf = self else { return }
             do {
                 let (data, response) = try result.resolve()
-                if let d = data, let image = UIImage(data: d) {
+                if let d = data, let image = PeakImage(data: d) {
                     strongSelf.output = Result { return (image, response) }
                 } else {
                     strongSelf.output = Result { throw ResultError.noResult }

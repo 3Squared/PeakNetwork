@@ -7,7 +7,16 @@
 //
 
 import Foundation
-import PeakNetwork
+
+#if os(iOS)
+
+@testable import PeakNetwork_iOS
+
+#else
+
+@testable import PeakNetwork_macOS
+
+#endif
 
 struct TestEntity: Decodable {
     let name: String
