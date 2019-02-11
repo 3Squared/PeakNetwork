@@ -75,7 +75,7 @@ open class NetworkOperation<T>: RetryingOperation<T> {
     }
     
     open func decode(data: Data, response: HTTPURLResponse) -> Result<T> {
-        fatalError("Override me!")
+        fatalError("Subclasses must implement `decode(::)`.")
     }
 }
 
