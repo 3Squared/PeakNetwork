@@ -20,11 +20,12 @@ import PeakResult
 // Override `createTask`, make a URLSessionTask, and ensure you call `finish` within your call back block.
 /// If a `RetryStrategy` is provided, this can be re-run if the network task fails (not 200).
 open class NetworkOperation<T>: RetryingOperation<T> {
-    internal var task: URLSessionTask?
-    internal var session: Session
-    internal var requestable: Requestable!
+    public let session: Session
+    
+    open var requestable: Requestable!
+    open var task: URLSessionTask?
 
-    public init(_ requestable: Requestable? = nil, using session: Session) {
+    public init(requestable: Requestable? = nil, session: Session) {
         self.session = session
         self.requestable = requestable
         super.init()
@@ -81,9 +82,9 @@ open class NetworkOperation<T>: RetryingOperation<T> {
 
 /// A subclass of `NetworkOperation`.
 /// `DecodableOperation` will attempt to parse the response into a `Decodable` type.
-public class DecodableOperation<D: Decodable>: NetworkOperation<D> {
+open class DecodableOperation<D: Decodable>: NetworkOperation<D> {
     
-    private let decoder: JSONDecoder
+    public let decoder: JSONDecoder
 
     /// Create a new `DecodableResponseOperation`, parsing the response to a list of the given generic type.
     ///
@@ -91,12 +92,14 @@ public class DecodableOperation<D: Decodable>: NetworkOperation<D> {
     ///   - requestable: A requestable describing the web resource to fetch.
     ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(_ requestable: Requestable?, decoder: JSONDecoder = JSONDecoder(), using session: Session = URLSession.shared) {
+    public init(requestable: Requestable?,
+                decoder: JSONDecoder = JSONDecoder(),
+                session: Session = URLSession.shared) {
         self.decoder = decoder
-        super.init(requestable, using: session)
+        super.init(requestable: requestable, session: session)
     }
     
-    public override func decode(data: Data, response: HTTPURLResponse) -> Result<D> {
+    open override func decode(data: Data, response: HTTPURLResponse) -> Result<D> {
         return Result {
             return try decoder.decode(D.self, from: data)
         }
@@ -105,7 +108,7 @@ public class DecodableOperation<D: Decodable>: NetworkOperation<D> {
 
 /// A subclass of `NetworkOperation`.
 /// `DecodableResponseOperation` will attempt to parse the response into a `Decodable` type.
-public class DecodableResponseOperation<D: Decodable>: NetworkOperation<(D, HTTPURLResponse)> {
+open class DecodableResponseOperation<D: Decodable>: NetworkOperation<(D, HTTPURLResponse)> {
     
     private let decoder: JSONDecoder
 
@@ -115,12 +118,12 @@ public class DecodableResponseOperation<D: Decodable>: NetworkOperation<(D, HTTP
     ///   - requestable: A requestable describing the web resource to fetch.
     ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(_ requestable: Requestable?, decoder: JSONDecoder = JSONDecoder(), using session: Session = URLSession.shared) {
+    public init(requestable: Requestable?, decoder: JSONDecoder = JSONDecoder(), session: Session = URLSession.shared) {
         self.decoder = decoder
-        super.init(requestable, using: session)
+        super.init(requestable: requestable, session: session)
     }
     
-    public override func decode(data: Data, response: HTTPURLResponse) -> Result<(D, HTTPURLResponse)> {
+    open override func decode(data: Data, response: HTTPURLResponse) -> Result<(D, HTTPURLResponse)> {
         return Result {
             return (try decoder.decode(D.self, from: data), response)
         }
@@ -140,9 +143,9 @@ open class CustomNetworkInputOperation<D: Decodable, O, I>: NetworkOperation<O>,
     /// - Parameters:
     ///   - session: The `JSONDecoder` to use when decoding the response data (optional).
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(decoder: JSONDecoder = JSONDecoder(), using session: Session = URLSession.shared) {
+    public init(decoder: JSONDecoder = JSONDecoder(), session: Session = URLSession.shared) {
         self.decoder = decoder
-        super.init(using: session)
+        super.init(session: session)
     }
     
     open override func createTask(in session: Session) -> URLSessionTask? {
@@ -183,15 +186,15 @@ open class CustomNetworkInputOperation<D: Decodable, O, I>: NetworkOperation<O>,
 
 /// A subclass of `NetworkOperation`.
 /// `RequestableInputOperation` will take a `Requestable` input, call it, and attempt to parse the response into a `Decodable` type.
-public class RequestableInputOperation<D: Decodable>: DecodableOperation<D>, ConsumesResult {
+open class RequestableInputOperation<D: Decodable>: DecodableOperation<D>, ConsumesResult {
     
     public var input: Result<Requestable> = Result { throw ResultError.noResult }
     
-    public init(decoder: JSONDecoder = JSONDecoder(), using session: Session = URLSession.shared) {
-        super.init(nil, decoder: decoder, using: session)
+    public init(decoder: JSONDecoder = JSONDecoder(), session: Session = URLSession.shared) {
+        super.init(requestable: nil, decoder: decoder, session: session)
     }
     
-    public override func createTask(in session: Session) -> URLSessionTask? {
+    open override func createTask(in session: Session) -> URLSessionTask? {
         switch input {
         case .success(let requestable):
             self.requestable = requestable
@@ -206,15 +209,15 @@ public class RequestableInputOperation<D: Decodable>: DecodableOperation<D>, Con
 
 /// A subclass of `NetworkOperation`.
 /// `RequestableInputResponseOperation` will take a `Requestable` input, call it, and attempt to parse the response into a `Decodable` type.
-public class RequestableInputResponseOperation<D: Decodable>: DecodableResponseOperation<D>, ConsumesResult {
+open class RequestableInputResponseOperation<D: Decodable>: DecodableResponseOperation<D>, ConsumesResult {
     
     public var input: Result<Requestable> = Result { throw ResultError.noResult }
     
-    public init(decoder: JSONDecoder = JSONDecoder(), using session: Session = URLSession.shared) {
-        super.init(nil, decoder: decoder, using: session)
+    public init(decoder: JSONDecoder = JSONDecoder(), session: Session = URLSession.shared) {
+        super.init(requestable: nil, decoder: decoder, session: session)
     }
     
-    public override func createTask(in session: Session) -> URLSessionTask? {
+    open override func createTask(in session: Session) -> URLSessionTask? {
         switch input {
         case .success(let requestable):
             self.requestable = requestable
@@ -229,25 +232,25 @@ public class RequestableInputResponseOperation<D: Decodable>: DecodableResponseO
 
 
 /// A subclass of `NetworkOperation` which will return the basic response.
-public class URLResponseOperation: NetworkOperation<HTTPURLResponse> {
+open class URLResponseOperation: NetworkOperation<HTTPURLResponse> {
     
-    public override func decode(data: Data, response: HTTPURLResponse) -> Result<HTTPURLResponse> {
+    open override func decode(data: Data, response: HTTPURLResponse) -> Result<HTTPURLResponse> {
         return .success(response)
     }
 }
 
 /// A subclass of `NetworkOperation` which will return the response as `Data`.
-public class DataResponseOperation: NetworkOperation<(Data, HTTPURLResponse)> {
+open class DataResponseOperation: NetworkOperation<(Data, HTTPURLResponse)> {
     
-    public override func decode(data: Data, response: HTTPURLResponse) -> Result<(Data, HTTPURLResponse)> {
+    open override func decode(data: Data, response: HTTPURLResponse) -> Result<(Data, HTTPURLResponse)> {
         return .success((data, response))
     }
 }
 
 /// A subclass of `NetworkOperation` which will return the response parsed as a `UIImage`.
-public class ImageResponseOperation: NetworkOperation<(PeakImage, HTTPURLResponse)> {
+open class ImageResponseOperation: NetworkOperation<(PeakImage, HTTPURLResponse)> {
     
-    public override func decode(data: Data, response: HTTPURLResponse) -> Result<(PeakImage, HTTPURLResponse)> {
+    open override func decode(data: Data, response: HTTPURLResponse) -> Result<(PeakImage, HTTPURLResponse)> {
         if let image = PeakImage(data: data) {
             return Result { return (image, response) }
         } else {
@@ -264,7 +267,7 @@ public class ImageResponseOperation: NetworkOperation<(PeakImage, HTTPURLRespons
 
 /// `DecodableFileOperation` will attempt to parse the contents of a file loaded from
 /// the main bundle into a `Decodable` type.
-public class DecodableFileOperation<Output: Decodable>: ConcurrentOperation, ProducesResult {
+open class DecodableFileOperation<Output: Decodable>: ConcurrentOperation, ProducesResult {
     
     public var output: Result<Output> = Result { throw ResultError.noResult }
 

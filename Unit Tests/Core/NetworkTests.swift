@@ -48,7 +48,7 @@ class NetworkTests: XCTestCase {
 
         let expect = expectation(description: "")
         
-        let networkOperation = URLResponseOperation(request, using: session)
+        let networkOperation = URLResponseOperation(requestable: request, session: session)
         
         networkOperation.addResultBlock { result in
             switch result {
@@ -73,7 +73,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = URLResponseOperation(request, using: session)
+        let networkOperation = URLResponseOperation(requestable: request, session: session)
         
         networkOperation.addResultBlock { result in
             switch result {
@@ -99,7 +99,7 @@ class NetworkTests: XCTestCase {
 
         let expect = expectation(description: "")
 
-        let networkOperation = URLResponseOperation(URL(string: "http://google.com")!, using: session)
+        let networkOperation = URLResponseOperation(requestable: URL(string: "http://google.com")!, session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -123,7 +123,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = DecodableResponseOperation<TestEntity>(URL(string: "http://google.com")!, using: session)
+        let networkOperation = DecodableResponseOperation<TestEntity>(requestable: URL(string: "http://google.com")!, session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -148,7 +148,7 @@ class NetworkTests: XCTestCase {
 
         let expect = expectation(description: "")
         
-        let networkOperation = DecodableResponseOperation<TestEntity>(URL(string: "http://google.com")!, using: session)
+        let networkOperation = DecodableResponseOperation<TestEntity>(requestable: URL(string: "http://google.com")!, session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -176,7 +176,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = DecodableResponseOperation<[TestEntity]>(URL(string: "http://google.com")!, using: session)
+        let networkOperation = DecodableResponseOperation<[TestEntity]>(requestable: URL(string: "http://google.com")!, session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -202,7 +202,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = DecodableResponseOperation<[TestEntity]>(URL(string: "http://google.com")!, using: session)
+        let networkOperation = DecodableResponseOperation<[TestEntity]>(requestable: URL(string: "http://google.com")!, session: session)
         
         networkOperation.addResultBlock { result in
             do {
@@ -229,7 +229,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = URLResponseOperation(URL(string: "http://google.com")!, using: session)
+        let networkOperation = URLResponseOperation(requestable: URL(string: "http://google.com")!, session: session)
         
         var runCount = 0
         networkOperation.retryStrategy = { failureCount in
@@ -278,7 +278,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = RequestableInputOperation<TestEntity>(using: session)
+        let networkOperation = RequestableInputOperation<TestEntity>(session: session)
         networkOperation.input = Result { URL(string: "http://google.com")! }
         
         networkOperation.addResultBlock { result in
@@ -301,7 +301,7 @@ class NetworkTests: XCTestCase {
 
         let expect = expectation(description: "")
         
-        let networkOperation = RequestableInputOperation<TestEntity>(using: session)
+        let networkOperation = RequestableInputOperation<TestEntity>(session: session)
 
         networkOperation.addResultBlock { result in
             do {
@@ -329,7 +329,7 @@ class NetworkTests: XCTestCase {
 
         let expect = expectation(description: "")
 
-        let networkOperation = RequestableInputOperation<TestEntity>(using: session)
+        let networkOperation = RequestableInputOperation<TestEntity>(session: session)
         networkOperation.input = Result { URL(string: "http://google.com")! }
 
         networkOperation.addResultBlock { result in
