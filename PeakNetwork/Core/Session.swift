@@ -16,6 +16,7 @@ public protocol Session {
     func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskCompletionHandler) -> URLSessionDataTask
 }
 
+extension URLSession: Session { }
 
 /// This describes a mocked response.
 public struct MockResponse {
@@ -228,39 +229,4 @@ public class MockSession: Session {
         }
     }
     
-}
-
-
-extension URLSession: Session { }
-
-// MARK: - Convenience methods on URLSession to return configured data tasks, used internally.
-public extension Session {
-    
-    /// Create a URLSessionTask for raw Data and URLResponse.
-    ///
-    /// - parameter request: A URLRequest
-    /// - parameter completion:  A completion block called with a Result containing a URLResponse and Data
-    ///
-    /// - returns: A new URLSessionTask.
-    public func dataTask<U: URLResponse>(with request: URLRequest, completion: @escaping (Result<(Data?, U)>) -> Void) -> URLSessionTask {
-        return dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            if let error = error {
-                completion(Result { throw error })
-            } else if let httpResponse = response as? HTTPURLResponse {
-                if httpResponse.statusCodeEnum.isSuccess {
-                    completion(Result {
-                        return (data, response as! U)
-                    })
-                } else {
-                    completion(Result {
-                        throw ServerError.error(code: httpResponse.statusCodeEnum, data: data, response: httpResponse)
-                    })
-                }
-            } else {
-                completion(Result {
-                    throw ServerError.unknownResponse
-                })
-            }
-        }
-    }
 }
