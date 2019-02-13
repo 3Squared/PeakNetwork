@@ -1,43 +1,53 @@
 //
-//  RecordingLogger.swift
-//  PeakNetwork
+//  RecordingLoggerTests.swift
+//  PeakNetwork-iOSTests
 //
-//  Created by Luke Stringer on 01/10/2018.
-//  Copyright © 2018 3Squared Ltd. All rights reserved.
+//  Created by Luke Stringer on 13/02/2019.
+//  Copyright © 2019 3Squared. All rights reserved.
 //
+
+import Foundation
 
 import XCTest
-import PeakNetwork
-@testable import PeakNetwork
+
+#if os(iOS)
+
+@testable import PeakNetwork_iOS
+
+#else
+
+@testable import PeakNetwork_macOS
+
+#endif
 
 class RecordingLoggerTests: XCTestCase {
-
-	func testIntegrationWithOperations() {
-		
-		let expect = expectation(description: "\(#function)")
-		
-        let request1 = URLRequestable(
+    
+    func testIntegrationWithOperations() {
+        
+        let expect = expectation(description: "\(#function)")
+        
+        let request1 = Request (
             URL(string:"https://api.3squared.com/path/to/method?first=string&second=true&third=0")!
         )
         
-        let request2 = URLRequestable(
+        let request2 = Request (
             URL(string:"https://api.3squared.com/path/to/another?first=1")!
         )
         
-		let mockSession = MockSession { session in
+        let mockSession = MockSession { session in
             session.queue(response: MockResponse(json: ["name": "Peak", "type": "Network"], statusCode: .ok))
             session.queue(response: MockResponse(json: ["name": "Apple"], statusCode: .ok))
-		}
+        }
         
         var writeCount = 0
-		
-		let loggingSession = LoggingSession(with: mockSession, logger: RecordingJSONLogger(fileWriter: MockFileWriter { fileContents, filename in
+        
+        let loggingSession = LoggingSession(with: mockSession, logger: RecordingJSONLogger(fileWriter: MockFileWriter { fileContents, filename in
             
             switch writeCount {
             case 0:
                 XCTAssertEqual(filename, "api.3squared.com--path-to-method-first=string-second=true-third=0")
                 XCTAssertEqual(fileContents,
-                """
+                               """
                 {
                   "name" : "Peak",
                   "type" : "Network"
@@ -47,7 +57,7 @@ class RecordingLoggerTests: XCTestCase {
             case 1:
                 XCTAssertEqual(filename, "api.3squared.com--path-to-another-first=1")
                 XCTAssertEqual(fileContents,
-                """
+                               """
                 {
                   "name" : "Apple"
                 }
@@ -58,19 +68,19 @@ class RecordingLoggerTests: XCTestCase {
             
             writeCount += 1
             
-		}))
-		
-		let operation1 = URLResponseOperation(request1, session: loggingSession)
+        }))
+        
+        let operation1 = URLResponseOperation(request1, session: loggingSession)
         let operation2 = URLResponseOperation(request2, session: loggingSession)
         
-		operation1.then(do: operation2).enqueue()
-		
-		waitForExpectations(timeout: 1.0, handler: nil)
-	}
+        operation1.then(do: operation2).enqueue()
+        
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
     
     func testURLWithQuery() {
         let expect = expectation(description: "\(#function)")
-
+        
         let request = URLRequest(url: URL(string:"https://api.3squared.com/path/to/method?first=string&second=true&third=0")!)
         let id = UUID()
         let requestDate = Date()
@@ -119,7 +129,7 @@ class RecordingLoggerTests: XCTestCase {
         
         let logger = RecordingJSONLogger(fileWriter: MockFileWriter { fileContents, _ in
             XCTAssertEqual(fileContents,
-            """
+                           """
             {
               "name" : "Peak",
               "type" : "Network"
@@ -184,3 +194,4 @@ struct MockFileWriter: WriteFile {
         callBack(string, filename)
     }
 }
+

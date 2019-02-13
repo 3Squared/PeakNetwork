@@ -12,4 +12,13 @@ Pod::Spec.new do |s|
   s.dependency 'PeakOperation'
   s.swift_version = '4.2'
 
+  s.ios.deployment_target = '10.0'
+  s.tvos.deployment_target = '10.0'
+  s.macos.deployment_target = '10.13'
+
+  s.source_files = "PeakNetwork", "PeakNetwork/Core/**/*.{h,m,swift}"
+  s.ios.source_files = "PeakNetwork/Platforms/iOS/**/*.{h,m,swift}"
+  s.tvos.source_files = "PeakNetwork/Platforms/iOS/**/*.{h,m,swift}"
+  s.macos.source_files = "PeakNetwork/Platforms/macOS/**/*.{h,m,swift}"
+
 end

@@ -42,7 +42,7 @@ public class RecordingJSONLogger: Logger {
     private func fileContents(from data: Data?, response: URLResponse?) -> String {
         if let rawData = data,
             let json = try? JSONSerialization.jsonObject(with: rawData, options: .allowFragments),
-            let prettyJSONData = try? JSONSerialization.data(withJSONObject: json, options: [.sortedKeys, .prettyPrinted]),
+            let prettyJSONData = try? JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted]),
             let jsonString = String(data: prettyJSONData, encoding: String.Encoding.utf8) {
             return jsonString
         }

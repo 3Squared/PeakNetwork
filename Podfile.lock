@@ -1,10 +1,11 @@
 PODS:
-  - PeakOperation (2.1.1):
+  - PeakOperation (2.2.1):
     - PeakResult
-  - PeakResult (2.1.1)
+  - PeakResult (2.2.1)
 
 DEPENDENCIES:
   - PeakOperation
+  - PeakResult
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -12,9 +13,9 @@ SPEC REPOS:
     - PeakResult
 
 SPEC CHECKSUMS:
-  PeakOperation: 1cfae299e91470e62e871bbab8d5e8d51820ea56
-  PeakResult: a3bbeaae2485fec1199a09f6991a7b8613a9d6ed
+  PeakOperation: a01a390e661caa2708150a9e6e6457af928f045c
+  PeakResult: d75726e240ff934095cc0c7a37b74f9c8ebfc57a
 
-PODFILE CHECKSUM: ed624724faf77626fcf2a4b39d2b800979ad8f3d
+PODFILE CHECKSUM: 928a58c4afcf4af20ef8c88b7135f82bab246111
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.0

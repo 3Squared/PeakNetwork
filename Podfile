@@ -1,13 +1,27 @@
-platform :ios, '10.0'
-
 source 'https://github.com/CocoaPods/Specs.git'
 
-target 'PeakNetwork' do
-	use_frameworks!
+target 'PeakNetwork-iOS' do
+
+	platform :ios, '10.0'
 
 	pod 'PeakOperation'
-			
-	target 'PeakNetworkTests' do
+	pod 'PeakResult'
+		
+  target 'PeakNetwork-iOSTests' do
+
+		inherit! :search_paths
+	end
+end
+
+target 'PeakNetwork-macOS' do
+
+	platform :osx, '10.13'
+
+	pod 'PeakOperation'
+	pod 'PeakResult'
+		
+  target 'PeakNetwork-macOSTests' do
+
 		inherit! :search_paths
 	end
 end
