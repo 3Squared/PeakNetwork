@@ -61,7 +61,6 @@ public class RecordingLogger: Logger {
 
 public struct Recording: Codable {
     public struct Times: Codable {
-        // Encode to ISO date strings
         let start: Date
         let end: Date
     }
@@ -108,6 +107,7 @@ public struct FileWriter: WriteRecording {
         do {
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted
+            encoder.dateEncodingStrategy = .iso8601
             let data = try encoder.encode(recording)
             guard let string = String(data: data, encoding: String.Encoding.utf8) else {
                 print("Failed to convert data to String")
