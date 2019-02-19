@@ -45,8 +45,8 @@
 		CB5F252A206BD4A30023FB7F /* MockSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */; };
 		CBCF0A472211D5D70023DF8E /* Interceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCF0A462211D5D70023DF8E /* Interceptor.swift */; };
 		CBCF0A482211D5D70023DF8E /* Interceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCF0A462211D5D70023DF8E /* Interceptor.swift */; };
-		CBCF0A4A2212E3A00023DF8E /* DecodeInputOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCF0A492212E3A00023DF8E /* DecodeInputOperation.swift */; };
-		CBCF0A4B2212E3A00023DF8E /* DecodeInputOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCF0A492212E3A00023DF8E /* DecodeInputOperation.swift */; };
+		CBCF0A4A2212E3A00023DF8E /* DecodeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCF0A492212E3A00023DF8E /* DecodeOperation.swift */; };
+		CBCF0A4B2212E3A00023DF8E /* DecodeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCF0A492212E3A00023DF8E /* DecodeOperation.swift */; };
 		CBF2179720CAC63700515DB2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2179620CAC63700515DB2 /* Logger.swift */; };
 		CBFD4EE71F740C07008CD8AA /* PeakNetwork_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBFD4EDD1F740C07008CD8AA /* PeakNetwork_iOS.framework */; };
 		F4136952B70A608A1EC4C881 /* libPods-PeakNetwork-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E6DCE3A2926F7FADD67D8B5F /* libPods-PeakNetwork-iOS.a */; };
@@ -104,7 +104,7 @@
 		CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPStatusCodes.swift; sourceTree = "<group>"; };
 		CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSessionTests.swift; sourceTree = "<group>"; };
 		CBCF0A462211D5D70023DF8E /* Interceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interceptor.swift; sourceTree = "<group>"; };
-		CBCF0A492212E3A00023DF8E /* DecodeInputOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeInputOperation.swift; sourceTree = "<group>"; };
+		CBCF0A492212E3A00023DF8E /* DecodeOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeOperation.swift; sourceTree = "<group>"; };
 		CBF2179620CAC63700515DB2 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		CBFD4EDD1F740C07008CD8AA /* PeakNetwork_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PeakNetwork_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PeakNetwork.h; sourceTree = "<group>"; };
@@ -175,7 +175,7 @@
 				CBCF0A462211D5D70023DF8E /* Interceptor.swift */,
 				CBF2179620CAC63700515DB2 /* Logger.swift */,
 				CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */,
-				CBCF0A492212E3A00023DF8E /* DecodeInputOperation.swift */,
+				CBCF0A492212E3A00023DF8E /* DecodeOperation.swift */,
 				CB2380DE1F740D1500F1B001 /* Operators.swift */,
 				CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */,
 				188DEAC4220DAF9B0067A6EF /* PeakNetwork+Aliases.swift */,
@@ -592,7 +592,7 @@
 				1830B164219D8F9E00AC862F /* CertificatePinningSessionDelegate.swift in Sources */,
 				18F2DFF421A81ABD007098FB /* Requestable.swift in Sources */,
 				188DEAC7220DAF9F0067A6EF /* PeakNetwork+Aliases.swift in Sources */,
-				CBCF0A4B2212E3A00023DF8E /* DecodeInputOperation.swift in Sources */,
+				CBCF0A4B2212E3A00023DF8E /* DecodeOperation.swift in Sources */,
 				CBCF0A482211D5D70023DF8E /* Interceptor.swift in Sources */,
 				1830B167219D8F9E00AC862F /* HTTPStatusCodes.swift in Sources */,
 				1830B166219D8F9E00AC862F /* HTTPMethods.swift in Sources */,
@@ -619,7 +619,7 @@
 				CB2380E61F740D1500F1B001 /* ImageController.swift in Sources */,
 				18F2DFF321A81ABD007098FB /* Requestable.swift in Sources */,
 				188DEAC5220DAF9B0067A6EF /* PeakNetwork+Aliases.swift in Sources */,
-				CBCF0A4A2212E3A00023DF8E /* DecodeInputOperation.swift in Sources */,
+				CBCF0A4A2212E3A00023DF8E /* DecodeOperation.swift in Sources */,
 				CBCF0A472211D5D70023DF8E /* Interceptor.swift in Sources */,
 				CBF2179720CAC63700515DB2 /* Logger.swift in Sources */,
 				CB2380E81F740D1500F1B001 /* Session.swift in Sources */,
