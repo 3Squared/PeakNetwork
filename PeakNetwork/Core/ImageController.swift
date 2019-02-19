@@ -19,7 +19,7 @@ public class ImageController {
     public static var sharedInstance = ImageController()
     
     let internalQueue = OperationQueue()
-    let urlToOperationTable = NSMapTable<NSURL, ImageResponseOperation>.strongToWeakObjects()
+    let urlToOperationTable = NSMapTable<NSURL, SequenceOperation<NetworkOperation, ImageDecodeOperation>>.strongToWeakObjects()
     let objectToUrlTable = NSMapTable<NSObject, NSURL>.weakToStrongObjects()
     let urlsToObjectsTable = NSMapTable<NSURL, NSMutableSet>.weakToStrongObjects()
 
@@ -74,13 +74,16 @@ public class ImageController {
             return
         }
         
-        let imageOperation: ImageResponseOperation
+        let imageOperation: SequenceOperation<NetworkOperation, ImageDecodeOperation>
         var usingExisting = false
         if let existingOperation = urlToOperationTable.object(forKey: url) {
             imageOperation = existingOperation
             usingExisting = true
         } else {
-            imageOperation = ImageResponseOperation(requestable, session: session)
+            imageOperation = SequenceOperation(
+                do: NetworkOperation(requestable: requestable, session: session),
+                passResultTo: ImageDecodeOperation()
+            )
         }
         
         // Create an operation to fetch the image data
@@ -89,7 +92,7 @@ public class ImageController {
                 completion(nil, object, .network)
             } else {
                 do {
-                    let (image, _) = try result.resolve()
+                    let image = try result.resolve()
                     self.cache.setObject(image, forKey: url)
                     completion(image, object, .network)
                 } catch {

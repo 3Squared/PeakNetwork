@@ -123,6 +123,7 @@ class ImageControllerTests: XCTestCase {
         imageView.cancelImage()
         
         expectation(for: NSPredicate(block: { _, _ -> Bool in
+            print("operations == \(queue.operations.count)")
             return queue.operations.count == 0
         }), evaluatedWith: queue, handler: nil)
         
