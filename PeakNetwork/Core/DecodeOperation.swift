@@ -185,6 +185,7 @@ open class SequenceOperation<First, Second>: ConcurrentOperation, ProducesResult
 }
 
 /// `DecodableOperation` will attempt to parse the response into a `Decodable` type.
+@available(*, deprecated, message: "Use a NetworkOperation chained with a DecodeOperation.")
 open class DecodableOperation<D: Decodable>: SequenceOperation<NetworkOperation, JSONDecodeOperation<D>> {
     public init(requestable: Requestable?,
                 decoder: JSONDecoder = JSONDecoder(),
@@ -198,6 +199,7 @@ open class DecodableOperation<D: Decodable>: SequenceOperation<NetworkOperation,
 
 /// `DecodableResponseOperation` will attempt to parse the response into a `Decodable` type.
 /// Alsoincludes the `HTTPURLResponse` in its `Result`.
+@available(*, deprecated, message: "Use a NetworkOperation chained with a DecodeOperation.")
 open class DecodableResponseOperation<D: Decodable>: SequenceOperation<NetworkOperation, JSONDecodeResponseOperation<D>> {
     public init(requestable: Requestable?,
                 decoder: JSONDecoder = JSONDecoder(),
