@@ -17,12 +17,12 @@ import PeakResult
 
 /// An operation which takes an Input and decodes it to an Output.
 /// A more specialised version of `MapOperation`, easier to use for this specific task.
-open class DecodeInputOperation<I, O>: ConcurrentOperation, ConsumesResult, ProducesResult {
+open class DecodeOperation<I, O>: ConcurrentOperation, ConsumesResult, ProducesResult {
     
     public var input: Result<I> = Result { throw ResultError.noResult }
     public var output: Result<O> = Result { throw ResultError.noResult }
 
-    /// Create a new `DecodeInputOperation`.
+    /// Create a new `DecodeOperation`.
     ///
     /// - Parameter input: An optional input value.
     public init(input: I? = nil) {
@@ -54,7 +54,7 @@ open class DecodeInputOperation<I, O>: ConcurrentOperation, ConsumesResult, Prod
 
 
 /// Decode a network response using a `JSONDecoder`.
-open class JSONDecodeOperation<D: Decodable>: DecodeInputOperation<NetworkResponse, D> {
+open class JSONDecodeOperation<D: Decodable>: DecodeOperation<NetworkResponse, D> {
     
     public let decoder: JSONDecoder
 
@@ -81,7 +81,7 @@ open class JSONDecodeOperation<D: Decodable>: DecodeInputOperation<NetworkRespon
 }
 
 /// Decode a network response using a `JSONDecoder`, keeping the `HTTPURLResponse` passed in.
-open class JSONDecodeResponseOperation<D: Decodable>: DecodeInputOperation<NetworkResponse, (D, HTTPURLResponse)> {
+open class JSONDecodeResponseOperation<D: Decodable>: DecodeOperation<NetworkResponse, (D, HTTPURLResponse)> {
     
     public let decoder: JSONDecoder
     
@@ -108,7 +108,7 @@ open class JSONDecodeResponseOperation<D: Decodable>: DecodeInputOperation<Netwo
 }
 
 /// Decode a network response into a platform-specific Image type
-open class ImageDecodeOperation: DecodeInputOperation<NetworkResponse, PeakImage> {
+open class ImageDecodeOperation: DecodeOperation<NetworkResponse, PeakImage> {
     
     open override func decode(input: NetworkResponse) -> Result<PeakImage> {
         if let data = input.data, let image = PeakImage(data: data) {
