@@ -34,14 +34,6 @@ extension ApiEndpoints: Requestable {
 
 The library also provides 2 implementations:
 
-### URLRequestable
-
-Creates a `Requestable` using a given `URL`.
-
-```swift
-let requestable = URLRequestable(url: url)
-```
-
 ### BlockRequestable
 
 Creates a `Requestable` using a given block.
@@ -53,15 +45,42 @@ let requestable = BlockRequestable {
 }
 ```
 
-## Network Operations
+### BodyRequest
 
-The core of PeakNetwork is made up of Operation subclasses which wrap a `URLSessionTask`. These are built on top of `RetryingOperation` from [PeakOperation](https://github.com/3squared/PeakOperation).
+Creates a `Requestable` with a `httpBody` set to the provded `Encodable` object.
 
-Each of these operations accepts a `Requestable`, converts it to a `URLRequest`, and then performs it on the shared or provided `URLSession`. These operations all conform to `ProducesResult` from PeakOperation, so they produce a `Result` and can therefore be chained, potentially with database import operations or similar. 
+```swift
+let requestable = BodyRequest("http://example.com", body: encodable)
+```
 
-### DecodableOperation *(Decodable)*
+Extensions that implement `Requestable` are also provided for `URLRequest`, `URL` and `String`. 
 
-This operation will attept to parse the `URLResponse`'s as the provided `Decodable` type. For example, given the struct:
+```swift
+"http://example.com".request
+```
+
+## NetworkOperation
+
+The core of PeakNetwork is made up of an Operation subclasses which wrap a `URLSessionTask`. It is built on top of `RetryingOperation` from [PeakOperation](https://github.com/3squared/PeakOperation).
+
+`NetworkOperation` accepts a `Requestable`, converts it to a `URLRequest`, and then performs it on the shared or provided `URLSession`. This operation conforms both `ConsumesResult` and `ProducesResult` from PeakOperation:
+    - Consumes `Result<Requestable>`, so it can be chained with a `Requestable`-producing operation instead of being initialised with one.
+    - Produces `Result<NetworkResponse>` where `NetworkResponse` wraps the data and URL response from performing  the request. 
+
+If the request receives a response outside of the 200..300 range, the result of the operation will be a `.failure` containing a `ServerError`.
+
+```swift
+let networkOperation = NetworkOperation(requestable: ApiEndpoint.search("hello"))
+networkOperation.addResultBlock { result in
+    // The result of the operation will be 
+    // .success(NetworkResponse) or .failure(error)
+    let response = try? result.resolve()
+}
+```
+
+### DecodeOperation
+
+Once you have your `NetworkResponse` from your `NetworkOperation`, you most likely want to decode it into some other format. This is commonly done using a `JSONDecoder`, for which `JSONDecodeOperation` is provided. Given:
 
 ```swift
 struct Item: Decodable {
@@ -79,45 +98,26 @@ and a JSON body of the form:
 you can request a item from your server like so:
 
 ```swift
-let networkOperation = DecodableOperation<Item>(requestable)
-networkOperation.addResultBlock { result in
+let networkOperation = NetworkOperation(requestable: ApiEndpoint.search("hello"))
+let decodeOperation = JSONDecodeOperation<Item>()
+
+decodeOperation.addResultBlock { result in
     // The result of the operation will be 
     // .success(Item) or .failure(error)
     let item = try? result.resolve()
 }
 
-networkOperation.enqueue()
-
+networkOperation.passesResult(to: decodeOperation).enqueue()
 ```
 
-A list of `Item`s can be requested with the operation `DecodableOperation<[Item]>` - the generic behaviour matches that of `Decoder` and `Encoder`, as they are used internally.
+A list of `Item`s can be decoded with `JSONDecodeOperation<[Item]>` - the generic behaviour matches that of `Decoder` and `Encoder`, as they are used internally.
 
-### DecodableResponseOperation *(Decodable, HTTPURLResponse)*
+Other included `DecodeOperations` are:
 
-Identical to `DecodableOperation`, but adds the raw `URLResponse` to the operation's `Result`, in case you need to inspect the status code or other property:
+- `JSONDecodeResponseOperation`, also passes along the `HTTPURLResponse` along with the `Decodable`.
+- `ImageDecodeOperation`, decodes the response data as a `UIImage`/`NSImage`.
 
-```swift
-let networkOperation = DecodableResponseOperation<[Item]>(requestable)
-networkOperation.addResultBlock { result in
-    let (items, response) = try? result.resolve()
-}
-```
-
-### URLResponseOperation *(HTTPURLResponse)*
-
-This operation performs the request and sets its result to the raw `URLResponse`. No other parsing is performed.
-
-You may want to use this when you only care about the returned status code.
-
-### DataResponseOperation *(Data, HTTPURLResponse)*
-
-This operation performs the request and sets its result to the raw `URLResponse` as well as the returned `Data`. No other parsing is performed.
-
-
-### ImageResponseOperation *(UIImage, HTTPURLResponse)*
-
-This operation performs the request and sets its result to the raw `URLResponse` and converts the returned `Data` to a `UIImage`.
-
+To create your own for a custom format or behaviour, subclass `DecodeOperation` and override `decode(:)`.
 
 ## ImageController
 
@@ -202,7 +202,7 @@ let session = MockSession { session in
     session.queue(response: MockResponse(statusCode: .ok))
 }
 
-let networkOperation = URLResponseOperation(requestable, session: session)
+let networkOperation = NetworkOperation(requestable, session: session)
 ```
 
 Here, we mock a response with a 200 status, and nothing else. This is the minimum `MockResponse` we can make. The next time a request is made using this session, the mock response will be returned. Once all the responses have been used, a fatal error will occur.
@@ -233,7 +233,6 @@ session.queue(response: MockResponse(fileName: "searchResults", statusCode: .ok,
 Here we also set `sticky: true`. This means that the response is nt consumed, and multiple requests will receive this same response.
 
 There are many other options and combinations of arguments for `MockResponse.`
-
 
 ## Examples
 
