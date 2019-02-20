@@ -217,7 +217,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-PeakNetworkExamples/Pods-PeakNetworkExamples-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-PeakNetworkExamples/Pods-PeakNetworkExamples-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/PeakNetwork/PeakNetwork.framework",
 				"${BUILT_PRODUCTS_DIR}/PeakOperation/PeakOperation.framework",
 				"${BUILT_PRODUCTS_DIR}/PeakResult/PeakResult.framework",
@@ -230,7 +230,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PeakNetworkExamples/Pods-PeakNetworkExamples-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PeakNetworkExamples/Pods-PeakNetworkExamples-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

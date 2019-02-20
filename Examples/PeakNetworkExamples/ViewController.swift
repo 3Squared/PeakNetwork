@@ -28,7 +28,7 @@ class ViewController: UITableViewController {
         WebService.shared.search(for: "Hello World!") { [unowned self] result in
             DispatchQueue.main.async {
                 switch (result) {
-                case .success((let searchResults, _)):
+                case .success(let searchResults):
                     self.searchResults = searchResults
                 case .failure(ServerError.error(code: .internalServerError, data: _, response: _)):
                     let alert = UIAlertController(title: "Internal Server Error", message: "A server error occurred.", preferredStyle: .alert)

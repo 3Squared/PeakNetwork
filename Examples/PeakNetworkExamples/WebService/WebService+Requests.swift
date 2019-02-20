@@ -13,15 +13,16 @@ import PeakOperation
 
 extension WebService {
     
-    func search(for query: String, completion: @escaping (Result<([SearchResult], HTTPURLResponse)>) -> ()) {
-        let operation = DecodableResponseOperation<[SearchResult]>(
-            GET.search(query: query),
-            decoder: decoder,
-            session: session
-        )
-                
-        operation.addResultBlock(block: completion)
-        operation.enqueue(on: queue)
+    func search(for query: String, completion: @escaping (Result<[SearchResult]>) -> ()) {
+        
+        let network = NetworkOperation(requestable: GET.search(query: query), session: session)
+        let decode = JSONDecodeOperation<[SearchResult]>(decoder: decoder)
+        
+        decode.addResultBlock(block: completion)
+
+        network
+            .passesResult(to: decode)
+            .enqueue(on: queue)
     }
     
 }
