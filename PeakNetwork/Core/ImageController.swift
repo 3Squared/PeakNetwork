@@ -6,7 +6,6 @@
 //  Copyright © 2016 3Squared. All rights reserved.
 //
 
-import UIKit
 import PeakResult
 
 /// Allow remote images to be easilty set on UIImageViews.
@@ -20,11 +19,11 @@ public class ImageController {
     public static var sharedInstance = ImageController()
     
     let internalQueue = OperationQueue()
-    let urlToOperationTable = NSMapTable<NSURL, ImageResponseOperation>.strongToWeakObjects()
+    let urlToOperationTable = NSMapTable<NSURL, SequenceOperation<NetworkOperation, ImageDecodeOperation>>.strongToWeakObjects()
     let objectToUrlTable = NSMapTable<NSObject, NSURL>.weakToStrongObjects()
     let urlsToObjectsTable = NSMapTable<NSURL, NSMutableSet>.weakToStrongObjects()
 
-    let cache = NSCache<NSURL, UIImage>()
+    let cache = NSCache<NSURL, PeakImage>()
     let session: Session
     
     
@@ -63,7 +62,7 @@ public class ImageController {
     
     
     /// Get an image available at the URL described by a Requestable. object is a unique key, such as an ImageView.
-    public func getImage<T: NSObject>(_ requestable: Requestable, object: T, queue: OperationQueue? = nil, completion: @escaping (UIImage?, T, Source) -> ()) {
+    public func getImage<T: NSObject>(_ requestable: Requestable, object: T, queue: OperationQueue? = nil, completion: @escaping (PeakImage?, T, Source) -> ()) {
         
         // Cancel any in-flight operation for the same object
         cancelOperation(forObject: object)
@@ -75,13 +74,16 @@ public class ImageController {
             return
         }
         
-        let imageOperation: ImageResponseOperation
+        let imageOperation: SequenceOperation<NetworkOperation, ImageDecodeOperation>
         var usingExisting = false
         if let existingOperation = urlToOperationTable.object(forKey: url) {
             imageOperation = existingOperation
             usingExisting = true
         } else {
-            imageOperation = ImageResponseOperation(requestable, session: session)
+            imageOperation = SequenceOperation(
+                do: NetworkOperation(requestable: requestable, session: session),
+                passResultTo: ImageDecodeOperation()
+            )
         }
         
         // Create an operation to fetch the image data
@@ -90,7 +92,7 @@ public class ImageController {
                 completion(nil, object, .network)
             } else {
                 do {
-                    let (image, _) = try result.resolve()
+                    let image = try result.resolve()
                     self.cache.setObject(image, forKey: url)
                     completion(image, object, .network)
                 } catch {
@@ -131,18 +133,9 @@ public enum Source {
     case network
 }
 
-public extension UIImageView {
-    
-    /// Set the image available at the given URL as the `UIImageView`'s image.
-    ///
-    /// - Parameters:
-    ///   - url: The URL of an image.
-    ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
-    ///   - animation: The animation options (optional).
-    ///   - completion: A completion block indicating success or failure.
-    public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
-        self.setImage(URLRequestable(url), queue: queue, animation: animation, duration: duration, completion: completion)
-    }
+#if os(iOS) || os(tvOS)
+
+public extension PeakImageView {
     
     /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
     ///
@@ -181,20 +174,6 @@ public extension UIImageView {
 
 
 public extension UIButton {
-
-    /// Set the image available at the given URL as the `UIButton`'s image, for the given state.
-    /// You may set multiple images, one for each state, on a `UIButton` - only images for the same state will clash.
-    ///
-    /// - Parameters:
-    ///   - url: The URL of an image.
-    ///   - state: The `UIControlState` for which the image be displayed.
-    ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
-    ///   - animation: The animation options (optional).
-    ///   - completion: A completion block indicating success or failure.
-    public func setImage(_ url: URL, for state: UIControl.State, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, completion: @escaping (Bool) -> () = { _ in }) {
-        self.setImage(URLRequestable(url), for: state, queue: queue, animation: animation, completion: completion)
-    }
-    
     
     /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
     /// You may set multiple images, one for each state, on a `UIButton` - only images for the same state will clash.
@@ -235,3 +214,5 @@ public extension UIButton {
         ImageController.sharedInstance.cancelOperation(forObject: self)
     }
 }
+
+#endif
