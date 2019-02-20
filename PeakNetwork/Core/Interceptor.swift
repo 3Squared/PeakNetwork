@@ -10,6 +10,7 @@ import Foundation
 
 public typealias RequestInterceptor = (inout URLRequest) -> Void
 
+/// A session which allows you to provide actions which are performed on a request before it is executed.
 public class RequestInterceptorSession: Session {
     
     private let session: Session
@@ -52,6 +53,7 @@ public class RequestInterceptorSession: Session {
 
 public typealias ErrorInterceptor = (Data?, URLResponse?, Error) -> Void
 
+/// A session which allows you to provide actions which are performed if a request encounters an error.
 public class ErrorInterceptorSession: Session {
     
     private let session: Session
