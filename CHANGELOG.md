@@ -4,10 +4,18 @@ The changelog for `PeakNetwork`.
 
 --------------------------------------
 
+5.0.0
+-----
+- Added support for `macOS` and `tvOS`.
+- Add `RequestInterceptorSession`, allowing actions to be performed on a request before it is executed. 
+- Add `ErrorInterceptorSession`, allowing actions to be performed if a request encounters an error.
+- Split Network and Decode steps into separate operations.
+    - Instead of `DecodableOpeation` doing everything, you now perform a `NetworkOperation` then pass its result onto a `DecodeOperation`, which could decode it into any format.
+
 4.0.0
 -----
 - Rename from `THRNetwork` to `PeakNetwork`.
-
+- 
 3.1.2
 -----
 - Remove retain cycles.
