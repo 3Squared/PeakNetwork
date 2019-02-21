@@ -1,5 +1,5 @@
 PODS:
-  - PeakOperation (2.2.1):
+  - PeakOperation (3.0.0):
     - PeakResult
   - PeakResult (2.2.1)
 
@@ -13,9 +13,9 @@ SPEC REPOS:
     - PeakResult
 
 SPEC CHECKSUMS:
-  PeakOperation: a01a390e661caa2708150a9e6e6457af928f045c
+  PeakOperation: 1885ec9f8f2a7f2ff01dab279590d93c98757988
   PeakResult: d75726e240ff934095cc0c7a37b74f9c8ebfc57a
 
-PODFILE CHECKSUM: 928a58c4afcf4af20ef8c88b7135f82bab246111
+PODFILE CHECKSUM: cd2877a41348afa5d409e05c401b6ced23c39ae8
 
 COCOAPODS: 1.6.0

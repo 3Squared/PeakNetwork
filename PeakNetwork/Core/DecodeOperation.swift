@@ -15,46 +15,8 @@ import PeakOperation
 import PeakResult
 
 
-/// An operation which takes an Input and decodes it to an Output.
-/// A more specialised version of `MapOperation`, easier to use for this specific task.
-open class DecodeOperation<I, O>: ConcurrentOperation, ConsumesResult, ProducesResult {
-    
-    public var input: Result<I> = Result { throw ResultError.noResult }
-    public var output: Result<O> = Result { throw ResultError.noResult }
-
-    /// Create a new `DecodeOperation`.
-    ///
-    /// - Parameter input: An optional input value.
-    public init(input: I? = nil) {
-        super.init()
-        if let input = input {
-            self.input = .success(input)
-        }
-    }
-    
-    open override func execute() {
-        output = input.fold({ response in
-            return self.decode(input: response)
-        }, { error in
-            return .failure(error)
-        })
-        
-        finish()
-    }
-
-    
-    /// Convert a `success` input into a new output Result.
-    ///
-    /// - Parameter input:
-    /// - Returns: A converted output Result.
-    open func decode(input: I) -> Result<O> {
-        fatalError("Subclasses must implement `decode(::)`.")
-    }
-}
-
-
 /// Decode a network response using a `JSONDecoder`.
-open class JSONDecodeOperation<D: Decodable>: DecodeOperation<NetworkResponse, D> {
+open class JSONDecodeOperation<D: Decodable>: MapOperation<NetworkResponse, D> {
     
     public let decoder: JSONDecoder
 
@@ -69,7 +31,7 @@ open class JSONDecodeOperation<D: Decodable>: DecodeOperation<NetworkResponse, D
         super.init(input: input)
     }
     
-    override open func decode(input: NetworkResponse) -> Result<D> {
+    override open func map(input: NetworkResponse) -> Result<D> {
         guard let data = input.data else {
             return .failure(SerializationError.noData)
         }
@@ -81,7 +43,7 @@ open class JSONDecodeOperation<D: Decodable>: DecodeOperation<NetworkResponse, D
 }
 
 /// Decode a network response using a `JSONDecoder`, keeping the `HTTPURLResponse` passed in.
-open class JSONDecodeResponseOperation<D: Decodable>: DecodeOperation<NetworkResponse, (D, HTTPURLResponse)> {
+open class JSONDecodeResponseOperation<D: Decodable>: MapOperation<NetworkResponse, (D, HTTPURLResponse)> {
     
     public let decoder: JSONDecoder
     
@@ -96,7 +58,7 @@ open class JSONDecodeResponseOperation<D: Decodable>: DecodeOperation<NetworkRes
         super.init(input: input)
     }
     
-    override open func decode(input: NetworkResponse) -> Result<(D, HTTPURLResponse)> {
+    override open func map(input: NetworkResponse) -> Result<(D, HTTPURLResponse)> {
         guard let data = input.data else {
             return .failure(SerializationError.noData)
         }
@@ -108,9 +70,9 @@ open class JSONDecodeResponseOperation<D: Decodable>: DecodeOperation<NetworkRes
 }
 
 /// Decode a network response into a platform-specific Image type
-open class ImageDecodeOperation: DecodeOperation<NetworkResponse, PeakImage> {
+open class ImageDecodeOperation: MapOperation<NetworkResponse, PeakImage> {
     
-    open override func decode(input: NetworkResponse) -> Result<PeakImage> {
+    open override func map(input: NetworkResponse) -> Result<PeakImage> {
         if let data = input.data, let image = PeakImage(data: data) {
             return .success(image)
         } else {
