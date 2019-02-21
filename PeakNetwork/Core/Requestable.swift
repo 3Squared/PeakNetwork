@@ -41,8 +41,7 @@ public struct Request: Requestable {
     init(_ url: URL,
          query: [String: String] = [:],
          headers: [String: String] = [:],
-         method: HTTPMethod = .post,
-         encoder: JSONEncoder = JSONEncoder()) {
+         method: HTTPMethod = .post) {
         self.url = url
         self.query = query
         self.headers = headers
@@ -52,27 +51,23 @@ public struct Request: Requestable {
     init(_ string: String,
          query: [String: String] = [:],
          headers: [String: String] = [:],
-         method: HTTPMethod = .post,
-         encoder: JSONEncoder = JSONEncoder()) {
+         method: HTTPMethod = .post) {
         
         self.init(URL(string: string)!,
                   query: query,
                   headers: headers,
-                  method: method,
-                  encoder: encoder)
+                  method: method)
     }
     
     init(_ base: String,
          path: String,
          query: [String: String] = [:],
          headers: [String: String] = [:],
-         method: HTTPMethod = .post,
-         encoder: JSONEncoder = JSONEncoder()) {
+         method: HTTPMethod = .post) {
         self.init("\(base)/\(path)",
                   query: query,
                   headers: headers,
-                  method: method,
-                  encoder: encoder)
+                  method: method)
     }
     
     public var request: URLRequest {
@@ -101,7 +96,6 @@ public struct Request: Requestable {
     }
 }
 
-
 public struct BodyRequest<E: Encodable>: Requestable {
     
     public let body: E
@@ -116,7 +110,7 @@ public struct BodyRequest<E: Encodable>: Requestable {
          encoder: JSONEncoder = JSONEncoder()) {
         self.body = body
         self.encoder = encoder
-        self.internalRequest = Request(url, query: query, headers: headers, method: method, encoder: encoder)
+        self.internalRequest = Request(url, query: query, headers: headers, method: method)
     }
     
     init(_ string: String,
