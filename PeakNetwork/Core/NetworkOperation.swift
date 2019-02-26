@@ -18,7 +18,7 @@ public typealias NetworkResponse = (data: Data?, urlResponse: HTTPURLResponse)
 
 /// A subclass of `RetryingOperation` which wraps a `URLSessionTask`.
 /// Use when you want to perform network tasks in an operation queue.
-// If `createTask` is overriden, ensure you call `finish` within your callback block.
+/// If `createTask` is overriden, ensure you call `finish` within your callback block.
 /// If a `RetryStrategy` is provided, this can be re-run if the network task fails (not 200).
 open class NetworkOperation: RetryingOperation<NetworkResponse>, ConsumesResult {
     
@@ -92,3 +92,147 @@ open class NetworkOperation: RetryingOperation<NetworkResponse>, ConsumesResult 
     }
 }
 
+
+/// Perform a series of network requests on an internal queue and aggregate the results.
+open class GroupRequestNetworkOperation: ConcurrentOperation, ConsumesResult, ProducesResult {
+    
+    /// The outcome of the requests.
+    public struct Outcome {
+        let successes: [NetworkResponse]
+        let failures: [Error]
+    }
+    
+    public let session: Session
+    
+    public var input: Result<[Requestable]> = Result { throw ResultError.noResult }
+    public var output: Result<Outcome> = Result { throw ResultError.noResult }
+    
+    let internalQueue = OperationQueue()
+    let dispatchQueue = DispatchQueue(label: "GroupRequestNetworkOperation", qos: .background)
+    
+    /// Create a new `DecodableResponseOperation`, parsing the response to a list of the given generic type.
+    ///
+    /// - Parameters:
+    ///   - requestable: A requestable describing the web resource to fetch.
+    ///   - session: The `URLSession` in which to perform the fetch (optional).
+    public init(requestables: [Requestable]? = nil, session: Session = URLSession.shared) {
+        self.session = session
+        if let requestables = requestables {
+            input = .success(requestables)
+        }
+        super.init()
+    }
+    
+    open override func execute() {
+        switch input {
+        case .success(let requestables):
+            
+            var successes: [NetworkResponse] = []
+            var failures: [Error] = []
+            
+            let group = DispatchGroup()
+            
+            let operations: [NetworkOperation] = requestables.map { requestable in
+                group.enter()
+                
+                let operation = NetworkOperation(requestable: requestable.request, session: self.session)
+                
+                operation.addResultBlock { result in
+                    self.dispatchQueue.async {
+                        switch result {
+                        case .success(let response):
+                            successes.append(response)
+                        case .failure(let error):
+                            failures.append(error)
+                        }
+                        group.leave()
+                    }
+                }
+                return operation
+            }
+            
+            self.internalQueue.addOperations(operations, waitUntilFinished: false)
+            group.wait()
+            self.output = .success(Outcome(successes: successes, failures: failures))
+            finish()
+            
+        case .failure(let error):
+            output = .failure(error)
+            finish()
+        }
+    }
+}
+
+/// Perform a series of network requests on an internal queue and aggregate the results.
+open class GroupBodyRequestNetworkOperation<E: Encodable>: ConcurrentOperation, ConsumesResult, ProducesResult {
+    
+    /// The outcome of the requests.
+    public struct Outcome {
+        
+        /// Successful responses, associated with the body object
+        let successes: [(object: E, response: NetworkResponse)]
+        
+        /// Failed responses, associated with the body object
+        let failures: [(object: E, error: Error)]
+    }
+    
+    public let session: Session
+    
+    public var input: Result<[BodyRequest<E>]> = Result { throw ResultError.noResult }
+    public var output: Result<Outcome> = Result { throw ResultError.noResult }
+    
+    let internalQueue = OperationQueue()
+    let dispatchQueue = DispatchQueue(label: "GroupBodyRequestNetworkOperation", qos: .background)
+    
+    /// Create a new `DecodableResponseOperation`, parsing the response to a list of the given generic type.
+    ///
+    /// - Parameters:
+    ///   - requestable: A requestable describing the web resource to fetch.
+    ///   - session: The `URLSession` in which to perform the fetch (optional).
+    public init(bodyRequests: [BodyRequest<E>]? = nil, session: Session = URLSession.shared) {
+        self.session = session
+        if let bodyRequests = bodyRequests {
+            input = .success(bodyRequests)
+        }
+        super.init()
+    }
+    
+    open override func execute() {
+        switch input {
+        case .success(let requestables):
+            
+            var successes: [(E, NetworkResponse)] = []
+            var failures: [(E, Error)] = []
+            
+            let group = DispatchGroup()
+            
+            let operations: [NetworkOperation] = requestables.map { requestable in
+                group.enter()
+                
+                let operation = NetworkOperation(requestable: requestable.request, session: self.session)
+                
+                operation.addResultBlock { result in
+                    self.dispatchQueue.async {
+                        switch result {
+                        case .success(let response):
+                            successes.append((requestable.body, response))
+                        case .failure(let error):
+                            failures.append((requestable.body, error))
+                        }
+                        group.leave()
+                    }
+                }
+                return operation
+            }
+            
+            self.internalQueue.addOperations(operations, waitUntilFinished: false)
+            group.wait()
+            self.output = .success(Outcome(successes: successes, failures: failures))
+            finish()
+
+        case .failure(let error):
+            output = .failure(error)
+            finish()
+        }
+    }
+}

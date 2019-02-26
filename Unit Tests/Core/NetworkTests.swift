@@ -116,14 +116,15 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
-    func testNetworkThenDecodeOperationParseSuccess() {
+    func testNetworkOperationInputSuccess() {
         let session = MockSession { session in
             session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok))
         }
         
         let expect = expectation(description: "")
         
-        let networkOperation = NetworkOperation(requestable: URL(string: "http://google.com")!, session: session)
+        let networkOperation = NetworkOperation(session: session)
+        networkOperation.input = Result { URL(string: "http://google.com")! }
         let decodeOperation = JSONDecodeOperation<TestEntity>()
         
         decodeOperation.addResultBlock { result in
@@ -141,24 +142,20 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
-    
-    func testNetworkThenDecodeOperationParseFailure() {
-        let session = MockSession { session in
-            session.queue(response: MockResponse(json: ["wrong" : "key"], statusCode: .ok))
-        }
-
+    func testNetworkOperationWithNoInputFailure() {
+        let session = MockSession { _ in }
+        
         let expect = expectation(description: "")
         
-        let networkOperation = NetworkOperation(requestable: URL(string: "http://google.com")!, session: session)
-        let decodeOperation = JSONDecodeOperation<TestEntity>()
-
-        decodeOperation.addResultBlock { result in
+        let networkOperation = NetworkOperation(session: session)
+        
+        networkOperation.addResultBlock { result in
             do {
                 let _ = try result.resolve()
                 XCTFail()
             } catch {
                 switch error {
-                case DecodingError.keyNotFound(_, _):
+                case ResultError.noResult:
                     expect.fulfill()
                 default:
                     XCTFail()
@@ -166,64 +163,7 @@ class NetworkTests: XCTestCase {
             }
         }
         
-        networkOperation.passesResult(to: decodeOperation).enqueue()
-        
-        waitForExpectations(timeout: 1)
-    }
-
-        
-    func testNetworkThenDecodeArrayOperationParseSuccess() {
-        let session = MockSession { session in
-            session.queue(response: MockResponse(json: [["name" : "Sam"], ["name" : "Ben"]], statusCode: .ok))
-        }
-        
-        let expect = expectation(description: "")
-        
-        let networkOperation = NetworkOperation(requestable: URL(string: "http://google.com")!, session: session)
-        let decodeOperation = JSONDecodeOperation<[TestEntity]>()
-
-        decodeOperation.addResultBlock { result in
-            do {
-                let entities = try result.resolve()
-                XCTAssertEqual(entities.count, 2)
-                XCTAssertEqual(entities[0].name, "Sam")
-                XCTAssertEqual(entities[1].name, "Ben")
-                expect.fulfill()
-            } catch {
-                XCTFail()
-            }
-        }
-        
-        networkOperation.passesResult(to: decodeOperation).enqueue()
-
-        waitForExpectations(timeout: 1)
-    }
-    
-    func testNetworkThenDecodeArrayOperationParseFailure() {
-        let session = MockSession { session in
-            session.queue(response: MockResponse(json: [["wrong" : "key"], ["name" : "Ben"]], statusCode: .ok))
-        }
-        
-        let expect = expectation(description: "")
-        
-        let networkOperation = NetworkOperation(requestable: URL(string: "http://google.com")!, session: session)
-        let decodeOperation = JSONDecodeOperation<[TestEntity]>()
-
-        decodeOperation.addResultBlock { result in
-            do {
-                let _ = try result.resolve()
-                XCTFail()
-            } catch {
-                switch error {
-                case DecodingError.keyNotFound(_, _):
-                    expect.fulfill()
-                default:
-                    XCTFail()
-                }
-            }
-        }
-        
-        networkOperation.passesResult(to: decodeOperation).enqueue()
+        networkOperation.enqueue()
         waitForExpectations(timeout: 1)
     }
     
@@ -252,159 +192,6 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 100)
     }
     
-    func testFileRequestOperation() {
-        let expect = expectation(description: "")
-        
-        let networkOperation = DecodableFileOperation<[TestEntity]>(withFileName: "test")
-        
-        networkOperation.addResultBlock { result in
-            do {
-                let entity = try result.resolve()
-                XCTAssertEqual(entity[0].name, "Hello")
-                XCTAssertEqual(entity[1].name, "World")
-                XCTAssertEqual(entity[2].name, "!")
-                XCTAssertEqual(entity.count, 3)
-                expect.fulfill()
-            } catch {
-                XCTFail()
-            }
-        }
-        
-        networkOperation.enqueue()
-        
-        waitForExpectations(timeout: 1)
-    }
-
-    
-    func testNetworkOperationInputSuccess() {
-        let session = MockSession { session in
-            session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok))
-        }
-        
-        let expect = expectation(description: "")
-        
-        let networkOperation = NetworkOperation(session: session)
-        networkOperation.input = Result { URL(string: "http://google.com")! }
-        let decodeOperation = JSONDecodeOperation<TestEntity>()
-
-        decodeOperation.addResultBlock { result in
-            do {
-                let entity = try result.resolve()
-                XCTAssertEqual(entity.name, "Sam")
-                expect.fulfill()
-            } catch {
-                XCTFail()
-            }
-        }
-        
-        networkOperation.passesResult(to: decodeOperation).enqueue()
-
-        waitForExpectations(timeout: 1)
-    }
-    
-    func testNetworkOperationWithNoInputFailure() {
-        let session = MockSession { _ in }
-
-        let expect = expectation(description: "")
-        
-        let networkOperation = NetworkOperation(session: session)
-
-        networkOperation.addResultBlock { result in
-            do {
-                let _ = try result.resolve()
-                XCTFail()
-            } catch {
-                switch error {
-                case ResultError.noResult:
-                    expect.fulfill()
-                default:
-                    XCTFail()
-                }
-            }
-        }
-        
-        networkOperation.enqueue()
-        waitForExpectations(timeout: 1)
-    }
-
-
-    func testDecodableOperationParseSuccess() {
-        let session = MockSession { session in
-            session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok))
-        }
-        
-        let expect = expectation(description: "")
-        
-        let networkOperation = DecodableOperation<TestEntity>(requestable: URL(string: "http://google.com")!, session: session)
-        networkOperation.addResultBlock { result in
-            do {
-                let entity = try result.resolve()
-                XCTAssertEqual(entity.name, "Sam")
-                expect.fulfill()
-            } catch {
-                XCTFail()
-            }
-        }
-        
-        networkOperation.enqueue()
-        
-        waitForExpectations(timeout: 1)
-    }
-    
-    
-    func testDecodableOperationParseFailure() {
-        let session = MockSession { session in
-            session.queue(response: MockResponse(json: ["wrong" : "key"], statusCode: .ok))
-        }
-        
-        let expect = expectation(description: "")
-        
-        let networkOperation = DecodableOperation<TestEntity>(requestable: URL(string: "http://google.com")!, session: session)
-
-        networkOperation.addResultBlock { result in
-            do {
-                let _ = try result.resolve()
-                XCTFail()
-            } catch {
-                switch error {
-                case DecodingError.keyNotFound(_, _):
-                    expect.fulfill()
-                default:
-                    XCTFail()
-                }
-            }
-        }
-        
-        networkOperation.enqueue()
-
-        waitForExpectations(timeout: 1)
-    }
-
-
-    func testDecodableResponseOperationParseSuccess() {
-        let session = MockSession { session in
-            session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok))
-        }
-        
-        let expect = expectation(description: "")
-        
-        let networkOperation = DecodableResponseOperation<TestEntity>(requestable: URL(string: "http://google.com")!, session: session)
-        networkOperation.addResultBlock { result in
-            do {
-                let (entity, response) = try result.resolve()
-                XCTAssertEqual(entity.name, "Sam")
-                XCTAssertEqual(response.statusCodeEnum, .ok)
-                expect.fulfill()
-            } catch {
-                XCTFail()
-            }
-        }
-        
-        networkOperation.enqueue()
-        
-        waitForExpectations(timeout: 1)
-    }
-
     public enum TestError: Error {
         case justATest
     }

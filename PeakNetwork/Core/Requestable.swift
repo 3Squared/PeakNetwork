@@ -31,6 +31,9 @@ public struct BlockRequestable: Requestable {
     }
 }
 
+
+/// Simple struct for representing a network request.
+/// Convenient way to initialise a fully-specified request, instead of mutating a URLRequest.
 public struct Request: Requestable {
     
     public let url: URL
@@ -38,20 +41,36 @@ public struct Request: Requestable {
     public let headers: [String: String]
     public let method: HTTPMethod
     
+    
+    /// Create a new Request.
+    ///
+    /// - Parameters:
+    ///   - url: The URL to request.
+    ///   - query: A dictionary to be used as URL query items.
+    ///   - headers: A dictionary to be used as header fields.
+    ///   - method: The HTTP method with which to perform the request (defaults to GET).
     init(_ url: URL,
          query: [String: String] = [:],
          headers: [String: String] = [:],
-         method: HTTPMethod = .post) {
+         method: HTTPMethod = .get) {
         self.url = url
         self.query = query
         self.headers = headers
         self.method = method
     }
     
+    
+    /// Create a new Request.
+    ///
+    /// - Parameters:
+    ///   - string: The URL to request, as a string.
+    ///   - query: A dictionary to be used as URL query items.
+    ///   - headers: A dictionary to be used as header fields.
+    ///   - method: The HTTP method with which to perform the request (defaults to GET).
     init(_ string: String,
          query: [String: String] = [:],
          headers: [String: String] = [:],
-         method: HTTPMethod = .post) {
+         method: HTTPMethod = .get) {
         
         self.init(URL(string: string)!,
                   query: query,
@@ -59,11 +78,20 @@ public struct Request: Requestable {
                   method: method)
     }
     
+    
+    /// Create a new Request.
+    ///
+    /// - Parameters:
+    ///   - base: A base URL.
+    ///   - path: A path component to append to the provided base URL
+    ///   - query: A dictionary to be used as URL query items.
+    ///   - headers: A dictionary to be used as header fields.
+    ///   - method: The HTTP method with which to perform the request (defaults to GET).
     init(_ base: String,
          path: String,
          query: [String: String] = [:],
          headers: [String: String] = [:],
-         method: HTTPMethod = .post) {
+         method: HTTPMethod = .get) {
         self.init("\(base)/\(path)",
                   query: query,
                   headers: headers,
@@ -96,12 +124,23 @@ public struct Request: Requestable {
     }
 }
 
+/// Simple struct for representing a network request with a JSON HTTP body.
+/// Convenient way to initialise a fully-specified request, instead of mutating a URLRequest.
 public struct BodyRequest<E: Encodable>: Requestable {
     
     public let body: E
     public let encoder: JSONEncoder
     private let internalRequest: Request
     
+    /// Create a new BodyRequest.
+    ///
+    /// - Parameters:
+    ///   - url: The URL to request.
+    ///   - body: An encodable to be used as the request's HTTP body.
+    ///   - query: A dictionary to be used as URL query items.
+    ///   - headers: A dictionary to be used as header fields.
+    ///   - method: The HTTP method with which to perform the request (defaults to GET).
+    ///   - encoder: A JSONEncoder with which to encode the body.
     init(_ url: URL,
          body: E,
          query: [String: String] = [:],
@@ -113,6 +152,16 @@ public struct BodyRequest<E: Encodable>: Requestable {
         self.internalRequest = Request(url, query: query, headers: headers, method: method)
     }
     
+    
+    /// Create a new BodyRequest.
+    ///
+    /// - Parameters:
+    ///   - string: The URL to request, as a string.
+    ///   - body: An encodable to be used as the request's HTTP body.
+    ///   - query: A dictionary to be used as URL query items.
+    ///   - headers: A dictionary to be used as header fields.
+    ///   - method: The HTTP method with which to perform the request (defaults to GET).
+    ///   - encoder: A JSONEncoder with which to encode the body.
     init(_ string: String,
          body: E,
          query: [String: String] = [:],
@@ -122,6 +171,17 @@ public struct BodyRequest<E: Encodable>: Requestable {
         self.init(URL(string: string)!, body: body, query: query, headers: headers, method: method, encoder: encoder)
     }
     
+    
+    /// Create a new BodyRequest.
+    ///
+    /// - Parameters:
+    ///   - base: A base URL.
+    ///   - path: A path component to append to the provided base URL
+    ///   - body: An encodable to be used as the request's HTTP body.
+    ///   - query: A dictionary to be used as URL query items.
+    ///   - headers: A dictionary to be used as header fields.
+    ///   - method: The HTTP method with which to perform the request (defaults to GET).
+    ///   - encoder: A JSONEncoder with which to encode the body.
     init(_ base: String,
          path: String,
          body: E,
