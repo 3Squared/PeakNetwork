@@ -159,6 +159,8 @@ public class MockSession: Session {
     private var responses: [MockResponse] = []
     private var fallbackSession: Session?
     
+    private let dispatchQueue = DispatchQueue(label: "MockSession", qos: .background)
+
     /// Create a new session.
     ///
     /// - Parameters:
@@ -175,26 +177,29 @@ public class MockSession: Session {
     ///
     /// - Parameter response: A MockResponse.
     public func queue(response: MockResponse) {
-        responses += [response]
+        dispatchQueue.sync {
+            responses += [response]
+        }
     }
     
     public func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskCompletionHandler) -> URLSessionDataTask {
         
-        let isValid: (_ response: MockResponse) -> Bool = { return $0.isValid(request) }
-        
-        guard let response = responses.first(where: isValid), let index = responses.index(where: isValid) else {
+        return dispatchQueue.sync {
+            let isValid: (_ response: MockResponse) -> Bool = { return $0.isValid(request) }
+            
+            guard let response = responses.first(where: isValid), let index = responses.index(where: isValid) else {
                 if let session = self.fallbackSession {
                     return session.dataTask(with: request, completionHandler: completionHandler)
                 } else {
                     fatalError("No matching mock response found for the request (\(request))")
                 }
+            }
+            
+            if !response.sticky {
+                responses.remove(at: index)
+            }
+            return URLSessionDataTaskMock(response, forRequest: request, completionHandler: completionHandler)
         }
-        
-        if !response.sticky {
-            responses.remove(at: index)
-        }
-        
-        return URLSessionDataTaskMock(response, forRequest: request, completionHandler: completionHandler)
     }
     
     final private class URLSessionDataTaskMock : URLSessionDataTask {
