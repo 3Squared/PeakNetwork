@@ -18,6 +18,10 @@ import Foundation
 
 #endif
 
-struct TestEntity: Decodable {
+struct TestEntity: Codable {
     let name: String
+    
+    init(name: String) {
+        self.name = name
+    }
 }

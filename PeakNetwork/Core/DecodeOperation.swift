@@ -14,7 +14,6 @@ import AppKit
 import PeakOperation
 import PeakResult
 
-
 /// Decode a network response using a `JSONDecoder`.
 open class JSONDecodeOperation<D: Decodable>: MapOperation<NetworkResponse, D> {
     
@@ -23,7 +22,7 @@ open class JSONDecodeOperation<D: Decodable>: MapOperation<NetworkResponse, D> {
     /// Create a new `JSONDecodeOperation`.
     ///
     /// - Parameters:
-    ///   - input: An optional input `NetworkResponse`.
+    ///   - input: An input `NetworkResponse` (optional).
     ///   - decoder: The `JSONDecoder` to use when decoding the response data (optional).
     public init(input: NetworkResponse? = nil,
                 decoder: JSONDecoder = JSONDecoder()) {
@@ -50,7 +49,7 @@ open class JSONDecodeResponseOperation<D: Decodable>: MapOperation<NetworkRespon
     /// Create a new `JSONDecodeResponseOperation`.
     ///
     /// - Parameters:
-    ///   - input: An optional input `NetworkResponse`.
+    ///   - input: An input `NetworkResponse` (optional).
     ///   - decoder: The `JSONDecoder` to use when decoding the response data (optional).
     public init(input: NetworkResponse? = nil,
                 decoder: JSONDecoder = JSONDecoder()) {
