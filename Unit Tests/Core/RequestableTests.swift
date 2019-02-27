@@ -58,7 +58,7 @@ class RequestableTests: XCTestCase {
     }
     
     
-    func test_GroupBodyRequestNetworkOperation_returnsSuccessfulObjects() {
+    func test_multipleBodyRequestNetworkOperation_returnsSuccessfulObjects() {
         // Arrange:
         let encoder = JSONEncoder()
         let session = MockSession { session in
@@ -73,7 +73,7 @@ class RequestableTests: XCTestCase {
 
         // Act:
         let map = CodableToRequestOperation(input: entities, encoder: encoder)
-        let operation = GroupBodyRequestNetworkOperation<TestEntity>(session: session)
+        let operation = MultipleBodyRequestNetworkOperation<TestEntity>(session: session)
         
         let expect = expectation(description: "")
         operation.addResultBlock { outcome in
@@ -99,7 +99,7 @@ class RequestableTests: XCTestCase {
         }
     }
     
-    func test_GroupBodyRequestNetworkOperation_returnsSuccessesAndFailures() {
+    func test_multipleBodyRequestNetworkOperation_returnsSuccessesAndFailures() {
         // Arrange:
         let encoder = JSONEncoder()
         let session = MockSession { session in
@@ -116,7 +116,7 @@ class RequestableTests: XCTestCase {
         
         // Act:
         let map = CodableToRequestOperation(input: entities, encoder: encoder)
-        let operation = GroupBodyRequestNetworkOperation<TestEntity>(session: session)
+        let operation = MultipleBodyRequestNetworkOperation<TestEntity>(session: session)
         
         let expect = expectation(description: "")
         operation.addResultBlock { outcome in
@@ -155,7 +155,7 @@ class RequestableTests: XCTestCase {
         }
     }
     
-    func test_GroupRequestNetworkOperation_returnsSuccessesAndFailures() {
+    func test_multipleRequestNetworkOperation_returnsSuccessesAndFailures() {
         // Arrange:
         let session = MockSession { session in
             session.queue(response: MockResponse(statusCode: .ok))
@@ -170,7 +170,7 @@ class RequestableTests: XCTestCase {
         ]
         
         // Act:
-        let operation = GroupRequestNetworkOperation(requestables: requests, session: session)
+        let operation = MultipleRequestNetworkOperation(requestables: requests, session: session)
         
         let expect = expectation(description: "")
         operation.addResultBlock { outcome in

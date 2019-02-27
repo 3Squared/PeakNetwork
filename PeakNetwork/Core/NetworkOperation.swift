@@ -94,7 +94,7 @@ open class NetworkOperation: RetryingOperation<NetworkResponse>, ConsumesResult 
 
 
 /// Perform a series of network requests on an internal queue and aggregate the results.
-open class GroupRequestNetworkOperation: ConcurrentOperation, ConsumesResult, ProducesResult {
+open class MultipleRequestNetworkOperation: ConcurrentOperation, ConsumesResult, ProducesResult {
     
     /// The outcome of the requests.
     public struct Outcome {
@@ -164,7 +164,7 @@ open class GroupRequestNetworkOperation: ConcurrentOperation, ConsumesResult, Pr
 }
 
 /// Perform a series of network requests on an internal queue and aggregate the results.
-open class GroupBodyRequestNetworkOperation<E: Encodable>: ConcurrentOperation, ConsumesResult, ProducesResult {
+open class MultipleBodyRequestNetworkOperation<E: Encodable>: ConcurrentOperation, ConsumesResult, ProducesResult {
     
     /// The outcome of the requests.
     public struct Outcome {
