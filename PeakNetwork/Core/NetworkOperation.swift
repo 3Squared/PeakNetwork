@@ -108,7 +108,7 @@ open class MultipleRequestNetworkOperation: ConcurrentOperation, ConsumesResult,
     public var output: Result<Outcome> = Result { throw ResultError.noResult }
     
     let internalQueue = OperationQueue()
-    let dispatchQueue = DispatchQueue(label: "GroupRequestNetworkOperation", qos: .background)
+    let dispatchQueue = DispatchQueue(label: "GroupRequestNetworkOperation", attributes: .concurrent)
     
     /// Create a new `DecodableResponseOperation`, parsing the response to a list of the given generic type.
     ///
@@ -138,7 +138,7 @@ open class MultipleRequestNetworkOperation: ConcurrentOperation, ConsumesResult,
                 let operation = NetworkOperation(requestable: requestable.request, session: self.session)
                 
                 operation.addResultBlock { result in
-                    self.dispatchQueue.async {
+                    self.dispatchQueue.async(flags: .barrier) {
                         switch result {
                         case .success(let response):
                             successes.append(response)
