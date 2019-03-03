@@ -24,7 +24,6 @@
 		188DEAC7220DAF9F0067A6EF /* PeakNetwork+Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188DEAC4220DAF9B0067A6EF /* PeakNetwork+Aliases.swift */; };
 		25F55EACE4745B17BDCF734D /* libPods-PeakNetwork-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76C2CC72593AFE1EF68EAC50 /* libPods-PeakNetwork-macOS.a */; };
 		CAC3E8F76AC9DAB861D96F3C /* libPods-PeakNetwork-macOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27F82A9AFF4776139A2773C6 /* libPods-PeakNetwork-macOSTests.a */; };
-		CB19A067221F0DA500926A31 /* RequestableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB19A066221F0DA500926A31 /* RequestableTests.swift */; };
 		CB2380E41F740D1500F1B001 /* NetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */; };
 		CB2380E51F740D1500F1B001 /* CertificatePinningSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */; };
 		CB2380E61F740D1500F1B001 /* ImageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DD1F740D1500F1B001 /* ImageController.swift */; };
@@ -35,7 +34,7 @@
 		CB2380F51F740D9C00F1B001 /* CertificatePinningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380F21F740D7600F1B001 /* CertificatePinningTests.swift */; };
 		CB2380F61F740D9C00F1B001 /* ImageControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380EE1F740D7600F1B001 /* ImageControllerTests.swift */; };
 		CB2380F71F740D9C00F1B001 /* NetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380F01F740D7600F1B001 /* NetworkTests.swift */; };
-		CB2380F81F740D9C00F1B001 /* TestEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380F31F740D7600F1B001 /* TestEntity.swift */; };
+		CB2380F81F740D9C00F1B001 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380F31F740D7600F1B001 /* TestData.swift */; };
 		CB2380F91F740DBD00F1B001 /* 300.png in Resources */ = {isa = PBXBuildFile; fileRef = CB2380EF1F740D7600F1B001 /* 300.png */; };
 		CB2380FA1F740DBD00F1B001 /* 600.png in Resources */ = {isa = PBXBuildFile; fileRef = CB2380F41F740D7600F1B001 /* 600.png */; };
 		CB2380FB1F740DBD00F1B001 /* github.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = CB2380F11F740D7600F1B001 /* github.com.cer */; };
@@ -84,7 +83,6 @@
 		76C2CC72593AFE1EF68EAC50 /* libPods-PeakNetwork-macOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetwork-macOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F13389A8316B538B81A6709 /* Pods-PeakNetwork-macOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-macOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-macOSTests/Pods-PeakNetwork-macOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		8A48F868C8C5C16D7EF37F7F /* Pods-PeakNetwork-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-iOS/Pods-PeakNetwork-iOS.release.xcconfig"; sourceTree = "<group>"; };
-		CB19A066221F0DA500926A31 /* RequestableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestableTests.swift; sourceTree = "<group>"; };
 		CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkOperation.swift; sourceTree = "<group>"; };
 		CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatePinningSessionDelegate.swift; sourceTree = "<group>"; };
 		CB2380DD1F740D1500F1B001 /* ImageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageController.swift; sourceTree = "<group>"; };
@@ -97,7 +95,7 @@
 		CB2380F01F740D7600F1B001 /* NetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTests.swift; sourceTree = "<group>"; };
 		CB2380F11F740D7600F1B001 /* github.com.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = github.com.cer; sourceTree = "<group>"; };
 		CB2380F21F740D7600F1B001 /* CertificatePinningTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatePinningTests.swift; sourceTree = "<group>"; };
-		CB2380F31F740D7600F1B001 /* TestEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEntity.swift; sourceTree = "<group>"; };
+		CB2380F31F740D7600F1B001 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		CB2380F41F740D7600F1B001 /* 600.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 600.png; sourceTree = "<group>"; };
 		CB3178721FDAA5AF00B063ED /* test.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPStatusCodes.swift; sourceTree = "<group>"; };
@@ -219,9 +217,8 @@
 				CB2380F11F740D7600F1B001 /* github.com.cer */,
 				CB2380EE1F740D7600F1B001 /* ImageControllerTests.swift */,
 				CB2380F01F740D7600F1B001 /* NetworkTests.swift */,
-				CB19A066221F0DA500926A31 /* RequestableTests.swift */,
 				CB95D1D9222BE9F4004B29B3 /* ResourceTests.swift */,
-				CB2380F31F740D7600F1B001 /* TestEntity.swift */,
+				CB2380F31F740D7600F1B001 /* TestData.swift */,
 				CB3178721FDAA5AF00B063ED /* test.json */,
 			);
 			path = Core;
@@ -630,9 +627,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CB2380F81F740D9C00F1B001 /* TestEntity.swift in Sources */,
+				CB2380F81F740D9C00F1B001 /* TestData.swift in Sources */,
 				CB95D1DA222BE9F4004B29B3 /* ResourceTests.swift in Sources */,
-				CB19A067221F0DA500926A31 /* RequestableTests.swift in Sources */,
 				CB2380F71F740D9C00F1B001 /* NetworkTests.swift in Sources */,
 				CB2380F51F740D9C00F1B001 /* CertificatePinningTests.swift in Sources */,
 				CB2380F61F740D9C00F1B001 /* ImageControllerTests.swift in Sources */,

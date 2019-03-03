@@ -22,6 +22,8 @@ import PeakOperation
 
 class NetworkTests: XCTestCase {
     
+    let webService = WebService()
+    
     func testResponseValidation() {
         let success = HTTPURLResponse(url: URL(string:"google.com")!, statusCode: 200, httpVersion: "1.1", headerFields: nil)
         XCTAssertTrue(success!.statusCodeEnum.isSuccess)
@@ -44,11 +46,9 @@ class NetworkTests: XCTestCase {
             session.queue(response: MockResponse(statusCode: .internalServerError))
         }
 
-        let request = URL(string: "http://google.com")!
-
         let expect = expectation(description: "")
         
-        let networkOperation = NetworkOperation(requestable: request, session: session)
+        let networkOperation = NetworkOperation(resource: webService.simple(), session: session)
         
         networkOperation.addResultBlock { result in
             switch result {
@@ -69,12 +69,10 @@ class NetworkTests: XCTestCase {
             session.queue(response: MockResponse(json: ["hello": "world"], statusCode: .internalServerError))
         }
         
-        let request = URL(string: "http://google.com")!
-        
         let expect = expectation(description: "")
         
-        let networkOperation = NetworkOperation(requestable: request, session: session)
-        
+        let networkOperation = NetworkOperation(resource: webService.simple(), session: session)
+
         networkOperation.addResultBlock { result in
             switch result {
             case .failure(ServerError.error(code: .internalServerError, data: let data, response: _)):
@@ -99,8 +97,8 @@ class NetworkTests: XCTestCase {
 
         let expect = expectation(description: "")
 
-        let networkOperation = NetworkOperation(requestable: URL(string: "http://google.com")!, session: session)
-        
+        let networkOperation = NetworkOperation(resource: webService.simple(), session: session)
+
         networkOperation.addResultBlock { result in
             do {
                 let response = try result.resolve()
@@ -123,21 +121,21 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = NetworkOperation(session: session)
-        networkOperation.input = Result { URL(string: "http://google.com")! }
-        let decodeOperation = JSONDecodeOperation<TestEntity>()
+        let networkOperation = NetworkOperation<TestEntity>(session: session)
+
+        networkOperation.input = Result { webService.simple() }
         
-        decodeOperation.addResultBlock { result in
+        networkOperation.addResultBlock { result in
             do {
                 let entity = try result.resolve()
-                XCTAssertEqual(entity.name, "Sam")
+                XCTAssertEqual(entity.parsed!.name, "Sam")
                 expect.fulfill()
             } catch {
                 XCTFail()
             }
         }
         
-        networkOperation.passesResult(to: decodeOperation).enqueue()
+        networkOperation.enqueue()
         
         waitForExpectations(timeout: 1)
     }
@@ -147,8 +145,8 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = NetworkOperation(session: session)
-        
+        let networkOperation = NetworkOperation<TestEntity>(session: session)
+
         networkOperation.addResultBlock { result in
             do {
                 let _ = try result.resolve()
@@ -174,8 +172,8 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = NetworkOperation(requestable: URL(string: "http://google.com")!, session: session)
-        
+        let networkOperation = NetworkOperation(resource: webService.simple(), session: session)
+
         var runCount = 0
         networkOperation.retryStrategy = { failureCount in
             runCount += 1

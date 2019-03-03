@@ -14,8 +14,9 @@ public struct Resource<A> {
 }
 
 public extension Resource where A: Decodable {
-    init(endpoint: Endpoint, headers: [String: String], method: HTTPMethod, decoder: JSONDecoder) {
-        request = URLRequest(url: endpoint.url)
+    
+    init(url: URL, headers: [String: String], method: HTTPMethod, decoder: JSONDecoder) {
+        request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         request.allHTTPHeaderFields = headers
         parse = { data in
@@ -23,10 +24,32 @@ public extension Resource where A: Decodable {
             return try? decoder.decode(A.self, from: data)
         }
     }
+
+    
+    init(endpoint: Endpoint, headers: [String: String], method: HTTPMethod, decoder: JSONDecoder) {
+        self.init(url: endpoint.url, headers: headers, method: method, decoder: decoder)
+    }
     
     init<Body: Encodable>(endpoint: Endpoint, headers: [String: String], method: HTTPMethod, body: Body, encoder: JSONEncoder, decoder: JSONDecoder) {
         self.init(endpoint: endpoint, headers: headers, method: method, decoder: decoder)
         request.httpBody = try! encoder.encode(body)
+    }
+}
+
+public extension Resource where A: PeakImage {
+    
+    init(url: URL, headers: [String: String], method: HTTPMethod) {
+        request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        request.allHTTPHeaderFields = headers
+        parse = { data in
+            guard let data = data else { return nil }
+            return A(data: data)
+        }
+    }
+    
+    init(endpoint: Endpoint, headers: [String: String], method: HTTPMethod) {
+        self.init(url: endpoint.url, headers: headers, method: method)
     }
 }
 
@@ -41,7 +64,7 @@ public protocol API {
 
 public extension API {
     
-    func resource<D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get) -> Resource<D> {
+    public func resource<D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get) -> Resource<D> {
         return Resource(
             endpoint: endpoint(path, query: query),
             headers: headers.merging(commonHeaders) { current, _ in current },
@@ -50,7 +73,7 @@ public extension API {
         )
     }
 
-    func resource<E: Encodable, D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .post, body: E) -> Resource<D> {
+    public func resource<E: Encodable, D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .post, body: E) -> Resource<D> {
         return Resource(
             endpoint: endpoint(path, query: query),
             headers: headers.merging(commonHeaders) { current, _ in current },
