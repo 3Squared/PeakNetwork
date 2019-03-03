@@ -17,7 +17,7 @@ import PeakResult
 public struct Response<O> {
     let data: Data?
     let urlResponse: HTTPURLResponse
-    let parsed: O?
+    let parsed: O
 }
 
 /// A subclass of `RetryingOperation` which wraps a `URLSessionTask`.
@@ -80,16 +80,14 @@ open class NetworkOperation<O>: RetryingOperation<Response<O>>, ConsumesResult {
                 strongSelf.output = Result { throw error }
             } else if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCodeEnum.isSuccess {
-                    strongSelf.output = .success(Response(data: data, urlResponse: httpResponse, parsed: resource.parse(data)))
-                } else {
                     strongSelf.output = Result {
-                        throw ServerError.error(code: httpResponse.statusCodeEnum, data: data, response: httpResponse)
+                        Response(data: data, urlResponse: httpResponse, parsed: try resource.parse(data))
                     }
+                } else {
+                    strongSelf.output = .failure(ServerError.error(code: httpResponse.statusCodeEnum, data: data, response: httpResponse))
                 }
             } else {
-                strongSelf.output = Result {
-                    throw ServerError.unknownResponse
-                }
+                strongSelf.output = .failure(ServerError.unknownResponse)
             }
             strongSelf.finish()
         }

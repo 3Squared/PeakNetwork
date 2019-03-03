@@ -10,21 +10,57 @@ import Foundation
 
 public struct Resource<A> {
     var request: URLRequest
-    let parse: (Data?) -> A?
+    let parse: (Data?) throws -> A
+}
+
+public enum ResourceError: Error {
+    case noData
+    case invalidData
+}
+
+public extension Resource {
+    
+    init(url: URL, headers: [String: String], method: HTTPMethod, parse: @escaping (Data?) throws -> A) {
+        request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        request.allHTTPHeaderFields = headers
+        self.parse = parse
+    }
+    
+    init(endpoint: Endpoint, headers: [String: String], method: HTTPMethod, parse: @escaping (Data?) throws -> A) {
+        self.init(url: endpoint.url, headers: headers, method: method, parse: parse)
+    }
+}
+
+public extension Resource where A == Void {
+    
+    init(url: URL, headers: [String: String], method: HTTPMethod) {
+        self.init(url: url, headers: headers, method: method) { data in
+            return ()
+        }
+    }
+
+    init(endpoint: Endpoint, headers: [String: String], method: HTTPMethod) {
+        self.init(url: endpoint.url, headers: headers, method: method)
+    }
+    
+    init<Body: Encodable>(endpoint: Endpoint, headers: [String: String], method: HTTPMethod, body: Body, encoder: JSONEncoder) {
+        self.init(endpoint: endpoint, headers: headers, method: method)
+        request.httpBody = try! encoder.encode(body)
+    }
 }
 
 public extension Resource where A: Decodable {
     
     init(url: URL, headers: [String: String], method: HTTPMethod, decoder: JSONDecoder) {
-        request = URLRequest(url: url)
-        request.httpMethod = method.rawValue
-        request.allHTTPHeaderFields = headers
-        parse = { data in
-            guard let data = data else { return nil }
-            return try? decoder.decode(A.self, from: data)
+        self.init(url: url, headers: headers, method: method) { data in
+            if let data = data {
+                return try decoder.decode(A.self, from: data)
+            } else {
+                throw ResourceError.noData
+            }
         }
     }
-
     
     init(endpoint: Endpoint, headers: [String: String], method: HTTPMethod, decoder: JSONDecoder) {
         self.init(url: endpoint.url, headers: headers, method: method, decoder: decoder)
@@ -39,12 +75,16 @@ public extension Resource where A: Decodable {
 public extension Resource where A: PeakImage {
     
     init(url: URL, headers: [String: String], method: HTTPMethod) {
-        request = URLRequest(url: url)
-        request.httpMethod = method.rawValue
-        request.allHTTPHeaderFields = headers
-        parse = { data in
-            guard let data = data else { return nil }
-            return A(data: data)
+        self.init(url: url, headers: headers, method: method) { data in
+            if let data = data {
+                if let image = A(data: data) {
+                    return image
+                } else {
+                    throw ResourceError.invalidData
+                }
+            } else {
+                throw ResourceError.noData
+            }
         }
     }
     
@@ -63,6 +103,24 @@ public protocol API {
 }
 
 public extension API {
+    
+    public func resource(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get) -> Resource<Void> {
+        return Resource(
+            endpoint: endpoint(path, query: query),
+            headers: headers.merging(commonHeaders) { current, _ in current },
+            method: method
+        )
+    }
+    
+    public func resource<E: Encodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get, body: E) -> Resource<Void> {
+        return Resource(
+            endpoint: endpoint(path, query: query),
+            headers: headers.merging(commonHeaders) { current, _ in current },
+            method: method,
+            body: body,
+            encoder: encoder
+        )
+    }
     
     public func resource<D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get) -> Resource<D> {
         return Resource(

@@ -29,7 +29,7 @@ struct WebService {
         return api.resource(path: "/all")
     }
     
-    func complex(_ entity: TestEntity) -> Resource<TestEntity> {
+    func complex(_ entity: TestEntity) -> Resource<Void> {
         return api.resource(path: "/upload",
                             query: ["token": "overridden", "search": "test"],
                             headers: ["user-agent": "overridden", "device": "iphone"],
@@ -37,7 +37,13 @@ struct WebService {
                             body: entity)
     }
     
-    func url(_ url: URL) -> Resource<PeakImage> {
+    func url(_ url: URL) -> Resource<Data> {
+        return Resource<Data>(url: url, headers: [:], method: .get) { data in
+            return data!
+        }
+    }
+    
+    func image(_ url: URL) -> Resource<PeakImage> {
         return Resource<PeakImage>(url: url, headers: [:], method: .get)
     }
 }

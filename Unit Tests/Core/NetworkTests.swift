@@ -87,7 +87,7 @@ class NetworkTests: XCTestCase {
     
     func testNetworkOperationSuccess() {
         let session = MockSession { session in
-            session.queue(response: MockResponse(statusCode: .ok))
+            session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok))
         }
 
         let expect = expectation(description: "")
@@ -100,7 +100,7 @@ class NetworkTests: XCTestCase {
                 XCTAssertEqual(response.urlResponse.statusCode, 200)
                 expect.fulfill()
             } catch {
-                XCTFail()
+                XCTFail(error.localizedDescription)
             }
         }
         
@@ -123,7 +123,7 @@ class NetworkTests: XCTestCase {
         networkOperation.addResultBlock { result in
             do {
                 let entity = try result.resolve()
-                XCTAssertEqual(entity.parsed!.name, "Sam")
+                XCTAssertEqual(entity.parsed.name, "Sam")
                 expect.fulfill()
             } catch {
                 XCTFail()
@@ -185,7 +185,30 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 100)
     }
     
-    func testMultipleResourceNetworkOperation() {
+    func testNetworkOperation_voidResponse() {
+        let session = MockSession { session in
+            session.queue(response: MockResponse())
+        }
+        
+        let networkOperation = NetworkOperation(resource: webService.complex(TestEntity(name: "sam")), session: session)
+
+        let expect = expectation(description: "")
+        networkOperation.addResultBlock { _ in
+            expect.fulfill()
+        }
+        
+        networkOperation.enqueue()
+        waitForExpectations(timeout: 10)
+        
+        switch networkOperation.output {
+        case .success(let response):
+            XCTAssertNotNil(response.parsed)
+        case .failure(let error):
+            XCTFail(error.localizedDescription)
+        }
+    }
+    
+    func testMultipleResourceNetworkOperation_allSuccess() {
         let session = MockSession { session in
             session.queue(response: MockResponse(json: ["name": "sam"]))
             session.queue(response: MockResponse(json: ["name": "ben"]))
@@ -197,7 +220,7 @@ class NetworkTests: XCTestCase {
         ], session: session)
         
         let expect = expectation(description: "")
-        networkOperation.addResultBlock { result in
+        networkOperation.addResultBlock { _ in
             expect.fulfill()
         }
         
@@ -206,9 +229,35 @@ class NetworkTests: XCTestCase {
         
         let outcomes = try! networkOperation.output.resolve()
         XCTAssertEqual(outcomes.successes.count, 2)
-        XCTAssertTrue(outcomes.successes.contains { $0.parsed!.name == "sam" })
-        XCTAssertTrue(outcomes.successes.contains { $0.parsed!.name == "ben" })
+        XCTAssertTrue(outcomes.successes.contains { $0.parsed.name == "sam" })
+        XCTAssertTrue(outcomes.successes.contains { $0.parsed.name == "ben" })
     }
+    
+    func testMultipleResourceNetworkOperation_withFailure() {
+        let session = MockSession { session in
+            session.queue(response: MockResponse(json: ["name": "sam"]))
+            session.queue(response: MockResponse(statusCode: .internalServerError))
+        }
+        
+        let networkOperation = MultipleResourceNetworkOperation(resources: [
+            webService.simple(),
+            webService.simple()
+        ], session: session)
+        
+        let expect = expectation(description: "")
+        networkOperation.addResultBlock { _ in
+            expect.fulfill()
+        }
+        
+        networkOperation.enqueue()
+        waitForExpectations(timeout: 10)
+        
+        let outcomes = try! networkOperation.output.resolve()
+        XCTAssertEqual(outcomes.successes.count, 1)
+        XCTAssertEqual(outcomes.successes[0].parsed.name, "sam")
+        XCTAssertEqual(outcomes.failures.count, 1)
+    }
+
     
     public enum TestError: Error {
         case justATest

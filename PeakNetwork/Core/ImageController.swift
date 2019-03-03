@@ -88,7 +88,7 @@ public class ImageController {
             if imageOperation.isCancelled {
                 completion(nil, object, .network)
             } else {
-                if let response = try? result.resolve(), let image = response.parsed {
+                if let image = try? result.resolve().parsed {
                     self.cache.setObject(image, forKey: url)
                     completion(image, object, .network)
                 } else {
