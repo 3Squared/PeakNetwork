@@ -160,7 +160,6 @@ open class MultipleResourceNetworkOperation<O>: ConcurrentOperation, ConsumesRes
             group.wait()
             self.output = .success(Outcome(successes: successes, failures: failures))
             finish()
-
         case .failure(let error):
             output = .failure(error)
             finish()

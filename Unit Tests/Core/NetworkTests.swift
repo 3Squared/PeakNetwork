@@ -11,13 +11,9 @@ import PeakResult
 import PeakOperation
 
 #if os(iOS)
-
 @testable import PeakNetwork_iOS
-
 #else
-
 @testable import PeakNetwork_macOS
-
 #endif
 
 class NetworkTests: XCTestCase {
@@ -31,7 +27,6 @@ class NetworkTests: XCTestCase {
         let serverFail = HTTPURLResponse(url: URL(string:"google.com")!, statusCode: 500, httpVersion: "1.1", headerFields: nil)
         XCTAssertTrue(serverFail!.statusCodeEnum.isServerError)
 
-        
         let notFound = HTTPURLResponse(url: URL(string:"google.com")!, statusCode: 404, httpVersion: "1.1", headerFields: nil)
         XCTAssertTrue(notFound!.statusCodeEnum.isClientError)
         
@@ -188,6 +183,31 @@ class NetworkTests: XCTestCase {
         networkOperation.enqueue()
         
         waitForExpectations(timeout: 100)
+    }
+    
+    func testMultipleResourceNetworkOperation() {
+        let session = MockSession { session in
+            session.queue(response: MockResponse(json: ["name": "sam"]))
+            session.queue(response: MockResponse(json: ["name": "ben"]))
+        }
+
+        let networkOperation = MultipleResourceNetworkOperation(resources: [
+            webService.simple(),
+            webService.simple()
+        ], session: session)
+        
+        let expect = expectation(description: "")
+        networkOperation.addResultBlock { result in
+            expect.fulfill()
+        }
+        
+        networkOperation.enqueue()
+        waitForExpectations(timeout: 10)
+        
+        let outcomes = try! networkOperation.output.resolve()
+        XCTAssertEqual(outcomes.successes.count, 2)
+        XCTAssertTrue(outcomes.successes.contains { $0.parsed!.name == "sam" })
+        XCTAssertTrue(outcomes.successes.contains { $0.parsed!.name == "ben" })
     }
     
     public enum TestError: Error {
