@@ -48,9 +48,8 @@ struct WebService {
     }
 }
 
-struct ExampleAPI: API {
-    let scheme = "https"
-    let host = "example.com"
+struct ExampleAPI: APIProtocol {
+    let baseURL = "https://example.com"
     let encoder: JSONEncoder = JSONEncoder()
     let decoder: JSONDecoder = JSONDecoder()
     let commonQuery = ["token": "hello"]

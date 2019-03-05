@@ -10,28 +10,19 @@ import Foundation
 import PeakNetwork
 import PeakResult
 
-struct ExampleAPI: API {
-    let scheme = "https"
-    let host = "example.com"
-    
-    let encoder: JSONEncoder = JSONEncoder()
-    let decoder: JSONDecoder = JSONDecoder()
-    
-    var commonHeaders = ["api_key": UUID().uuidString]
+struct API: APIProtocol {
+    let baseURL = "https://example.com"
+    let session = URLSession.mock
 }
 
-extension ExampleAPI {
-    
-    func search(_ query: String) -> Resource<[SearchResult]> {
-        return resource(path: "/search", query: ["search": query])
+extension API {
+    func search(_ query: String) -> NetworkOperation<[SearchResult]> {
+        return operation(for: resource(path: "/search", query: ["search": query]))
     }
 }
 
-extension Resource {
-    
-    func enqueue(session: Session = URLSession.mock, _ completion: @escaping (Result<Response<ResponseType>>) -> ()) {
-        let operation = NetworkOperation(resource: self, session: session)
-        operation.addResultBlock(block: completion)
-        operation.enqueue()
-    }
+struct SearchResult: Codable {
+    let description: String
+    let url: URL
+    let imageURL: URL
 }

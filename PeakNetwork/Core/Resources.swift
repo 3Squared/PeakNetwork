@@ -93,20 +93,34 @@ public extension Resource where ResponseType: PeakImage {
     }
 }
 
-public protocol API {
-    var scheme: String { get }
-    var host: String { get }
-    var encoder: JSONEncoder { get }
-    var decoder: JSONDecoder { get }
-    var commonQuery: [String: String] { get }
-    var commonHeaders: [String: String] { get }
+extension Resource {
+    
+    func operation(session: Session) -> NetworkOperation<ResponseType> {
+        return NetworkOperation(resource: self, session: session)
+    }
 }
 
-public extension API {
+public protocol APIProtocol {
+    var baseURL: String { get }
+    var commonQuery: [String: String] { get }
+    var commonHeaders: [String: String] { get }
+    var session: Session { get }
+    var encoder: JSONEncoder { get }
+    var decoder: JSONDecoder { get }
+}
+
+public extension APIProtocol {
     
     var commonQuery: [String: String] { return [:] }
     var commonHeaders: [String: String] { return [:] }
-    
+    var session: Session { return URLSession.shared }
+    var encoder: JSONEncoder { return JSONEncoder() }
+    var decoder: JSONDecoder { return JSONDecoder() }
+
+    public func operation<T>(for resource: Resource<T>) -> NetworkOperation<T> {
+        return resource.operation(session: session)
+    }
+
     public func resource(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get) -> Resource<Void> {
         return Resource(
             endpoint: endpoint(path, query: query),
@@ -145,26 +159,22 @@ public extension API {
         )
     }
 
-    func endpoint(_ path: String, query: [String: String] = [:]) -> Endpoint {
-        return Endpoint(scheme: scheme,
-                        host: host,
+    public func endpoint(_ path: String, query: [String: String] = [:]) -> Endpoint {
+        return Endpoint(baseURL: baseURL,
                         path: path,
                         query: query.merging(commonQuery) { current, _ in current })
     }
 }
 
 public struct Endpoint {
-    let scheme: String
-    let host: String
+    let baseURL: String
     let path: String
     let query: [String: String]
 }
 
 public extension Endpoint {
     var url: URL {
-        var components = URLComponents()
-        components.scheme = scheme
-        components.host = host
+        var components = URLComponents(string: baseURL)!
         components.path = path
         components.queryItems = query.isEmpty ? nil : query.queryItems
         return components.url!

@@ -10,7 +10,6 @@ import Foundation
 import PeakNetwork
 
 extension URLSession {
-    
     static let mock: Session = LoggingSession(with: MockSession(configure: { session in
         session.queue(response: MockResponse(fileName: "Example1", responseHeaders: ["X-CustomHeader" : "This is a header"]))
         session.queue(response: MockResponse(statusCode: nil, error: RuntimeError("All these responses are mocked. This error was queued in \(#file) on line \(#line).")))
@@ -21,6 +20,7 @@ extension URLSession {
         return url?.absoluteString.contains("example.com") ?? true
     })
 }
+
 
 struct RuntimeError: LocalizedError {
     let message: String
@@ -33,4 +33,3 @@ struct RuntimeError: LocalizedError {
         return message
     }
 }
-

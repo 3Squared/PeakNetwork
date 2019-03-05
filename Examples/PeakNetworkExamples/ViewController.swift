@@ -11,7 +11,7 @@ import PeakNetwork
 
 class ViewController: UITableViewController {
     
-    let api = ExampleAPI()
+    let api = API()
     
     var searchResults: [SearchResult] = [] {
         didSet {
