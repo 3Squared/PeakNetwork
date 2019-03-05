@@ -15,9 +15,9 @@ import PeakOperation
 import PeakResult
 
 public struct Response<O> {
-    let data: Data?
-    let urlResponse: HTTPURLResponse
-    let parsed: O
+    public let data: Data?
+    public let urlResponse: HTTPURLResponse
+    public let parsed: O
 }
 
 /// A subclass of `RetryingOperation` which wraps a `URLSessionTask`.

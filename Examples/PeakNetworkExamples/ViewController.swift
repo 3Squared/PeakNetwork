@@ -11,6 +11,8 @@ import PeakNetwork
 
 class ViewController: UITableViewController {
     
+    let api = ExampleAPI()
+    
     var searchResults: [SearchResult] = [] {
         didSet {
             self.tableView.reloadData()
@@ -25,11 +27,11 @@ class ViewController: UITableViewController {
     @IBAction func refresh() {
         self.searchResults = []
         
-        WebService.shared.search(for: "Hello World!") { [unowned self] result in
+        api.search("Hello World!").enqueue { result in
             DispatchQueue.main.async {
                 switch (result) {
-                case .success(let searchResults):
-                    self.searchResults = searchResults
+                case .success(let response):
+                    self.searchResults = response.parsed
                 case .failure(ServerError.error(code: .internalServerError, data: _, response: _)):
                     let alert = UIAlertController(title: "Internal Server Error", message: "A server error occurred.", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default))

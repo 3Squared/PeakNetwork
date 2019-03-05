@@ -8,9 +8,9 @@
 
 import Foundation
 
-public struct Resource<A> {
+public struct Resource<ResponseType> {
     var request: URLRequest
-    let parse: (Data?) throws -> A
+    let parse: (Data?) throws -> ResponseType
 }
 
 public enum ResourceError: Error {
@@ -20,19 +20,19 @@ public enum ResourceError: Error {
 
 public extension Resource {
     
-    init(url: URL, headers: [String: String], method: HTTPMethod, parse: @escaping (Data?) throws -> A) {
+    init(url: URL, headers: [String: String], method: HTTPMethod, parse: @escaping (Data?) throws -> ResponseType) {
         request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         request.allHTTPHeaderFields = headers
         self.parse = parse
     }
     
-    init(endpoint: Endpoint, headers: [String: String], method: HTTPMethod, parse: @escaping (Data?) throws -> A) {
+    init(endpoint: Endpoint, headers: [String: String], method: HTTPMethod, parse: @escaping (Data?) throws -> ResponseType) {
         self.init(url: endpoint.url, headers: headers, method: method, parse: parse)
     }
 }
 
-public extension Resource where A == Void {
+public extension Resource where ResponseType == Void {
     
     init(url: URL, headers: [String: String], method: HTTPMethod) {
         self.init(url: url, headers: headers, method: method) { data in
@@ -50,12 +50,12 @@ public extension Resource where A == Void {
     }
 }
 
-public extension Resource where A: Decodable {
+public extension Resource where ResponseType: Decodable {
     
     init(url: URL, headers: [String: String], method: HTTPMethod, decoder: JSONDecoder) {
         self.init(url: url, headers: headers, method: method) { data in
             if let data = data {
-                return try decoder.decode(A.self, from: data)
+                return try decoder.decode(ResponseType.self, from: data)
             } else {
                 throw ResourceError.noData
             }
@@ -72,12 +72,12 @@ public extension Resource where A: Decodable {
     }
 }
 
-public extension Resource where A: PeakImage {
+public extension Resource where ResponseType: PeakImage {
     
     init(url: URL, headers: [String: String], method: HTTPMethod) {
         self.init(url: url, headers: headers, method: method) { data in
             if let data = data {
-                if let image = A(data: data) {
+                if let image = ResponseType(data: data) {
                     return image
                 } else {
                     throw ResourceError.invalidData
@@ -103,6 +103,9 @@ public protocol API {
 }
 
 public extension API {
+    
+    var commonQuery: [String: String] { return [:] }
+    var commonHeaders: [String: String] { return [:] }
     
     public func resource(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get) -> Resource<Void> {
         return Resource(

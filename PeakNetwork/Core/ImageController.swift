@@ -60,6 +60,10 @@ public class ImageController {
         objectToUrlTable.removeObject(forKey: object)
     }
     
+    /// Get an image available at the URL described by a Requestable. object is a unique key, such as an ImageView.
+    public func getImage<T: NSObject>(_ url: URL, object: T, queue: OperationQueue? = nil, completion: @escaping (PeakImage?, T, Source) -> ()) {
+        return getImage(Resource(url: url, headers: [:], method: .get), object: object, completion: completion)
+    }
     
     /// Get an image available at the URL described by a Requestable. object is a unique key, such as an ImageView.
     public func getImage<T: NSObject>(_ resource: Resource<PeakImage>, object: T, queue: OperationQueue? = nil, completion: @escaping (PeakImage?, T, Source) -> ()) {
@@ -132,6 +136,10 @@ public enum Source {
 #if os(iOS) || os(tvOS)
 
 public extension PeakImageView {
+    
+    public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
+        setImage(Resource(url: url, headers: [:], method: .get), queue: queue, animation: animation, duration: duration, completion: completion)
+    }
     
     /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
     ///
