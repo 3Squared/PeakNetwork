@@ -22,20 +22,36 @@ public class RecordingLogger: Logger {
         idToURLRequestMap[id] = request
     }
     
-    public func log(id: UUID, requestDate: Date, responseDate: Date, data: Data?, response: URLResponse?, error: Error?) {
+    public func log(id: UUID, requestDate: Date, responseDate: Date, data: Data?, response urlResponse: URLResponse?, error: Error?) {
         guard
             let urlRequest = idToURLRequestMap[id],
-            let urlResponse = response as? HTTPURLResponse,
             let method = urlRequest.httpMethod,
             let url = urlRequest.url,
             let requestHeaders = urlRequest.allHTTPHeaderFields
             else { return }
         
         let requestBodyString = urlRequest.httpBody.flatMap { String(data: $0, encoding: String.Encoding.utf8) }
-        let responseBodyString = data.flatMap { String(data: $0, encoding: String.Encoding.utf8) }
         
         let path = url.path
         
+        let request = Recording.Request(headers: requestHeaders, body: requestBodyString)
+        let response = createResponse(from: urlResponse, data: data)
+        let times = Recording.Times(start: requestDate, end: responseDate)
+        let recording = Recording(method: method, host: url.host, path: path, query: url.query, times: times, request: request, response: response)
+        
+        writer.write(recording, toFileNamed: "\(Int(requestDate.timeIntervalSince1970)).json" )
+        
+    }
+    
+    private func createResponse(from response: URLResponse?, data: Data?) -> Recording.Response? {
+        
+        guard let urlResponse = response as? HTTPURLResponse else {
+            return nil
+        }
+        
+        let responseBodyString = data.flatMap { String(data: $0, encoding: String.Encoding.utf8) }
+        
+        // Refactor into init on Recording.Headers
         let responseHeaders = urlResponse.allHeaderFields
             .compactMap { (key, value) -> Recording.Headers? in
                 guard let stringKey = key as? String, let stringValue = value as? String else {
@@ -49,13 +65,7 @@ public class RecordingLogger: Logger {
                 return current.merging(next) { (first, _) in first }
         }
         
-        let request = Recording.Request(headers: requestHeaders, body: requestBodyString)
-        let response = Recording.Response(status: urlResponse.statusCode, headers: responseHeaders, body: responseBodyString)
-        let times = Recording.Times(start: requestDate, end: responseDate)
-        let recording = Recording(method: method, host: url.host, path: path, query: url.query, times: times, request: request, response: response)
-        
-        writer.write(recording, toFileNamed: "\(Int(requestDate.timeIntervalSince1970)).json" )
-        
+        return Recording.Response(status: urlResponse.statusCode, headers: responseHeaders, body: responseBodyString)
     }
 }
 
@@ -85,7 +95,7 @@ public struct Recording: Codable {
     let times: Times
     
     let request: Request
-    let response: Response
+    let response: Response?
     
 }
 

@@ -22,33 +22,37 @@ import XCTest
 
 class RecordingLoggerTests: XCTestCase {
     
-    func testProducesJSONFile() {
+    func test_requestWithHeaders_isLoggedWithHeaders() {
         let expect = expectation(description: "\(#function)")
         
-        let request = URLRequest(url: URL(string:"https://api.3squared.com/path/to/method?first=string&second=true&third=0")!)
+        var request = URLRequest(url: URL(string:"https://api.3squared.com")!)
+        request.allHTTPHeaderFields = ["header1" : "value1", "header2" : "value 2"]
         let id = UUID()
         let requestDate = Date()
         let responseDate = Date()
-        let jsonData = try! JSONSerialization.data(withJSONObject: ["name": "Peak", "type": "Network"], options: .prettyPrinted)
         
-        let logger = RecordingJSONLogger(fileWriter: MockFileWriter { _, filename in
-            XCTAssertEqual(filename, "api.3squared.com--path-to-method-first=string-second=true-third=0")
+        
+        let logger = RecordingLogger(writer: MockFileWriter() { recording, _ in
+            XCTAssertEqual(recording.request.headers, ["header1" : "value1", "header2" : "value 2"])
+            
             expect.fulfill()
         })
         
         logger.log(id: id, requestDate: requestDate, request: request)
-        logger.log(id: id, requestDate: requestDate, responseDate: responseDate, data: jsonData, response: nil, error: nil)
-        
+        logger.log(id: id, requestDate: requestDate, responseDate: responseDate, data: nil, response: nil, error: nil)
+
         waitForExpectations(timeout: 1.0, handler: nil)
     }
+
 }
 
-
-struct MockFileWriter: WriteFile {
-    let callBack: (_ string: String, _ fileName: String) -> ()
+struct MockFileWriter: WriteRecording {
+    let callBack: (_ recording: Recording, _ filename: String) -> ()
     
-    func write(_ string: String, toFileNamed filename: String) {
-        callBack(string, filename)
+    func write(_ recording: Recording, toFileNamed filename: String) {
+        callBack(recording, filename)
     }
+    
+    
 }
 
