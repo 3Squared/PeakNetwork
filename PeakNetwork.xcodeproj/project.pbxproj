@@ -48,6 +48,7 @@
 		F4136952B70A608A1EC4C881 /* libPods-PeakNetwork-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E6DCE3A2926F7FADD67D8B5F /* libPods-PeakNetwork-iOS.a */; };
 		F5048E5C221420B7005E8269 /* RecordingLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5048E5B221420B7005E8269 /* RecordingLogger.swift */; };
 		F5048E6122143C70005E8269 /* RecordingLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5048E6022143C70005E8269 /* RecordingLoggerTests.swift */; };
+		F5413963222FDC0B007DAD1E /* Recording.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5413962222FDC0B007DAD1E /* Recording.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +111,7 @@
 		E6DCE3A2926F7FADD67D8B5F /* libPods-PeakNetwork-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetwork-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5048E5B221420B7005E8269 /* RecordingLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingLogger.swift; sourceTree = "<group>"; };
 		F5048E6022143C70005E8269 /* RecordingLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingLoggerTests.swift; sourceTree = "<group>"; };
+		F5413962222FDC0B007DAD1E /* Recording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recording.swift; sourceTree = "<group>"; };
 		F97A8322DDD435542D70EBE4 /* Pods-PeakNetwork-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-iOS/Pods-PeakNetwork-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -177,6 +179,7 @@
 				CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */,
 				CB2380DE1F740D1500F1B001 /* Operators.swift */,
 				F5048E5B221420B7005E8269 /* RecordingLogger.swift */,
+				F5413962222FDC0B007DAD1E /* Recording.swift */,
 				188DEAC4220DAF9B0067A6EF /* PeakNetwork+Aliases.swift */,
 			);
 			path = Core;
@@ -620,6 +623,7 @@
 				CB2380EC1F740D1500F1B001 /* Errors.swift in Sources */,
 				CB3AA6CA1FD5A5C9008EFC5C /* HTTPStatusCodes.swift in Sources */,
 				F5048E5C221420B7005E8269 /* RecordingLogger.swift in Sources */,
+				F5413963222FDC0B007DAD1E /* Recording.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
