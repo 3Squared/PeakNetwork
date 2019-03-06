@@ -23,16 +23,14 @@ public class RecordingLogger: Logger {
     }
     
     public func log(id: UUID, requestDate: Date, responseDate: Date, data: Data?, response urlResponse: URLResponse?, error: Error?) {
-        guard
-            let urlRequest = idToURLRequestMap[id],
-            let method = urlRequest.httpMethod,
-            let url = urlRequest.url
-            else { return }
+        guard let urlRequest = idToURLRequestMap[id] else { return }
+        
+        let url = urlRequest.url
         
         let request = Recording.Request(urlRequest: urlRequest)
         let response = Recording.Response(urlResponse: urlResponse, data: data)
         let times = Recording.Times(start: requestDate, end: responseDate)
-        let recording = Recording(method: method, host: url.host, path: url.path, query: url.query, times: times, request: request, response: response)
+        let recording = Recording(method: urlRequest.httpMethod, host: url?.host, path: url?.path, query: url?.query, times: times, request: request, response: response)
         
         writer.write(recording, toFileNamed: "\(Int(requestDate.timeIntervalSince1970)).json" )
         

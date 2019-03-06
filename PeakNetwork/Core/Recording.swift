@@ -27,9 +27,9 @@ public struct Recording: Codable {
         let body: String?
     }
     
-    let method: String
+    let method: String?
     let host: String?
-    let path: String
+    let path: String?
     let query: String?
     let times: Times
     
