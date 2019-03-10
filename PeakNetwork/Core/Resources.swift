@@ -121,17 +121,17 @@ public extension APIProtocol {
         return resource.operation(session: session)
     }
 
-    public func resource(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get) -> Resource<Void> {
+    public func resource(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get, customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
         return Resource(
-            endpoint: endpoint(path, query: query),
+            endpoint: endpoint(path, query: query, customise: customise),
             headers: headers.merging(commonHeaders) { current, _ in current },
             method: method
         )
     }
     
-    public func resource<E: Encodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get, body: E) -> Resource<Void> {
+    public func resource<E: Encodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get, body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
         return Resource(
-            endpoint: endpoint(path, query: query),
+            endpoint: endpoint(path, query: query, customise: customise),
             headers: headers.merging(commonHeaders) { current, _ in current },
             method: method,
             body: body,
@@ -139,18 +139,18 @@ public extension APIProtocol {
         )
     }
     
-    public func resource<D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get) -> Resource<D> {
+    public func resource<D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get, customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
         return Resource(
-            endpoint: endpoint(path, query: query),
+            endpoint: endpoint(path, query: query, customise: customise),
             headers: headers.merging(commonHeaders) { current, _ in current },
             method: method,
             decoder: decoder
         )
     }
 
-    public func resource<E: Encodable, D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .post, body: E) -> Resource<D> {
+    public func resource<E: Encodable, D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .post, body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
         return Resource(
-            endpoint: endpoint(path, query: query),
+            endpoint: endpoint(path, query: query, customise: customise),
             headers: headers.merging(commonHeaders) { current, _ in current },
             method: method,
             body: body,
@@ -159,24 +159,29 @@ public extension APIProtocol {
         )
     }
 
-    public func endpoint(_ path: String, query: [String: String] = [:]) -> Endpoint {
+    private func endpoint(_ path: String, query: [String: String] = [:], customise: URLComponentsCustomisationBlock?) -> Endpoint {
         return Endpoint(baseURL: baseURL,
                         path: path,
-                        query: query.merging(commonQuery) { current, _ in current })
+                        query: query.merging(commonQuery) { current, _ in current },
+                        customise: customise)
     }
 }
+
+public typealias URLComponentsCustomisationBlock = (inout URLComponents) -> ()
 
 public struct Endpoint {
     let baseURL: String
     let path: String
     let query: [String: String]
+    let customise: URLComponentsCustomisationBlock?
 }
 
 public extension Endpoint {
     var url: URL {
         var components = URLComponents(string: baseURL)!
-        components.path = path
+        components.path = components.path.isEmpty ? path : components.path + path
         components.queryItems = query.isEmpty ? nil : query.queryItems
+        customise?(&components)
         return components.url!
     }
 }
