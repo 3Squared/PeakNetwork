@@ -18,7 +18,7 @@ import PeakOperation
 
 class NetworkTests: XCTestCase {
     
-    let webService = WebService()
+    let api = MyAPI()
     
     func testResponseValidation() {
         let success = HTTPURLResponse(url: URL(string:"google.com")!, statusCode: 200, httpVersion: "1.1", headerFields: nil)
@@ -43,7 +43,7 @@ class NetworkTests: XCTestCase {
 
         let expect = expectation(description: "")
         
-        let networkOperation = NetworkOperation(resource: webService.simple(), session: session)
+        let networkOperation = NetworkOperation(resource: api.simple(), session: session)
         
         networkOperation.addResultBlock { result in
             switch result {
@@ -66,7 +66,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = NetworkOperation(resource: webService.simple(), session: session)
+        let networkOperation = NetworkOperation(resource: api.simple(), session: session)
 
         networkOperation.addResultBlock { result in
             switch result {
@@ -92,7 +92,7 @@ class NetworkTests: XCTestCase {
 
         let expect = expectation(description: "")
 
-        let networkOperation = NetworkOperation(resource: webService.simple(), session: session)
+        let networkOperation = NetworkOperation(resource: api.simple(), session: session)
 
         networkOperation.addResultBlock { result in
             do {
@@ -118,7 +118,7 @@ class NetworkTests: XCTestCase {
         
         let networkOperation = NetworkOperation<TestEntity>(session: session)
 
-        networkOperation.input = Result { webService.simple() }
+        networkOperation.input = Result { api.simple() }
         
         networkOperation.addResultBlock { result in
             do {
@@ -167,7 +167,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = NetworkOperation(resource: webService.simple(), session: session)
+        let networkOperation = NetworkOperation(resource: api.simple(), session: session)
 
         var runCount = 0
         networkOperation.retryStrategy = { failureCount in
@@ -190,7 +190,7 @@ class NetworkTests: XCTestCase {
             session.queue(response: MockResponse())
         }
         
-        let networkOperation = NetworkOperation(resource: webService.complex(TestEntity(name: "sam")), session: session)
+        let networkOperation = NetworkOperation(resource: api.complex(TestEntity(name: "sam")), session: session)
 
         let expect = expectation(description: "")
         networkOperation.addResultBlock { _ in
@@ -210,13 +210,13 @@ class NetworkTests: XCTestCase {
     
     func testMultipleResourceNetworkOperation_allSuccess() {
         let session = MockSession { session in
-            session.queue(response: MockResponse(json: ["name": "sam"]))
-            session.queue(response: MockResponse(json: ["name": "ben"]))
+            session.queue(response: MockResponse(json: ["name": "sam"]) { $0.url!.absoluteString.contains("sam") })
+            session.queue(response: MockResponse(json: ["name": "ben"]) { $0.url!.absoluteString.contains("ben") })
         }
 
         let networkOperation = MultipleResourceNetworkOperation(identifiableResources: [
-            (1, webService.simple()),
-            (2, webService.simple())
+            (1, api.resource(path: "/sam") as Resource<TestEntity>),
+            (2, api.resource(path: "/ben") as Resource<TestEntity>)
         ], session: session)
         
         let expect = expectation(description: "")
@@ -244,8 +244,8 @@ class NetworkTests: XCTestCase {
         }
         
         let networkOperation = MultipleResourceNetworkOperation(resources: [
-            webService.simple(),
-            webService.simple()
+            api.simple(),
+            api.simple()
         ], session: session)
         
         let expect = expectation(description: "")
@@ -270,9 +270,9 @@ class NetworkTests: XCTestCase {
         }
         
         let networkOperation = MultipleResourceNetworkOperation(resources: [
-            webService.simple(),
-            webService.simple()
-            ], session: session)
+            api.simple(),
+            api.simple()
+        ], session: session)
         
         let expect = expectation(description: "")
         networkOperation.addResultBlock { _ in
@@ -287,7 +287,47 @@ class NetworkTests: XCTestCase {
         XCTAssertTrue(outcomes.successes.contains { $0.response.parsed.name == "sam" })
         XCTAssertTrue(outcomes.successes.contains { $0.response.parsed.name == "ben" })
     }
-
+    
+    func testNetworkOperation_UnwrappingSuccess_GivesSuccessfullyParsedData() {
+        let session = MockSession { session in
+            session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok))
+        }
+        
+        let expect = expectation(description: "")
+        
+        let networkOperation = NetworkOperation(resource: api.simple(), session: session).unwrapped
+        
+        networkOperation.addResultBlock { result in
+            expect.fulfill()
+        }
+        networkOperation.enqueue()
+        waitForExpectations(timeout: 1)
+        
+        XCTAssertEqual(try! networkOperation.output.resolve().name, "Sam")
+    }
+    
+    
+    func testNetworkOperation_UnwrappingFailure_GivesFailure() {
+        let session = MockSession { session in
+            session.queue(response: MockResponse(statusCode: .internalServerError))
+        }
+        
+        let expect = expectation(description: "")
+        let networkOperation = NetworkOperation(resource: api.simple(), session: session).unwrapped
+        networkOperation.enqueue { result in
+            expect.fulfill()
+        }
+        
+        waitForExpectations(timeout: 1)
+        
+        switch networkOperation.output {
+        case .failure(ServerError.error(code: .internalServerError, data: _, response: _)):
+            break
+        default:
+            XCTFail()
+        }
+    }
+    
     
     public enum TestError: Error {
         case justATest

@@ -16,7 +16,7 @@ import XCTest
 
 class ImageControllerTests: XCTestCase {
     
-    let webService = WebService()
+    let api = MyAPI()
 
     override func setUp() {
         super.setUp()
@@ -57,7 +57,7 @@ class ImageControllerTests: XCTestCase {
         
         let context: NSString = "Hello"
 
-        ImageController.sharedInstance.getImage(webService.image(URL(string: "https://placehold.it/300")!), object: context) { image, thing, source in
+        ImageController.sharedInstance.getImage(URL(string: "https://placehold.it/300")!, object: context) { image, thing, source in
             XCTAssertEqual(context, thing)
             XCTAssertNotNil(image)
             expect.fulfill()
@@ -72,7 +72,7 @@ class ImageControllerTests: XCTestCase {
         let imageView = UIImageView(frame: CGRect.zero)
         
         XCTAssertNil(imageView.image)
-        imageView.setImage(webService.image(URL(string: "https://placehold.it/300")!)) { success in
+        imageView.setImage(URL(string: "https://placehold.it/300")!) { success in
             XCTAssertNotNil(imageView.image)
             XCTAssertTrue(success)
             expect.fulfill()
@@ -85,7 +85,7 @@ class ImageControllerTests: XCTestCase {
         let expect = expectation(description: "")
         let imageView = UIImageView(frame: CGRect.zero)
         XCTAssertNil(imageView.image)
-        imageView.setImage(webService.image(URL(string: "https://placehold.it/300")!), animation: [.transitionCrossDissolve], duration: 0.1) { success in
+        imageView.setImage(URL(string: "https://placehold.it/300")!, animation: [.transitionCrossDissolve], duration: 0.1) { success in
             XCTAssertNotNil(imageView.image)
             XCTAssertTrue(success)
             expect.fulfill()
@@ -99,7 +99,7 @@ class ImageControllerTests: XCTestCase {
         let button = UIButton(frame: CGRect.zero)
         
         XCTAssertNil(button.image(for: .normal))
-        button.setImage(webService.image(URL(string: "https://placehold.it/300")!), for: .normal) { success in
+        button.setImage(URL(string: "https://placehold.it/300")!, for: .normal) { success in
             XCTAssertNotNil(button.image(for: .normal))
             XCTAssertTrue(success)
             expect.fulfill()
@@ -113,7 +113,7 @@ class ImageControllerTests: XCTestCase {
         
         let imageView = UIImageView(frame: CGRect.zero)
         
-        imageView.setImage(webService.image(URL(string: "https://placehold.it/300")!), queue: queue) { success in
+        imageView.setImage(URL(string: "https://placehold.it/300")!, queue: queue) { success in
             XCTAssertNil(imageView.image)
             XCTAssertFalse(success)
         }
@@ -134,12 +134,12 @@ class ImageControllerTests: XCTestCase {
         
         let imageView = UIImageView(frame: CGRect.zero)
         
-        imageView.setImage(webService.image(URL(string: "https://placehold.it/300")!), queue: queue) { success in
+        imageView.setImage(URL(string: "https://placehold.it/300")!, queue: queue) { success in
             XCTAssertFalse(success)
         }
         XCTAssertEqual(queue.operations.count, 1)
         
-        imageView.setImage(webService.image(URL(string: "https://placehold.it/300")!), queue: queue) { success in
+        imageView.setImage(URL(string: "https://placehold.it/300")!, queue: queue) { success in
             XCTAssertTrue(success)
             expect.fulfill()
         }
@@ -162,12 +162,12 @@ class ImageControllerTests: XCTestCase {
         var image1: UIImage?
         var image2: UIImage?
 
-        ImageController.sharedInstance.getImage(webService.image(URL(string: "https://placehold.it/300")!), object: imageView1, queue: queue) { image, view, source in
+        ImageController.sharedInstance.getImage(URL(string: "https://placehold.it/300")!, object: imageView1, queue: queue) { image, view, source in
             image1 = image
             expect1.fulfill()
         }
         
-        ImageController.sharedInstance.getImage(webService.image(URL(string: "https://placehold.it/300")!), object: imageView2, queue: queue) { image, view, source in
+        ImageController.sharedInstance.getImage(URL(string: "https://placehold.it/300")!, object: imageView2, queue: queue) { image, view, source in
             image2 = image
             expect2.fulfill()
         }
@@ -189,13 +189,13 @@ class ImageControllerTests: XCTestCase {
         imageView2.accessibilityHint = "imageView2"
         
         
-        ImageController.sharedInstance.getImage(webService.image(URL(string: "https://placehold.it/300")!), object: imageView1, queue: queue) { image, view, source in
+        ImageController.sharedInstance.getImage(URL(string: "https://placehold.it/300")!, object: imageView1, queue: queue) { image, view, source in
             DispatchQueue.main.async {
                 XCTAssertNil(imageView1.image)
             }
         }
         
-        ImageController.sharedInstance.getImage(webService.image(URL(string: "https://placehold.it/300")!), object: imageView2, queue: queue) { image, view, source in
+        ImageController.sharedInstance.getImage(URL(string: "https://placehold.it/300")!, object: imageView2, queue: queue) { image, view, source in
             DispatchQueue.main.async {
                 XCTAssertNotNil(image)
             }

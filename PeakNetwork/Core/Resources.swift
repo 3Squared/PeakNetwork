@@ -18,6 +18,13 @@ public struct Endpoint {
     let path: String
     let query: [String: String]
     let customise: URLComponentsCustomisationBlock?
+    
+    init(baseURL: String, path: String, query: [String: String], customise: URLComponentsCustomisationBlock?) {
+        self.baseURL = baseURL.hasSuffix("/") ? baseURL : (baseURL + "/")
+        self.path = path.hasPrefix("/") ? String(path.dropFirst()) : path
+        self.query = query
+        self.customise = customise
+    }
 }
 
 public extension Endpoint {
@@ -288,7 +295,7 @@ public extension API {
     ///   - path: The path of the `Endpoint`, relative to the `API`'s `baseURL`.
     ///   - query: Query items for the request.
     /// - Returns: A configured `Endpoint`.
-    public func endpoint(_ path: String, query: [String: String] = [:], customise: URLComponentsCustomisationBlock?) -> Endpoint {
+    public func endpoint(_ path: String, query: [String: String] = [:], customise: URLComponentsCustomisationBlock? = nil) -> Endpoint {
         return Endpoint(baseURL: baseURL,
                         path: path,
                         query: query.merging(commonQuery) { current, _ in current },

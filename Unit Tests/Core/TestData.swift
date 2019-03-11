@@ -22,19 +22,26 @@ struct TestEntity: Codable {
     }
 }
 
-struct WebService {
-    let api = MyAPI()
+struct MyAPI: JSONAPI {
+    let baseURL = "https://example.com"
+    let encoder: JSONEncoder = JSONEncoder()
+    let decoder: JSONDecoder = JSONDecoder()
+    let commonQuery = ["token": "hello"]
+    let commonHeaders = ["user-agent": "peaknetwork"]
+}
+
+extension MyAPI {
     
     func simple() -> Resource<TestEntity> {
-        return api.resource(path: "/all")
+        return resource(path: "/all")
     }
     
     func complex(_ entity: TestEntity) -> Resource<Void> {
-        return api.resource(path: "/upload",
-                            query: ["token": "overridden", "search": "test"],
-                            headers: ["user-agent": "overridden", "device": "iphone"],
-                            method: .put,
-                            body: entity)
+        return resource(path: "/upload",
+                        query: ["token": "overridden", "search": "test"],
+                        headers: ["user-agent": "overridden", "device": "iphone"],
+                        method: .put,
+                        body: entity)
     }
     
     func url(_ url: URL) -> Resource<Data> {
@@ -42,16 +49,4 @@ struct WebService {
             return data!
         }
     }
-    
-    func image(_ url: URL) -> Resource<PeakImage> {
-        return Resource<PeakImage>(url: url, headers: [:], method: .get)
-    }
-}
-
-struct MyAPI: JSONAPI {
-    let baseURL = "https://example.com"
-    let encoder: JSONEncoder = JSONEncoder()
-    let decoder: JSONDecoder = JSONDecoder()
-    let commonQuery = ["token": "hello"]
-    let commonHeaders = ["user-agent": "peaknetwork"]
 }

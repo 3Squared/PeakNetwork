@@ -17,7 +17,7 @@ import XCTest
 
 class CertificatePinningTests: XCTestCase {
     
-    let webService = WebService()
+    let api = MyAPI()
 
     func testNoCertificate() {
         let expect = expectation(description: "")
@@ -27,7 +27,7 @@ class CertificatePinningTests: XCTestCase {
                                     delegate: certificatePinningSessionDelegate,
                                     delegateQueue: nil)
         
-        let networkOperation = NetworkOperation(resource: webService.url(URL(string: "https://google.com")!), session: urlSession)
+        let networkOperation = NetworkOperation(resource: api.url(URL(string: "https://google.com")!), session: urlSession)
         
         networkOperation.addResultBlock { result in
             do {
@@ -52,7 +52,7 @@ class CertificatePinningTests: XCTestCase {
                                     delegate: certificatePinningSessionDelegate,
                                     delegateQueue: nil)
         
-        let networkOperation = NetworkOperation(resource: webService.url(URL(string: "https://github.com")!), session: urlSession)
+        let networkOperation = NetworkOperation(resource: api.url(URL(string: "https://github.com")!), session: urlSession)
         
         networkOperation.addResultBlock { result in
             do {

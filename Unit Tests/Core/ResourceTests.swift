@@ -18,16 +18,16 @@ import PeakResult
 class ResourceTests: XCTestCase {
 
     func testGet() {
-        let resources = WebService()
-        let resource = resources.simple()
+        let api = MyAPI()
+        let resource = api.simple()
         
         XCTAssertEqual(resource.request.url!.absoluteString, "https://example.com/all?token=hello")
         XCTAssertEqual(resource.request.value(forHTTPHeaderField: "user-agent")!, "peaknetwork")
     }
 
     func testPost() {
-        let resources = WebService()
-        let resource = resources.complex(TestEntity(name: "sam"))
+        let api = MyAPI()
+        let resource = api.complex(TestEntity(name: "sam"))
         
         let request = resource.request
         let components = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)!
@@ -42,3 +42,4 @@ class ResourceTests: XCTestCase {
         XCTAssertEqual(String(data: request.httpBody!, encoding: .utf8)!, "{\"name\":\"sam\"}")
     }
 }
+
