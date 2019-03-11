@@ -214,9 +214,9 @@ class NetworkTests: XCTestCase {
             session.queue(response: MockResponse(json: ["name": "ben"]))
         }
 
-        let networkOperation = MultipleResourceNetworkOperation(resources: [
-            webService.simple(),
-            webService.simple()
+        let networkOperation = MultipleResourceNetworkOperation(identifiableResources: [
+            (1, webService.simple()),
+            (2, webService.simple())
         ], session: session)
         
         let expect = expectation(description: "")
@@ -229,11 +229,15 @@ class NetworkTests: XCTestCase {
         
         let outcomes = try! networkOperation.output.resolve()
         XCTAssertEqual(outcomes.successes.count, 2)
-        XCTAssertTrue(outcomes.successes.contains { $0.parsed.name == "sam" })
-        XCTAssertTrue(outcomes.successes.contains { $0.parsed.name == "ben" })
+        XCTAssertTrue(outcomes.successes.contains {
+             $0.object == 1 && $0.response.parsed.name == "sam"
+        })
+        XCTAssertTrue(outcomes.successes.contains {
+            $0.object == 2 && $0.response.parsed.name == "ben"
+        })
     }
     
-    func testMultipleResourceNetworkOperation_withFailure() {
+    func testMultipleResourceNetworkOperation_voidBody_withFailure() {
         let session = MockSession { session in
             session.queue(response: MockResponse(json: ["name": "sam"]))
             session.queue(response: MockResponse(statusCode: .internalServerError))
@@ -254,8 +258,34 @@ class NetworkTests: XCTestCase {
         
         let outcomes = try! networkOperation.output.resolve()
         XCTAssertEqual(outcomes.successes.count, 1)
-        XCTAssertEqual(outcomes.successes[0].parsed.name, "sam")
+        XCTAssertEqual(outcomes.successes[0].response.parsed.name, "sam")
+        XCTAssertTrue(outcomes.successes[0].object == ())
         XCTAssertEqual(outcomes.failures.count, 1)
+    }
+
+    func testMultipleResourceNetworkOperation_voidBody_allSuccess() {
+        let session = MockSession { session in
+            session.queue(response: MockResponse(json: ["name": "sam"]))
+            session.queue(response: MockResponse(json: ["name": "ben"]))
+        }
+        
+        let networkOperation = MultipleResourceNetworkOperation(resources: [
+            webService.simple(),
+            webService.simple()
+            ], session: session)
+        
+        let expect = expectation(description: "")
+        networkOperation.addResultBlock { _ in
+            expect.fulfill()
+        }
+        
+        networkOperation.enqueue()
+        waitForExpectations(timeout: 10)
+        
+        let outcomes = try! networkOperation.output.resolve()
+        XCTAssertEqual(outcomes.successes.count, 2)
+        XCTAssertTrue(outcomes.successes.contains { $0.response.parsed.name == "sam" })
+        XCTAssertTrue(outcomes.successes.contains { $0.response.parsed.name == "ben" })
     }
 
     

@@ -20,9 +20,11 @@ public struct Response<O> {
     public let parsed: O
 }
 
-/// A subclass of `RetryingOperation` which wraps a `URLSessionTask`.
 /// Use when you want to perform network tasks in an operation queue.
+/// The given `Resource`'s `parse` method will be used to decode the response data.
+///
 /// If `createTask` is overriden, ensure you call `finish` within your callback block.
+/// A subclass of `RetryingOperation` which wraps a `URLSessionTask`.
 /// If a `RetryStrategy` is provided, this can be re-run if the network task fails (not 200).
 open class NetworkOperation<O>: RetryingOperation<Response<O>>, ConsumesResult {
     
@@ -30,10 +32,10 @@ open class NetworkOperation<O>: RetryingOperation<Response<O>>, ConsumesResult {
     public let session: Session
     open var task: URLSessionTask?
     
-    /// Create a new `DecodableResponseOperation`, parsing the response to a list of the given generic type.
+    /// Create a new `NetworkOperation`, parsing the response into the `Resource`'s type.
     ///
     /// - Parameters:
-    ///   - requestable: A requestable describing the web resource to fetch.
+    ///   - requestable: A `Resource` describing the web resource to fetch.
     ///   - session: The `URLSession` in which to perform the fetch (optional).
     public init(resource: Resource<O>? = nil, session: Session = URLSession.shared) {
         self.session = session
@@ -96,31 +98,39 @@ open class NetworkOperation<O>: RetryingOperation<Response<O>>, ConsumesResult {
 
 
 /// Perform a series of network requests on an internal queue and aggregate the results.
-open class MultipleResourceNetworkOperation<O>: ConcurrentOperation, ConsumesResult, ProducesResult {
+open class MultipleResourceNetworkOperation<E, O>: ConcurrentOperation, ConsumesResult, ProducesResult {
 
-    /// The outcome of the requests.
+    /// The outcome of the requests. The object provided with the `Resource`
+    /// is associated with the the `Response` or `Error`.
     public struct Outcome {
-        let successes: [Response<O>]
-        let failures: [Error]
+        let successes: [IdentifiableResponse]
+        let failures: [IdentifiableError]
     }
+    
+    public typealias IdentifiableResource = (object: E, resource: Resource<O>)
+    public typealias IdentifiableResponse = (object: E, response: Response<O>)
+    public typealias IdentifiableError = (object: E, error: Error)
 
     public let session: Session
 
-    public var input: Result<[Resource<O>]> = Result { throw ResultError.noResult }
+    public var input: Result<[IdentifiableResource]> = Result { throw ResultError.noResult }
     public var output: Result<Outcome> = Result { throw ResultError.noResult }
 
     let internalQueue = OperationQueue()
-    let dispatchQueue = DispatchQueue(label: "GroupRequestNetworkOperation", attributes: .concurrent)
+    let dispatchQueue = DispatchQueue(label: "MultipleResourceNetworkOperation", attributes: .concurrent)
 
-    /// Create a new `DecodableResponseOperation`, parsing the response to a list of the given generic type.
+    /// Create a new `MultipleResourceNetworkOperation`, parsing the response to a list of the given generic type.
     ///
     /// - Parameters:
-    ///   - requestable: A requestable describing the web resource to fetch.
+    ///   - identifiableResources: A list of `IdentifiableResource` describing the web resources to fetch.
+    ///     The object provided may be anything; it is not used, simply returned along with the `Response` or
+    ///     `Error` associated with it. This way you may see which specific requests failed by using an ID or
+    ///     a request body.
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(resources: [Resource<O>]? = nil, session: Session = URLSession.shared) {
+    public init(identifiableResources: [IdentifiableResource]? = nil, session: Session = URLSession.shared) {
         self.session = session
-        if let resources = resources {
-            input = .success(resources)
+        if let identifiableResources = identifiableResources {
+            input = .success(identifiableResources)
         }
         super.init()
     }
@@ -129,23 +139,24 @@ open class MultipleResourceNetworkOperation<O>: ConcurrentOperation, ConsumesRes
         switch input {
         case .success(let resources):
 
-            var successes: [Response<O>] = []
-            var failures: [Error] = []
+            var successes: [IdentifiableResponse] = []
+            var failures: [IdentifiableError] = []
 
             let group = DispatchGroup()
             
-            let operations: [NetworkOperation<O>] = resources.map { resource in
+            let operations: [NetworkOperation<O>] = resources.map { body, resource in
                 group.enter()
 
+                
                 let operation = NetworkOperation(resource: resource, session: self.session)
 
                 operation.addResultBlock { result in
                     self.dispatchQueue.async(flags: .barrier) {
                         switch result {
                         case .success(let response):
-                            successes.append(response)
+                            successes.append((body, response))
                         case .failure(let error):
-                            failures.append(error)
+                            failures.append((body, error))
                         }
                         group.leave()
                     }
@@ -165,76 +176,20 @@ open class MultipleResourceNetworkOperation<O>: ConcurrentOperation, ConsumesRes
     }
 }
 
-///// Perform a series of network requests on an internal queue and aggregate the results.
-//open class MultipleBodyRequestNetworkOperation<E: Encodable>: ConcurrentOperation, ConsumesResult, ProducesResult {
-//
-//    /// The outcome of the requests.
-//    public struct Outcome {
-//
-//        /// Successful responses, associated with the body object
-//        let successes: [(object: E, response: NetworkResponse)]
-//
-//        /// Failed responses, associated with the body object
-//        let failures: [(object: E, error: Error)]
-//    }
-//
-//    public let session: Session
-//
-//    public var input: Result<[BodyRequest<E>]> = Result { throw ResultError.noResult }
-//    public var output: Result<Outcome> = Result { throw ResultError.noResult }
-//
-//    let internalQueue = OperationQueue()
-//    let dispatchQueue = DispatchQueue(label: "GroupBodyRequestNetworkOperation", qos: .background)
-//
-//    /// Create a new `DecodableResponseOperation`, parsing the response to a list of the given generic type.
-//    ///
-//    /// - Parameters:
-//    ///   - requestable: A requestable describing the web resource to fetch.
-//    ///   - session: The `URLSession` in which to perform the fetch (optional).
-//    public init(bodyRequests: [BodyRequest<E>]? = nil, session: Session = URLSession.shared) {
-//        self.session = session
-//        if let bodyRequests = bodyRequests {
-//            input = .success(bodyRequests)
-//        }
-//        super.init()
-//    }
-//
-//    open override func execute() {
-//        switch input {
-//        case .success(let requestables):
-//
-//            var successes: [(E, NetworkResponse)] = []
-//            var failures: [(E, Error)] = []
-//
-//            let group = DispatchGroup()
-//
-//            let operations: [NetworkOperation] = requestables.map { requestable in
-//                group.enter()
-//
-//                let operation = NetworkOperation(requestable: requestable.request, session: self.session)
-//
-//                operation.addResultBlock { result in
-//                    self.dispatchQueue.async {
-//                        switch result {
-//                        case .success(let response):
-//                            successes.append((requestable.body, response))
-//                        case .failure(let error):
-//                            failures.append((requestable.body, error))
-//                        }
-//                        group.leave()
-//                    }
-//                }
-//                return operation
-//            }
-//
-//            self.internalQueue.addOperations(operations, waitUntilFinished: false)
-//            group.wait()
-//            self.output = .success(Outcome(successes: successes, failures: failures))
-//            finish()
-//
-//        case .failure(let error):
-//            output = .failure(error)
-//            finish()
-//        }
-//    }
-//}
+public extension MultipleResourceNetworkOperation where E == Void {
+
+    /// Create a new `MultipleResourceNetworkOperation`, parsing the response to a list of the given generic type.
+    /// Use when you do not need to associate the `Response`/`Error` with a specific object.
+    ///
+    /// - Parameters:
+    ///   - identifiableResources: A list of `Resource` describing the web resources to fetch.
+    ///     The associated object is Void.
+    ///   - session: The `URLSession` in which to perform the fetch (optional).
+    public convenience init(resources: [Resource<O>]? = nil, session: Session = URLSession.shared) {
+        if let resources = resources {
+            self.init(identifiableResources: resources.map { ((), $0) }, session: session)
+        } else {
+            self.init(identifiableResources: nil, session: session)
+        }
+    }
+}

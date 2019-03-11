@@ -23,7 +23,7 @@ struct TestEntity: Codable {
 }
 
 struct WebService {
-    let api = ExampleAPI()
+    let api = MyAPI()
     
     func simple() -> Resource<TestEntity> {
         return api.resource(path: "/all")
@@ -48,11 +48,10 @@ struct WebService {
     }
 }
 
-struct ExampleAPI: APIProtocol {
+struct MyAPI: JSONAPI {
     let baseURL = "https://example.com"
     let encoder: JSONEncoder = JSONEncoder()
     let decoder: JSONDecoder = JSONDecoder()
     let commonQuery = ["token": "hello"]
     let commonHeaders = ["user-agent": "peaknetwork"]
 }
-

@@ -137,11 +137,19 @@ public enum Source {
 
 public extension PeakImageView {
     
+    
+    /// Set the image available at the `URL` as the `UIButton`'s image, for the given state.
+    ///
+    /// - Parameters:
+    ///   - url: A URL to an image.
+    ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
+    ///   - animation: The animation options (optional).
+    ///   - completion: A completion block indicating success or failure.
     public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
         setImage(Resource(url: url, headers: [:], method: .get), queue: queue, animation: animation, duration: duration, completion: completion)
     }
     
-    /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
+    /// Set the image available at the `Resource` as the `UIButton`'s image, for the given state.
     ///
     /// - Parameters:
     ///   - requestable: A requestable describing the location of an image.
@@ -179,7 +187,20 @@ public extension PeakImageView {
 
 public extension UIButton {
     
-    /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
+    /// Set the image available at the `URL` as the `UIButton`'s image, for the given state.
+    /// You may set multiple images, one for each state, on a `UIButton` - only images for the same state will clash.
+    ///
+    /// - Parameters:
+    ///   - url: A URL to an image.
+    ///   - state: The `UIControlState` for which the image be displayed.
+    ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
+    ///   - animation: The animation options (optional).
+    ///   - completion: A completion block indicating success or failure.
+    public func setImage(_ url: URL, queue: OperationQueue? = nil, for state: UIControl.State, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
+        setImage(Resource(url: url, headers: [:], method: .get), for: state, queue: queue, animation: animation, duration: duration, completion: completion)
+    }
+    
+    /// Set the image available at the `Resource` as the `UIButton`'s image, for the given state.
     /// You may set multiple images, one for each state, on a `UIButton` - only images for the same state will clash.
     ///
     /// - Parameters:
