@@ -96,6 +96,20 @@ open class NetworkOperation<O>: RetryingOperation<Response<O>>, ConsumesResult {
     }
 }
 
+extension NetworkOperation {
+    /// Unwrap the Response and return a result containing only the
+    /// parsed data, discarding the network response information.
+    public var unwrapped: MapOperation<Response<O>, O> {
+        return passesResult(to: BlockMapOperation<Response<O>, O> { input in
+            switch (input) {
+            case .success(let response):
+                return .success(response.parsed)
+            case .failure(let error):
+                return .failure(error)
+            }
+        })
+    }
+}
 
 /// Perform a series of network requests on an internal queue and aggregate the results.
 open class MultipleResourceNetworkOperation<E, O>: ConcurrentOperation, ConsumesResult, ProducesResult {
