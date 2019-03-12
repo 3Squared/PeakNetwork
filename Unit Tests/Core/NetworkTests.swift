@@ -109,6 +109,30 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
+    func testNetworkOperation_BodyAndResponse_Success() {
+        let session = MockSession { session in
+            session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok))
+        }
+        
+        let expect = expectation(description: "")
+        
+        let networkOperation = NetworkOperation(resource: api.complexWithResponse(TestEntity(name: "Test")), session: session)
+        
+        networkOperation.addResultBlock { result in
+            do {
+                let response = try result.resolve()
+                XCTAssertEqual(response.parsed.name, "Sam")
+                expect.fulfill()
+            } catch {
+                XCTFail(error.localizedDescription)
+            }
+        }
+        
+        networkOperation.enqueue()
+        
+        waitForExpectations(timeout: 1)
+    }
+    
     func testNetworkOperationInputSuccess() {
         let session = MockSession { session in
             session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok))

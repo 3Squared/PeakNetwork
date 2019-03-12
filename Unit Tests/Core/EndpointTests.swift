@@ -48,4 +48,9 @@ class EndpointTests: XCTestCase {
         }
         XCTAssertEqual(endpoint.url.absoluteString, "ftp://example.com/test")
     }
+    
+    func test_BaseURL_QueryItems_CreatesValidURL() {
+        let endpoint = Endpoint(baseURL: "https://example.com", path: "test", query: ["hello":"world"], customise: nil)
+        XCTAssertEqual(endpoint.url.absoluteString, "https://example.com/test?hello=world")
+    }
 }

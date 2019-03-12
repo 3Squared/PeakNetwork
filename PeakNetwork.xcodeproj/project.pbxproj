@@ -42,6 +42,9 @@
 		CB3AA6CA1FD5A5C9008EFC5C /* HTTPStatusCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */; };
 		CB5F252A206BD4A30023FB7F /* MockSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */; };
 		CB808B0F2236B4BB00446EC0 /* EndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB808B0E2236B4BB00446EC0 /* EndpointTests.swift */; };
+		CB808B112237BA7600446EC0 /* APITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB808B102237BA7600446EC0 /* APITests.swift */; };
+		CB808B132237BEC400446EC0 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB808B122237BEC400446EC0 /* API.swift */; };
+		CB808B152237BECC00446EC0 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB808B142237BECC00446EC0 /* Endpoint.swift */; };
 		CB808B182237E7F100446EC0 /* RequestInterceptorSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB808B162237E7F000446EC0 /* RequestInterceptorSessionTests.swift */; };
 		CB808B192237E7F100446EC0 /* ErrorInterceptorSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB808B172237E7F000446EC0 /* ErrorInterceptorSessionTests.swift */; };
 		CB95D1D8222BDAEB004B29B3 /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB95D1D7222BDAEB004B29B3 /* Resources.swift */; };
@@ -104,6 +107,9 @@
 		CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPStatusCodes.swift; sourceTree = "<group>"; };
 		CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSessionTests.swift; sourceTree = "<group>"; };
 		CB808B0E2236B4BB00446EC0 /* EndpointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointTests.swift; sourceTree = "<group>"; };
+		CB808B102237BA7600446EC0 /* APITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APITests.swift; sourceTree = "<group>"; };
+		CB808B122237BEC400446EC0 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		CB808B142237BECC00446EC0 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		CB808B162237E7F000446EC0 /* RequestInterceptorSessionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestInterceptorSessionTests.swift; sourceTree = "<group>"; };
 		CB808B172237E7F000446EC0 /* ErrorInterceptorSessionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorInterceptorSessionTests.swift; sourceTree = "<group>"; };
 		CB95D1D7222BDAEB004B29B3 /* Resources.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Resources.swift; sourceTree = "<group>"; };
@@ -183,7 +189,9 @@
 				CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */,
 				188DEAC4220DAF9B0067A6EF /* PeakNetwork+Aliases.swift */,
 				CB2380DF1F740D1500F1B001 /* Session.swift */,
+				CB808B142237BECC00446EC0 /* Endpoint.swift */,
 				CB95D1D7222BDAEB004B29B3 /* Resources.swift */,
+				CB808B122237BEC400446EC0 /* API.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -225,8 +233,9 @@
 				CB808B162237E7F000446EC0 /* RequestInterceptorSessionTests.swift */,
 				CB2380EE1F740D7600F1B001 /* ImageControllerTests.swift */,
 				CB2380F01F740D7600F1B001 /* NetworkTests.swift */,
-				CB95D1D9222BE9F4004B29B3 /* ResourceTests.swift */,
 				CB808B0E2236B4BB00446EC0 /* EndpointTests.swift */,
+				CB95D1D9222BE9F4004B29B3 /* ResourceTests.swift */,
+				CB808B102237BA7600446EC0 /* APITests.swift */,
 				CB2380F31F740D7600F1B001 /* TestData.swift */,
 				CB3178721FDAA5AF00B063ED /* test.json */,
 			);
@@ -617,6 +626,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB808B152237BECC00446EC0 /* Endpoint.swift in Sources */,
 				CB2380E41F740D1500F1B001 /* NetworkOperation.swift in Sources */,
 				CB2380E71F740D1500F1B001 /* Operators.swift in Sources */,
 				CB95D1D8222BDAEB004B29B3 /* Resources.swift in Sources */,
@@ -625,6 +635,7 @@
 				CB2380E61F740D1500F1B001 /* ImageController.swift in Sources */,
 				188DEAC5220DAF9B0067A6EF /* PeakNetwork+Aliases.swift in Sources */,
 				CBCF0A472211D5D70023DF8E /* Interceptor.swift in Sources */,
+				CB808B132237BEC400446EC0 /* API.swift in Sources */,
 				CBF2179720CAC63700515DB2 /* Logger.swift in Sources */,
 				CB2380E81F740D1500F1B001 /* Session.swift in Sources */,
 				CB2380EC1F740D1500F1B001 /* Errors.swift in Sources */,
@@ -643,6 +654,7 @@
 				CB2380F51F740D9C00F1B001 /* CertificatePinningTests.swift in Sources */,
 				CB2380F61F740D9C00F1B001 /* ImageControllerTests.swift in Sources */,
 				CB808B0F2236B4BB00446EC0 /* EndpointTests.swift in Sources */,
+				CB808B112237BA7600446EC0 /* APITests.swift in Sources */,
 				CB5F252A206BD4A30023FB7F /* MockSessionTests.swift in Sources */,
 				CB808B192237E7F100446EC0 /* ErrorInterceptorSessionTests.swift in Sources */,
 			);

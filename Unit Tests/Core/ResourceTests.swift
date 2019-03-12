@@ -17,29 +17,15 @@ import PeakResult
 
 class ResourceTests: XCTestCase {
 
-    func testGet() {
-        let api = MyAPI()
-        let resource = api.simple()
-        
-        XCTAssertEqual(resource.request.url!.absoluteString, "https://example.com/all?token=hello")
-        XCTAssertEqual(resource.request.value(forHTTPHeaderField: "user-agent")!, "peaknetwork")
-    }
 
-    func testPost() {
-        let api = MyAPI()
-        let resource = api.complex(TestEntity(name: "sam"))
-        
-        let request = resource.request
-        let components = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)!
-        
-        XCTAssertEqual(components.queryItems!.count, 2)
-        XCTAssertTrue(components.queryItems!.contains { $0.name == "search" && $0.value == "test"})
-        XCTAssertTrue(components.queryItems!.contains { $0.name == "token" && $0.value == "overridden"})
+    func test_test() {
+        let endpoint = Endpoint(baseURL: "https://example.com", path: "test", query: [:], customise: nil)
 
-        XCTAssertEqual(request.allHTTPHeaderFields!.count, 2)
-        XCTAssertEqual(request.value(forHTTPHeaderField: "user-agent")!, "overridden")
-        XCTAssertEqual(request.value(forHTTPHeaderField: "device")!, "iphone")
-        XCTAssertEqual(String(data: request.httpBody!, encoding: .utf8)!, "{\"name\":\"sam\"}")
+        let resource = Resource(endpoint: endpoint, headers: [:], method: .get) { data in
+            
+        }
+        
+        XCTAssertEqual(resource.request.url!.absoluteString, "https://example.com/test")
     }
 }
 

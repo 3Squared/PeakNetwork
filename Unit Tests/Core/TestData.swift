@@ -44,6 +44,14 @@ extension MyAPI {
                         body: entity)
     }
     
+    func complexWithResponse(_ entity: TestEntity) -> Resource<TestEntity> {
+        return resource(path: "/upload",
+                        query: ["token": "overridden", "search": "test"],
+                        headers: ["user-agent": "overridden", "device": "iphone"],
+                        method: .put,
+                        body: entity)
+    }
+    
     func url(_ url: URL) -> Resource<Data> {
         return Resource<Data>(url: url, headers: [:], method: .get) { data in
             return data!
