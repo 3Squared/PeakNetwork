@@ -20,11 +20,12 @@ extension URLSession: Session { }
 
 /// This describes a mocked response.
 public struct MockResponse {
-    let data: Data
+    let dataBlock: () -> Data
     let error: Error?
     let statusCode: HTTPStatusCode?
     let responseHeaders: [String: String]
     let sticky: Bool
+    let delay: TimeInterval
     let isValid: (URLRequest) -> Bool
     
     /// Create a new `MockResponse` with a JSON-type array.
@@ -41,6 +42,7 @@ public struct MockResponse {
                               responseHeaders: [String: String] = [:],
                               error: Error? = nil,
                               sticky: Bool = false,
+                              delay: TimeInterval = 0,
                               encoder: JSONEncoder = JSONEncoder(),
                               isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
         self.init(data: try! encoder.encode(json),
@@ -48,6 +50,7 @@ public struct MockResponse {
                   responseHeaders: responseHeaders,
                   error: error,
                   sticky: sticky,
+                  delay: delay,
                   isValid: isValid)
     }
     
@@ -65,6 +68,7 @@ public struct MockResponse {
                               responseHeaders: [String: String] = [:],
                               error: Error? = nil,
                               sticky: Bool = false,
+                              delay: TimeInterval = 0,
                               encoder: JSONEncoder = JSONEncoder(),
                               isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
         self.init(data: try! encoder.encode(json),
@@ -72,6 +76,7 @@ public struct MockResponse {
                   responseHeaders: responseHeaders,
                   error: error,
                   sticky: sticky,
+                  delay: delay,
                   isValid: isValid)
     }
     
@@ -89,6 +94,7 @@ public struct MockResponse {
                 responseHeaders: [String: String] = [:],
                 error: Error? = nil,
                 sticky: Bool = false,
+                delay: TimeInterval = 0,
                 isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
         let path = Bundle.allBundles.path(forResource: fileName, ofType: "json")!
         let data = try! NSData(contentsOfFile: path) as Data
@@ -97,6 +103,7 @@ public struct MockResponse {
                   responseHeaders: responseHeaders,
                   error: error,
                   sticky: sticky,
+                  delay: delay,
                   isValid: isValid)
     }
     
@@ -114,6 +121,7 @@ public struct MockResponse {
                 responseHeaders: [String: String] = [:],
                 error: Error? = nil,
                 sticky: Bool = false,
+                delay: TimeInterval = 0,
                 isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
         
         self.init(data: jsonString.data(using: .utf8)!,
@@ -121,6 +129,7 @@ public struct MockResponse {
                   responseHeaders: responseHeaders,
                   error: error,
                   sticky: sticky,
+                  delay: delay,
                   isValid: isValid)
     }
     
@@ -139,12 +148,39 @@ public struct MockResponse {
                 responseHeaders: [String: String] = [:],
                 error: Error? = nil,
                 sticky: Bool = false,
+                delay: TimeInterval = 0,
                 isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
-        self.data = data
+        self.init(dataBlock: { return data },
+                  statusCode: statusCode,
+                  responseHeaders: responseHeaders,
+                  error: error,
+                  sticky: sticky,
+                  delay: delay,
+                  isValid: isValid)
+    }
+    
+    /// Create a new `MockResponse`.
+    ///
+    /// - Parameters:
+    ///   - dataBlock: A block called to create the data to be returned in the response.
+    ///   - error: An optional error to pass back.
+    ///   - statusCode: The status code of the response.
+    ///   - responseHeaders: Headers to be returned in the response.
+    ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
+    ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
+    public init(dataBlock: @escaping () -> Data,
+                statusCode: HTTPStatusCode? = .ok,
+                responseHeaders: [String: String] = [:],
+                error: Error? = nil,
+                sticky: Bool = false,
+                delay: TimeInterval = 0,
+                isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
+        self.dataBlock = dataBlock
         self.statusCode = statusCode
         self.responseHeaders = responseHeaders
         self.error = error
         self.sticky = sticky
+        self.delay = delay
         self.isValid = isValid
     }
 }
@@ -208,6 +244,8 @@ public class MockSession: Session {
         let taskResponse: MockResponse
         let request: URLRequest
         
+        private let dispatchQueue = DispatchQueue(label: "URLSessionDataTaskMock", qos: .background)
+
         override var originalRequest: URLRequest { return request }
         override var currentRequest: URLRequest { return request }
 
@@ -223,9 +261,13 @@ public class MockSession: Session {
                                                             statusCode: statusCode,
                                                             httpVersion: "1.1",
                                                             headerFields: taskResponse.responseHeaders)
-                completionHandler(taskResponse.data, urlResponse, taskResponse.error)
+                dispatchQueue.asyncAfter(deadline: .now() + taskResponse.delay) {
+                    self.completionHandler(self.taskResponse.dataBlock(), urlResponse, self.taskResponse.error)
+                }
             } else {
-                completionHandler(taskResponse.data, nil, taskResponse.error)
+                dispatchQueue.asyncAfter(deadline: .now() + taskResponse.delay) {
+                    self.completionHandler(self.taskResponse.dataBlock(), nil, self.taskResponse.error)
+                }
             }
         }
         

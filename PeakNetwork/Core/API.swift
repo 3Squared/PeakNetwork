@@ -59,7 +59,7 @@ public extension API {
     ///   - headers: HTTP headers for the request.
     ///   - method: The HTTP method with which to perform the request.
     /// - Returns: A configured `Resource`.
-    public func resource(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get, customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
+    public func resource(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod, customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
         return Resource(
             endpoint: endpoint(path, query: query, customise: customise),
             headers: headers.merging(commonHeaders) { current, _ in current },
@@ -97,7 +97,7 @@ public extension JSONAPI {
     ///   - method: The HTTP method with which to perform the request.
     ///   - body: An `Encodable` object to be used as the HTTP request body.
     /// - Returns: A configured `Resource`.
-    public func resource<E: Encodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get, body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
+    public func resource<E: Encodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod, body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
         return Resource(
             endpoint: endpoint(path, query: query, customise: customise),
             headers: headers.merging(commonHeaders) { current, _ in current },
@@ -116,7 +116,7 @@ public extension JSONAPI {
     ///   - headers: HTTP headers for the request.
     ///   - method: The HTTP method with which to perform the request.
     /// - Returns: A configured `Resource`.
-    public func resource<D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .get, customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
+    public func resource<D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod, customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
         return Resource(
             endpoint: endpoint(path, query: query, customise: customise),
             headers: headers.merging(commonHeaders) { current, _ in current },
@@ -135,7 +135,7 @@ public extension JSONAPI {
     ///   - method: The HTTP method with which to perform the request.
     ///   - body: An `Encodable` object to be used as the HTTP request body.
     /// - Returns: A configured `Resource`.
-    public func resource<E: Encodable, D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod = .post, body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
+    public func resource<E: Encodable, D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod, body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
         return Resource(
             endpoint: endpoint(path, query: query, customise: customise),
             headers: headers.merging(commonHeaders) { current, _ in current },
