@@ -239,8 +239,8 @@ class NetworkTests: XCTestCase {
         }
 
         let networkOperation = MultipleResourceNetworkOperation(identifiableResources: [
-            (1, api.resource(path: "/sam") as Resource<TestEntity>),
-            (2, api.resource(path: "/ben") as Resource<TestEntity>)
+            (1, api.resource(path: "/sam", method: .get) as Resource<TestEntity>),
+            (2, api.resource(path: "/ben", method: .get) as Resource<TestEntity>)
         ], session: session)
         
         let expect = expectation(description: "")

@@ -33,7 +33,7 @@ struct MyAPI: JSONAPI {
 extension MyAPI {
     
     func simple() -> Resource<TestEntity> {
-        return resource(path: "/all")
+        return resource(path: "/all", method: .get)
     }
     
     func complex(_ entity: TestEntity) -> Resource<Void> {
