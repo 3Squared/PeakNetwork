@@ -18,6 +18,12 @@ public struct Response<O> {
     public let data: Data?
     public let urlResponse: HTTPURLResponse
     public let parsed: O
+    
+    public init(data: Data?, urlResponse: HTTPURLResponse, parsed: O) {
+        self.data = data
+        self.urlResponse = urlResponse
+        self.parsed = parsed
+    }
 }
 
 /// Use when you want to perform network tasks in an operation queue.
