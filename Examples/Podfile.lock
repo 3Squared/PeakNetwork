@@ -1,9 +1,7 @@
 PODS:
   - PeakNetwork (5.0.0):
     - PeakOperation
-  - PeakOperation (2.2.1):
-    - PeakResult
-  - PeakResult (2.2.1)
+  - PeakOperation (3.2.0)
 
 DEPENDENCIES:
   - PeakNetwork (from `../`)
@@ -11,17 +9,15 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - PeakOperation
-    - PeakResult
 
 EXTERNAL SOURCES:
   PeakNetwork:
     :path: "../"
 
 SPEC CHECKSUMS:
-  PeakNetwork: 5bf2d84633f57d0cfe2bd7ebb330e4e68c6935bf
-  PeakOperation: a01a390e661caa2708150a9e6e6457af928f045c
-  PeakResult: d75726e240ff934095cc0c7a37b74f9c8ebfc57a
+  PeakNetwork: 2c242ea0276dfb072143595de9ebfe0bc353d382
+  PeakOperation: 59ee044652b7bd2f12a3ae0118aa0d02bb6f70cf
 
 PODFILE CHECKSUM: 1ba7eb7b5ec1e6601a0201f475e55b5955b69ff0
 
-COCOAPODS: 1.6.0
+COCOAPODS: 1.6.1
