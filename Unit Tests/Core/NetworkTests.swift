@@ -7,17 +7,11 @@
 //
 
 import XCTest
-import PeakResult
 import PeakOperation
-
 #if os(iOS)
-
 @testable import PeakNetwork_iOS
-
 #else
-
 @testable import PeakNetwork_macOS
-
 #endif
 
 class NetworkTests: XCTestCase {
@@ -103,7 +97,7 @@ class NetworkTests: XCTestCase {
         
         networkOperation.addResultBlock { result in
             do {
-                let response = try result.resolve()
+                let response = try result.get()
                 XCTAssertEqual(response.urlResponse.statusCode, 200)
                 expect.fulfill()
             } catch {
@@ -128,7 +122,7 @@ class NetworkTests: XCTestCase {
         
         decodeOperation.addResultBlock { result in
             do {
-                let entity = try result.resolve()
+                let entity = try result.get()
                 XCTAssertEqual(entity.name, "Sam")
                 expect.fulfill()
             } catch {
@@ -154,7 +148,7 @@ class NetworkTests: XCTestCase {
 
         decodeOperation.addResultBlock { result in
             do {
-                let _ = try result.resolve()
+                let _ = try result.get()
                 XCTFail()
             } catch {
                 switch error {
@@ -184,7 +178,7 @@ class NetworkTests: XCTestCase {
 
         decodeOperation.addResultBlock { result in
             do {
-                let entities = try result.resolve()
+                let entities = try result.get()
                 XCTAssertEqual(entities.count, 2)
                 XCTAssertEqual(entities[0].name, "Sam")
                 XCTAssertEqual(entities[1].name, "Ben")
@@ -211,7 +205,7 @@ class NetworkTests: XCTestCase {
 
         decodeOperation.addResultBlock { result in
             do {
-                let _ = try result.resolve()
+                let _ = try result.get()
                 XCTFail()
             } catch {
                 switch error {
@@ -259,7 +253,7 @@ class NetworkTests: XCTestCase {
         
         networkOperation.addResultBlock { result in
             do {
-                let entity = try result.resolve()
+                let entity = try result.get()
                 XCTAssertEqual(entity[0].name, "Hello")
                 XCTAssertEqual(entity[1].name, "World")
                 XCTAssertEqual(entity[2].name, "!")
@@ -289,7 +283,7 @@ class NetworkTests: XCTestCase {
 
         decodeOperation.addResultBlock { result in
             do {
-                let entity = try result.resolve()
+                let entity = try result.get()
                 XCTAssertEqual(entity.name, "Sam")
                 expect.fulfill()
             } catch {
@@ -311,7 +305,7 @@ class NetworkTests: XCTestCase {
 
         networkOperation.addResultBlock { result in
             do {
-                let _ = try result.resolve()
+                let _ = try result.get()
                 XCTFail()
             } catch {
                 switch error {
@@ -338,7 +332,7 @@ class NetworkTests: XCTestCase {
         let networkOperation = DecodableOperation<TestEntity>(requestable: URL(string: "http://google.com")!, session: session)
         networkOperation.addResultBlock { result in
             do {
-                let entity = try result.resolve()
+                let entity = try result.get()
                 XCTAssertEqual(entity.name, "Sam")
                 expect.fulfill()
             } catch {
@@ -363,7 +357,7 @@ class NetworkTests: XCTestCase {
 
         networkOperation.addResultBlock { result in
             do {
-                let _ = try result.resolve()
+                let _ = try result.get()
                 XCTFail()
             } catch {
                 switch error {
@@ -391,7 +385,7 @@ class NetworkTests: XCTestCase {
         let networkOperation = DecodableResponseOperation<TestEntity>(requestable: URL(string: "http://google.com")!, session: session)
         networkOperation.addResultBlock { result in
             do {
-                let (entity, response) = try result.resolve()
+                let (entity, response) = try result.get()
                 XCTAssertEqual(entity.name, "Sam")
                 XCTAssertEqual(response.statusCodeEnum, .ok)
                 expect.fulfill()

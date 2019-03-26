@@ -12,7 +12,6 @@ import UIKit
 import AppKit
 #endif
 import PeakOperation
-import PeakResult
 
 public typealias NetworkResponse = (data: Data?, urlResponse: HTTPURLResponse)
 
@@ -22,7 +21,7 @@ public typealias NetworkResponse = (data: Data?, urlResponse: HTTPURLResponse)
 /// If a `RetryStrategy` is provided, this can be re-run if the network task fails (not 200).
 open class NetworkOperation: RetryingOperation<NetworkResponse>, ConsumesResult {
     
-    public var input: Result<Requestable> = Result { throw ResultError.noResult }
+    public var input: Result<Requestable, Error> = Result { throw ResultError.noResult }
     public let session: Session
     open var task: URLSessionTask?
     

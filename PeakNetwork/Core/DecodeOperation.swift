@@ -12,15 +12,13 @@ import UIKit
 import AppKit
 #endif
 import PeakOperation
-import PeakResult
-
 
 /// An operation which takes an Input and decodes it to an Output.
 /// A more specialised version of `MapOperation`, easier to use for this specific task.
 open class DecodeOperation<I, O>: ConcurrentOperation, ConsumesResult, ProducesResult {
     
-    public var input: Result<I> = Result { throw ResultError.noResult }
-    public var output: Result<O> = Result { throw ResultError.noResult }
+    public var input: Result<I, Error> = Result { throw ResultError.noResult }
+    public var output: Result<O, Error> = Result { throw ResultError.noResult }
 
     /// Create a new `DecodeOperation`.
     ///
@@ -33,12 +31,12 @@ open class DecodeOperation<I, O>: ConcurrentOperation, ConsumesResult, ProducesR
     }
     
     open override func execute() {
-        output = input.fold({ response in
-            return self.decode(input: response)
-        }, { error in
-            return .failure(error)
-        })
-        
+        switch input {
+        case .success(let response):
+            output = decode(input: response)
+        case .failure(let error):
+            output = .failure(error)
+        }
         finish()
     }
 
@@ -47,7 +45,7 @@ open class DecodeOperation<I, O>: ConcurrentOperation, ConsumesResult, ProducesR
     ///
     /// - Parameter input:
     /// - Returns: A converted output Result.
-    open func decode(input: I) -> Result<O> {
+    open func decode(input: I) -> Result<O, Error> {
         fatalError("Subclasses must implement `decode(::)`.")
     }
 }
@@ -69,7 +67,7 @@ open class JSONDecodeOperation<D: Decodable>: DecodeOperation<NetworkResponse, D
         super.init(input: input)
     }
     
-    override open func decode(input: NetworkResponse) -> Result<D> {
+    override open func decode(input: NetworkResponse) -> Result<D, Error> {
         guard let data = input.data else {
             return .failure(SerializationError.noData)
         }
@@ -96,7 +94,7 @@ open class JSONDecodeResponseOperation<D: Decodable>: DecodeOperation<NetworkRes
         super.init(input: input)
     }
     
-    override open func decode(input: NetworkResponse) -> Result<(D, HTTPURLResponse)> {
+    override open func decode(input: NetworkResponse) -> Result<(D, HTTPURLResponse), Error> {
         guard let data = input.data else {
             return .failure(SerializationError.noData)
         }
@@ -110,7 +108,7 @@ open class JSONDecodeResponseOperation<D: Decodable>: DecodeOperation<NetworkRes
 /// Decode a network response into a platform-specific Image type
 open class ImageDecodeOperation: DecodeOperation<NetworkResponse, PeakImage> {
     
-    open override func decode(input: NetworkResponse) -> Result<PeakImage> {
+    open override func decode(input: NetworkResponse) -> Result<PeakImage, Error> {
         if let data = input.data, let image = PeakImage(data: data) {
             return .success(image)
         } else {
@@ -139,8 +137,8 @@ open class SequenceOperation<First, Second>: ConcurrentOperation, ProducesResult
         Second: ConsumesResult,
         First.Output == Second.Input {
     
-    public var input: Result<First.Input> = Result { throw ResultError.noResult }
-    public var output: Result<Second.Output> = Result { throw ResultError.noResult }
+    public var input: Result<First.Input, Error> = Result { throw ResultError.noResult }
+    public var output: Result<Second.Output, Error> = Result { throw ResultError.noResult }
 
     internal let queue = OperationQueue()
     
@@ -216,7 +214,7 @@ open class DecodableResponseOperation<D: Decodable>: SequenceOperation<NetworkOp
 /// the main bundle into a `Decodable` type.
 open class DecodableFileOperation<Output: Decodable>: ConcurrentOperation, ProducesResult {
 
-    public var output: Result<Output> = Result { throw ResultError.noResult }
+    public var output: Result<Output, Error> = Result { throw ResultError.noResult }
 
     let fileName: String
     let decoder: JSONDecoder

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import PeakResult
 
 public typealias DataTaskCompletionHandler = (Data?, URLResponse?, Error?) -> Void
 
