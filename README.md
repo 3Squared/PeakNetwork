@@ -64,8 +64,8 @@ Extensions that implement `Requestable` are also provided for `URLRequest`, `URL
 The core of PeakNetwork is made up of an Operation subclasses which wrap a `URLSessionTask`. It is built on top of `RetryingOperation` from [PeakOperation](https://github.com/3squared/PeakOperation).
 
 `NetworkOperation` accepts a `Requestable`, converts it to a `URLRequest`, and then performs it on the shared or provided `URLSession`. This operation conforms both `ConsumesResult` and `ProducesResult` from PeakOperation:
-    - Consumes `Result<Requestable>`, so it can be chained with a `Requestable`-producing operation instead of being initialised with one.
-    - Produces `Result<NetworkResponse>` where `NetworkResponse` wraps the data and URL response from performing  the request. 
+    - Consumes `Result<Requestable, Error>`, so it can be chained with a `Requestable`-producing operation instead of being initialised with one.
+    - Produces `Result<NetworkResponse, Error>` where `NetworkResponse` wraps the data and URL response from performing  the request. 
 
 If the request receives a response outside of the 200..300 range, the result of the operation will be a `.failure` containing a `ServerError`.
 
@@ -74,7 +74,7 @@ let networkOperation = NetworkOperation(requestable: ApiEndpoint.search("hello")
 networkOperation.addResultBlock { result in
     // The result of the operation will be 
     // .success(NetworkResponse) or .failure(error)
-    let response = try? result.resolve()
+    let response = try? result.get()
 }
 ```
 
@@ -104,7 +104,7 @@ let decodeOperation = JSONDecodeOperation<Item>()
 decodeOperation.addResultBlock { result in
     // The result of the operation will be 
     // .success(Item) or .failure(error)
-    let item = try? result.resolve()
+    let item = try? result.get()
 }
 
 networkOperation.passesResult(to: decodeOperation).enqueue()
@@ -271,5 +271,4 @@ The Peak Framework is a collection of open-source microframeworks created by the
 |Name|Description|
 |:--|:--|
 |[PeakCoreData](https://github.com/3squared/PeakCoreData)|Provides enhances and conveniences to `Core Data`.|
-|[PeakResult](https://github.com/3squared/PeakResult)|A simple `Result` type.|
 |[PeakOperation](https://github.com/3squared/PeakOperation)|Provides enhancement and conveniences to `Operation`, making use of the `Result` type.|

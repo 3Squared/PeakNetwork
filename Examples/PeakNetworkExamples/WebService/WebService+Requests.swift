@@ -8,12 +8,11 @@
 
 import Foundation
 import PeakNetwork
-import PeakResult
 import PeakOperation
 
 extension WebService {
     
-    func search(for query: String, completion: @escaping (Result<[SearchResult]>) -> ()) {
+    func search(for query: String, completion: @escaping (Result<[SearchResult], Error>) -> ()) {
         
         let network = NetworkOperation(requestable: GET.search(query: query), session: session)
         let decode = JSONDecodeOperation<[SearchResult]>(decoder: decoder)
