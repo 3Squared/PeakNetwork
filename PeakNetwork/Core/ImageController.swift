@@ -6,7 +6,7 @@
 //  Copyright © 2016 3Squared. All rights reserved.
 //
 
-import PeakResult
+import Foundation
 
 /// Allow remote images to be easilty set on UIImageViews.
 /// Manages starting, cancellung, and mapping  of download operations.
@@ -92,7 +92,7 @@ public class ImageController {
                 completion(nil, object, .network)
             } else {
                 do {
-                    let image = try result.resolve()
+                    let image = try result.get()
                     self.cache.setObject(image, forKey: url)
                     completion(image, object, .network)
                 } catch {
@@ -135,7 +135,9 @@ public enum Source {
 
 #if os(iOS) || os(tvOS)
 
-public extension PeakImageView {
+import UIKit
+
+extension PeakImageView {
     
     /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
     ///
@@ -172,8 +174,7 @@ public extension PeakImageView {
     }
 }
 
-
-public extension UIButton {
+extension UIButton {
     
     /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
     /// You may set multiple images, one for each state, on a `UIButton` - only images for the same state will clash.
