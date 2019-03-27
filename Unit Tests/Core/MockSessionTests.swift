@@ -62,22 +62,22 @@ class MockSessionTests: XCTestCase {
         let redditRequest = URLRequest(url: URL(string: "http://reddit.com")!)
 
         session.dataTask(with: googleRequest) { data, response, error in
-            XCTAssert((response as! HTTPURLResponse).statusCodeEnum == .ok)
+            XCTAssert((response as! HTTPURLResponse).statusCodeValue == .ok)
             expect.fulfill()
         }.resume()
         
         session.dataTask(with: redditRequest) { data, response, error in
-            XCTAssert((response as! HTTPURLResponse).statusCodeEnum == .alreadyReported)
+            XCTAssert((response as! HTTPURLResponse).statusCodeValue == .alreadyReported)
             expect.fulfill()
         }.resume()
         
         session.dataTask(with: googleRequest) { data, response, error in
-            XCTAssert((response as! HTTPURLResponse).statusCodeEnum == .accepted)
+            XCTAssert((response as! HTTPURLResponse).statusCodeValue == .accepted)
             expect.fulfill()
         }.resume()
         
         session.dataTask(with: redditRequest) { data, response, error in
-            XCTAssert((response as! HTTPURLResponse).statusCodeEnum == .badGateway)
+            XCTAssert((response as! HTTPURLResponse).statusCodeValue == .badGateway)
             expect.fulfill()
         }.resume()
         
@@ -95,7 +95,7 @@ class MockSessionTests: XCTestCase {
         let googleRequest = URLRequest(url: URL(string: "http://google.com")!)
         
         let task = session.dataTask(with: googleRequest) { data, response, error in
-            XCTAssert((response as! HTTPURLResponse).statusCodeEnum == .ok)
+            XCTAssert((response as! HTTPURLResponse).statusCodeValue == .ok)
             expect.fulfill()
         }
         
@@ -205,7 +205,7 @@ class MockSessionTests: XCTestCase {
         let request = URLRequest(url: URL(string:"http://reddit.com")!)
         
         session.dataTask(with: request) { data, response, error in
-            XCTAssert((response as! HTTPURLResponse).statusCodeEnum == .ok)
+            XCTAssert((response as! HTTPURLResponse).statusCodeValue == .ok)
             expect.fulfill()
         }.resume()
 

@@ -74,11 +74,11 @@ open class NetworkOperation: RetryingOperation<NetworkResponse>, ConsumesResult 
             if let error = error {
                 strongSelf.output = Result { throw error }
             } else if let httpResponse = response as? HTTPURLResponse {
-                if httpResponse.statusCodeEnum.isSuccess {
+                if httpResponse.statusCodeValue.isSuccess {
                     strongSelf.output = .success((data, httpResponse))
                 } else {
                     strongSelf.output = Result {
-                        throw ServerError.error(code: httpResponse.statusCodeEnum, data: data, response: httpResponse)
+                        throw ServerError.error(code: httpResponse.statusCodeValue, data: data, response: httpResponse)
                     }
                 }
             } else {

@@ -96,7 +96,7 @@ open class BasicLogger: Logger {
         guard shouldLog(response?.url) else { return }
 
         if let httpResponse = response as? HTTPURLResponse {
-            print("\(httpResponse.statusCodeEnum.isSuccess && error == nil ? "✅" : "❌") Response")
+            print("\(httpResponse.statusCodeValue.isSuccess && error == nil ? "✅" : "❌") Response")
         } else {
             print("\(error == nil ? "✅" : "❌") Response")
         }
@@ -111,7 +111,7 @@ open class BasicLogger: Logger {
         print("Execution time: \(String(format: "%.5f", responseDate.timeIntervalSince(requestDate))) seconds")
 
         if let httpResponse = response as? HTTPURLResponse {
-            print("Code: \(httpResponse.statusCodeEnum)")
+            print("Code: \(httpResponse.statusCodeValue)")
             logHeaders(httpResponse.allHeaderFields)
         }
         if let error = error {
