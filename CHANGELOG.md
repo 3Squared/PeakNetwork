@@ -4,6 +4,11 @@ The changelog for `PeakNetwork`.
 
 --------------------------------------
 
+5.1.0
+-----
+- Remove dependency on `PeakResult`.
+- Update project to Swift 5.
+
 5.0.0
 -----
 - Added support for `macOS` and `tvOS`.
