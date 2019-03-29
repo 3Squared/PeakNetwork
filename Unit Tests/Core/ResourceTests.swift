@@ -8,7 +8,7 @@
 
 import XCTest
 import PeakOperation
-import PeakResult
+
 #if os(iOS)
 @testable import PeakNetwork_iOS
 #else

@@ -406,7 +406,7 @@ public enum HTTPStatusCode: Int {
 }
 
 
-public extension HTTPStatusCode {
+extension HTTPStatusCode {
     /// Informational - Request received, continuing process.
     public var isInformational: Bool {
         return isIn(range: 100...199)
@@ -435,7 +435,7 @@ public extension HTTPStatusCode {
     }
 }
 
-public extension HTTPStatusCode {
+extension HTTPStatusCode {
     /// - returns: a localized string suitable for displaying to users that describes the specified status code.
     public var localizedReasonPhrase: String {
         return HTTPURLResponse.localizedString(forStatusCode: rawValue)
@@ -453,38 +453,18 @@ extension HTTPStatusCode: CustomDebugStringConvertible, CustomStringConvertible 
 }
 
 // MARK: - HTTP URL Response
-public extension HTTPStatusCode {
+extension HTTPStatusCode {
     
     /// Obtains a possible status code from an optional HTTP URL response.
-    public init?(HTTPResponse: HTTPURLResponse?) {
-        guard let statusCodeValue = HTTPResponse?.statusCode else {
-            return nil
-        }
-        self.init(statusCodeValue)
-    }
-    
-    /// This is declared as it's not automatically picked up by the complier for the above init
-    private init?(_ rawValue: Int) {
-        guard let value = HTTPStatusCode(rawValue: rawValue) else {
-            return nil
-        }
-        self = value
+    public init(HTTPResponse: HTTPURLResponse) {
+        self.init(rawValue: HTTPResponse.statusCode)!
     }
 }
 
-public extension HTTPURLResponse {
-    
-    /**
-     * Marked internal to expose (as `statusCodeValue`) for Objective-C interoperability only.
-     *
-     * - returns: the receiver’s HTTP status code.
-     */
-    var statusCodeEnum: HTTPStatusCode {
-        return HTTPStatusCode(HTTPResponse: self)!
-    }
+extension HTTPURLResponse {
     
     /// - returns: the receiver’s HTTP status code.
-    public var statusCodeValue: HTTPStatusCode? {
+    public var statusCodeValue: HTTPStatusCode {
         return HTTPStatusCode(HTTPResponse: self)
     }
     
@@ -503,5 +483,3 @@ public extension HTTPURLResponse {
         self.init(url: url, statusCode: statusCode.rawValue, httpVersion: httpVersion, headerFields: headerFields)
     }
 }
-
-

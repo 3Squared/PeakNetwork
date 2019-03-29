@@ -31,7 +31,7 @@ class CertificatePinningTests: XCTestCase {
         
         networkOperation.addResultBlock { result in
             do {
-                try _ = result.resolve()
+                try _ = result.get()
                 XCTFail()
             } catch {
                 expect.fulfill()
@@ -56,7 +56,7 @@ class CertificatePinningTests: XCTestCase {
         
         networkOperation.addResultBlock { result in
             do {
-                try _ = result.resolve()
+                try _ = result.get()
                 expect.fulfill()
             } catch {
                 XCTFail()

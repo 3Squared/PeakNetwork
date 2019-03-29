@@ -6,7 +6,7 @@
 //  Copyright © 2016 3Squared. All rights reserved.
 //
 
-import PeakResult
+import Foundation
 
 /// Allow remote images to be easilty set on UIImageViews.
 /// Manages starting, cancellung, and mapping  of download operations.
@@ -92,7 +92,7 @@ public class ImageController {
             if imageOperation.isCancelled {
                 completion(nil, object, .network)
             } else {
-                if let image = try? result.resolve().parsed {
+                if let image = try? result.get().parsed {
                     self.cache.setObject(image, forKey: url)
                     completion(image, object, .network)
                 } else {
@@ -135,6 +135,8 @@ public enum Source {
 
 #if os(iOS) || os(tvOS)
 
+import UIKit
+
 public extension PeakImageView {
     
     
@@ -145,7 +147,7 @@ public extension PeakImageView {
     ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
     ///   - animation: The animation options (optional).
     ///   - completion: A completion block indicating success or failure.
-    public func setImage(_ url: URL, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
+    func setImage(_ url: URL, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
         setImage(Resource(url: url, headers: [:], method: .get), queue: queue, animation: animation, duration: duration, completion: completion)
     }
     
@@ -156,7 +158,7 @@ public extension PeakImageView {
     ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
     ///   - animation: The animation options (optional).
     ///   - completion: A completion block indicating success or failure.
-    public func setImage(_ resource: Resource<PeakImage>, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
+    func setImage(_ resource: Resource<PeakImage>, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
         ImageController.sharedInstance.getImage(resource, object: self, queue: queue) { image, imageView, source in
             OperationQueue.main.addOperation {
                 if image == nil {
@@ -179,7 +181,7 @@ public extension PeakImageView {
     }
     
     /// Cancel any in-flight images requests for the `UIImageView`.
-    public func cancelImage() {
+    func cancelImage() {
         ImageController.sharedInstance.cancelOperation(forObject: self)
     }
 }
@@ -196,7 +198,7 @@ public extension UIButton {
     ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
     ///   - animation: The animation options (optional).
     ///   - completion: A completion block indicating success or failure.
-    public func setImage(_ url: URL, queue: OperationQueue? = nil, for state: UIControl.State, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
+    func setImage(_ url: URL, queue: OperationQueue? = nil, for state: UIControl.State, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
         setImage(Resource(url: url, headers: [:], method: .get), for: state, queue: queue, animation: animation, duration: duration, completion: completion)
     }
     
@@ -209,7 +211,7 @@ public extension UIButton {
     ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
     ///   - animation: The animation options (optional).
     ///   - completion: A completion block indicating success or failure.
-    public func setImage(_ resource: Resource<PeakImage>, for state: UIControl.State, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
+    func setImage(_ resource: Resource<PeakImage>, for state: UIControl.State, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
         // Cannot use self as the object, as you may want to request multiple images - one for each state
         let object: NSString = NSString.init(format: "%d%d", self.hash, state.rawValue)
         ImageController.sharedInstance.getImage(resource, object: object, queue: queue) { image, button, source in
@@ -235,7 +237,7 @@ public extension UIButton {
     
     
     /// Cancel any in-flight images requests for the `UIButton`.
-    public func cancelImage() {
+    func cancelImage() {
         ImageController.sharedInstance.cancelOperation(forObject: self)
     }
 }

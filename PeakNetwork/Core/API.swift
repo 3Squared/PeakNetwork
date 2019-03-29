@@ -46,7 +46,7 @@ public extension API {
     ///
     /// - Parameter resource: A resource to request.
     /// - Returns: A `NetworkOperation` configured with the provided `Resource` and shared API properties.
-    public func operation<T>(for resource: Resource<T>) -> NetworkOperation<T> {
+    func operation<T>(for resource: Resource<T>) -> NetworkOperation<T> {
         return resource.operation(session: session)
     }
     
@@ -59,7 +59,7 @@ public extension API {
     ///   - headers: HTTP headers for the request.
     ///   - method: The HTTP method with which to perform the request.
     /// - Returns: A configured `Resource`.
-    public func resource(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod, customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
+    func resource(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod, customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
         return Resource(
             endpoint: endpoint(path, query: query, customise: customise),
             headers: headers.merging(commonHeaders) { current, _ in current },
@@ -74,7 +74,7 @@ public extension API {
     ///   - path: The path of the `Endpoint`, relative to the `API`'s `baseURL`.
     ///   - query: Query items for the request.
     /// - Returns: A configured `Endpoint`.
-    public func endpoint(_ path: String, query: [String: String] = [:], customise: URLComponentsCustomisationBlock? = nil) -> Endpoint {
+    func endpoint(_ path: String, query: [String: String] = [:], customise: URLComponentsCustomisationBlock? = nil) -> Endpoint {
         return Endpoint(baseURL: baseURL,
                         path: path,
                         query: query.merging(commonQuery) { current, _ in current },
@@ -97,7 +97,7 @@ public extension JSONAPI {
     ///   - method: The HTTP method with which to perform the request.
     ///   - body: An `Encodable` object to be used as the HTTP request body.
     /// - Returns: A configured `Resource`.
-    public func resource<E: Encodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod, body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
+    func resource<E: Encodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod, body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
         return Resource(
             endpoint: endpoint(path, query: query, customise: customise),
             headers: headers.merging(commonHeaders) { current, _ in current },
@@ -116,7 +116,7 @@ public extension JSONAPI {
     ///   - headers: HTTP headers for the request.
     ///   - method: The HTTP method with which to perform the request.
     /// - Returns: A configured `Resource`.
-    public func resource<D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod, customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
+    func resource<D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod, customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
         return Resource(
             endpoint: endpoint(path, query: query, customise: customise),
             headers: headers.merging(commonHeaders) { current, _ in current },
@@ -135,7 +135,7 @@ public extension JSONAPI {
     ///   - method: The HTTP method with which to perform the request.
     ///   - body: An `Encodable` object to be used as the HTTP request body.
     /// - Returns: A configured `Resource`.
-    public func resource<E: Encodable, D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod, body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
+    func resource<E: Encodable, D: Decodable>(path: String, query: [String: String] = [:], headers: [String: String] = [:], method: HTTPMethod, body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
         return Resource(
             endpoint: endpoint(path, query: query, customise: customise),
             headers: headers.merging(commonHeaders) { current, _ in current },

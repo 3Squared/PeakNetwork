@@ -12,7 +12,6 @@ import UIKit
 import AppKit
 #endif
 import PeakOperation
-import PeakResult
 
 public struct Response<O> {
     public let data: Data?
@@ -34,7 +33,7 @@ public struct Response<O> {
 /// If a `RetryStrategy` is provided, this can be re-run if the network task fails (not 200).
 open class NetworkOperation<O>: RetryingOperation<Response<O>>, ConsumesResult {
     
-    public var input: Result<Resource<O>> = Result { throw ResultError.noResult }
+    public var input: Result<Resource<O>, Error> = Result { throw ResultError.noResult }
     public let session: Session
     open var task: URLSessionTask?
     
@@ -87,12 +86,12 @@ open class NetworkOperation<O>: RetryingOperation<Response<O>>, ConsumesResult {
             if let error = error {
                 strongSelf.output = Result { throw error }
             } else if let httpResponse = response as? HTTPURLResponse {
-                if httpResponse.statusCodeEnum.isSuccess {
+                if httpResponse.statusCodeValue.isSuccess {
                     strongSelf.output = Result {
                         Response(data: data, urlResponse: httpResponse, parsed: try resource.parse(data))
                     }
                 } else {
-                    strongSelf.output = .failure(ServerError.error(code: httpResponse.statusCodeEnum, data: data, response: httpResponse))
+                    strongSelf.output = .failure(ServerError.error(code: httpResponse.statusCodeValue, data: data, response: httpResponse))
                 }
             } else {
                 strongSelf.output = .failure(ServerError.unknownResponse)
@@ -129,8 +128,8 @@ open class MultipleResourceNetworkOperation<E, O>: ConcurrentOperation, Consumes
 
     public let session: Session
 
-    public var input: Result<[(object: E, resource: Resource<O>)]> = Result { throw ResultError.noResult }
-    public var output: Result<MultipleResourceOutcome<E, O>> = Result { throw ResultError.noResult }
+    public var input: Result<[(object: E, resource: Resource<O>)], Error> = Result { throw ResultError.noResult }
+    public var output: Result<MultipleResourceOutcome<E, O>, Error> = Result { throw ResultError.noResult }
 
     let internalQueue = OperationQueue()
     let dispatchQueue = DispatchQueue(label: "MultipleResourceNetworkOperation", attributes: .concurrent)
@@ -201,7 +200,7 @@ public extension MultipleResourceNetworkOperation where E == Void {
     ///   - identifiableResources: A list of `Resource` describing the web resources to fetch.
     ///     The associated object is Void.
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public convenience init(resources: [Resource<O>]? = nil, session: Session = URLSession.shared) {
+    convenience init(resources: [Resource<O>]? = nil, session: Session = URLSession.shared) {
         if let resources = resources {
             self.init(identifiableResources: resources.map { ((), $0) }, session: session)
         } else {

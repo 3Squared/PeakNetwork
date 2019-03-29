@@ -8,7 +8,7 @@
 
 import XCTest
 import PeakOperation
-import PeakResult
+
 #if os(iOS)
 @testable import PeakNetwork_iOS
 #else
@@ -54,7 +54,7 @@ class APITests: XCTestCase {
         let api = SimpleAPI()
         let operation = api.operation(for: api.resource(path: "test", method: .get))
         
-        let input = try! operation.input.resolve()
+        let input = try! operation.input.get()
         XCTAssertEqual(operation.session as! URLSession, api.session as! URLSession)
         XCTAssertEqual(input.request.url!.absoluteString, "https://simple.com/test")
     }

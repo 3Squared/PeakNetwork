@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0ABF0F530AF3B11F12C43522 /* libPods-PeakNetwork-iOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B51BF785E46F99A7DA4347 /* libPods-PeakNetwork-iOSTests.a */; };
 		182C4827219DC70D00B03F9F /* PeakNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */; };
 		1830B148219D8ED600AC862F /* PeakNetwork_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1830B13F219D8ED600AC862F /* PeakNetwork_macOS.framework */; };
 		1830B164219D8F9E00AC862F /* CertificatePinningSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */; };
@@ -22,8 +21,10 @@
 		188DEAC3220DAF790067A6EF /* PeakNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */; };
 		188DEAC5220DAF9B0067A6EF /* PeakNetwork+Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188DEAC4220DAF9B0067A6EF /* PeakNetwork+Aliases.swift */; };
 		188DEAC7220DAF9F0067A6EF /* PeakNetwork+Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188DEAC4220DAF9B0067A6EF /* PeakNetwork+Aliases.swift */; };
-		25F55EACE4745B17BDCF734D /* libPods-PeakNetwork-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76C2CC72593AFE1EF68EAC50 /* libPods-PeakNetwork-macOS.a */; };
-		CAC3E8F76AC9DAB861D96F3C /* libPods-PeakNetwork-macOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27F82A9AFF4776139A2773C6 /* libPods-PeakNetwork-macOSTests.a */; };
+		3B4E384CA142B233A36CEC86 /* Pods_PeakNetwork_macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63E5D9BFC2D4F33660A3E136 /* Pods_PeakNetwork_macOS.framework */; };
+		49F8CC2F797F60903C4BF30D /* Pods_PeakNetwork_macOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B27D4BF04ACEFFA9B50FF368 /* Pods_PeakNetwork_macOSTests.framework */; };
+		A548995C8219D27924BD04D5 /* Pods_PeakNetwork_iOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C03BE7406BC6D91246EFD7F /* Pods_PeakNetwork_iOSTests.framework */; };
+		BD042F6235D8A53881642A96 /* Pods_PeakNetwork_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7DA24673277C9F684A0ACF3 /* Pods_PeakNetwork_iOS.framework */; };
 		CB2380E41F740D1500F1B001 /* NetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */; };
 		CB2380E51F740D1500F1B001 /* CertificatePinningSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */; };
 		CB2380E61F740D1500F1B001 /* ImageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DD1F740D1500F1B001 /* ImageController.swift */; };
@@ -53,7 +54,6 @@
 		CBCF0A482211D5D70023DF8E /* Interceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCF0A462211D5D70023DF8E /* Interceptor.swift */; };
 		CBF2179720CAC63700515DB2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2179620CAC63700515DB2 /* Logger.swift */; };
 		CBFD4EE71F740C07008CD8AA /* PeakNetwork_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBFD4EDD1F740C07008CD8AA /* PeakNetwork_iOS.framework */; };
-		F4136952B70A608A1EC4C881 /* libPods-PeakNetwork-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E6DCE3A2926F7FADD67D8B5F /* libPods-PeakNetwork-iOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,19 +76,19 @@
 /* Begin PBXFileReference section */
 		056D1377BC3154B39DE0DF12 /* Pods-PeakNetwork-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-macOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-macOS/Pods-PeakNetwork-macOS.debug.xcconfig"; sourceTree = "<group>"; };
 		1181CBF1635E348B99C9CBA8 /* Pods-PeakNetwork-iOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-iOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-iOSTests/Pods-PeakNetwork-iOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		15B51BF785E46F99A7DA4347 /* libPods-PeakNetwork-iOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetwork-iOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1830B13F219D8ED600AC862F /* PeakNetwork_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PeakNetwork_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1830B142219D8ED600AC862F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1830B147219D8ED600AC862F /* PeakNetwork_macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PeakNetwork_macOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1830B14E219D8ED600AC862F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		188DEAC4220DAF9B0067A6EF /* PeakNetwork+Aliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PeakNetwork+Aliases.swift"; sourceTree = "<group>"; };
 		19F67A4308912F1015036221 /* Pods-PeakNetwork-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-macOS/Pods-PeakNetwork-macOS.release.xcconfig"; sourceTree = "<group>"; };
-		27F82A9AFF4776139A2773C6 /* libPods-PeakNetwork-macOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetwork-macOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C03BE7406BC6D91246EFD7F /* Pods_PeakNetwork_iOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PeakNetwork_iOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F9F5BFD151A18FBA00DF18B /* Pods-PeakNetwork-macOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-macOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-macOSTests/Pods-PeakNetwork-macOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		63E5D9BFC2D4F33660A3E136 /* Pods_PeakNetwork_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PeakNetwork_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		73AF6A0F3F1AF9D6A6612758 /* Pods-PeakNetwork-iOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-iOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-iOSTests/Pods-PeakNetwork-iOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		76C2CC72593AFE1EF68EAC50 /* libPods-PeakNetwork-macOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetwork-macOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F13389A8316B538B81A6709 /* Pods-PeakNetwork-macOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-macOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-macOSTests/Pods-PeakNetwork-macOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		8A48F868C8C5C16D7EF37F7F /* Pods-PeakNetwork-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-iOS/Pods-PeakNetwork-iOS.release.xcconfig"; sourceTree = "<group>"; };
+		B27D4BF04ACEFFA9B50FF368 /* Pods_PeakNetwork_macOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PeakNetwork_macOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkOperation.swift; sourceTree = "<group>"; };
 		CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatePinningSessionDelegate.swift; sourceTree = "<group>"; };
 		CB2380DD1F740D1500F1B001 /* ImageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageController.swift; sourceTree = "<group>"; };
@@ -121,7 +121,7 @@
 		CBFD4EE11F740C07008CD8AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CBFD4EE61F740C07008CD8AA /* PeakNetwork_iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PeakNetwork_iOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBFD4EED1F740C07008CD8AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E6DCE3A2926F7FADD67D8B5F /* libPods-PeakNetwork-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetwork-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F7DA24673277C9F684A0ACF3 /* Pods_PeakNetwork_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PeakNetwork_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F97A8322DDD435542D70EBE4 /* Pods-PeakNetwork-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-iOS/Pods-PeakNetwork-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -130,7 +130,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				25F55EACE4745B17BDCF734D /* libPods-PeakNetwork-macOS.a in Frameworks */,
+				3B4E384CA142B233A36CEC86 /* Pods_PeakNetwork_macOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,7 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1830B148219D8ED600AC862F /* PeakNetwork_macOS.framework in Frameworks */,
-				CAC3E8F76AC9DAB861D96F3C /* libPods-PeakNetwork-macOSTests.a in Frameworks */,
+				49F8CC2F797F60903C4BF30D /* Pods_PeakNetwork_macOSTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,7 +147,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4136952B70A608A1EC4C881 /* libPods-PeakNetwork-iOS.a in Frameworks */,
+				BD042F6235D8A53881642A96 /* Pods_PeakNetwork_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,7 +156,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CBFD4EE71F740C07008CD8AA /* PeakNetwork_iOS.framework in Frameworks */,
-				0ABF0F530AF3B11F12C43522 /* libPods-PeakNetwork-iOSTests.a in Frameworks */,
+				A548995C8219D27924BD04D5 /* Pods_PeakNetwork_iOSTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,10 +166,10 @@
 		115BC29ECA395A799C88B9AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E6DCE3A2926F7FADD67D8B5F /* libPods-PeakNetwork-iOS.a */,
-				15B51BF785E46F99A7DA4347 /* libPods-PeakNetwork-iOSTests.a */,
-				76C2CC72593AFE1EF68EAC50 /* libPods-PeakNetwork-macOS.a */,
-				27F82A9AFF4776139A2773C6 /* libPods-PeakNetwork-macOSTests.a */,
+				F7DA24673277C9F684A0ACF3 /* Pods_PeakNetwork_iOS.framework */,
+				1C03BE7406BC6D91246EFD7F /* Pods_PeakNetwork_iOSTests.framework */,
+				63E5D9BFC2D4F33660A3E136 /* Pods_PeakNetwork_macOS.framework */,
+				B27D4BF04ACEFFA9B50FF368 /* Pods_PeakNetwork_macOSTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -440,12 +440,12 @@
 					};
 					CBFD4EDC1F740C07008CD8AA = {
 						CreatedOnToolsVersion = 9.0;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					CBFD4EE51F740C07008CD8AA = {
 						CreatedOnToolsVersion = 9.0;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -909,7 +909,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -933,7 +933,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.3squared.PeakNetwork-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -951,7 +951,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.3squared.PeakNetworkTests;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -968,7 +968,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.3squared.PeakNetworkTests;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

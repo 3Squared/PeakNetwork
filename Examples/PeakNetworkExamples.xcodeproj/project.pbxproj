@@ -143,19 +143,20 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = 3Squared;
 				TargetAttributes = {
 					CB104F921E41EE3700F4C562 = {
 						CreatedOnToolsVersion = 8.2.1;
-						LastSwiftMigration = 1000;
+						DevelopmentTeam = VPQ4FHFFW8;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = CB104F8E1E41EE3700F4C562 /* Build configuration list for PBXProject "PeakNetworkExamples" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -214,13 +215,11 @@
 				"${PODS_ROOT}/Target Support Files/Pods-PeakNetworkExamples/Pods-PeakNetworkExamples-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/PeakNetwork/PeakNetwork.framework",
 				"${BUILT_PRODUCTS_DIR}/PeakOperation/PeakOperation.framework",
-				"${BUILT_PRODUCTS_DIR}/PeakResult/PeakResult.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PeakNetwork.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PeakOperation.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PeakResult.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -375,11 +374,12 @@
 			baseConfigurationReference = BB4BBB51BEF531A68DDD04FF /* Pods-PeakNetworkExamples.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = VPQ4FHFFW8;
 				INFOPLIST_FILE = PeakNetworkExamples/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.3squared.PeakNetworkExamples;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -388,11 +388,12 @@
 			baseConfigurationReference = 5ED3BFC6ACEC582AFAF613D4 /* Pods-PeakNetworkExamples.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = VPQ4FHFFW8;
 				INFOPLIST_FILE = PeakNetworkExamples/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.3squared.PeakNetworkExamples;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

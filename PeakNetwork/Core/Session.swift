@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import PeakResult
 
 public typealias DataTaskCompletionHandler = (Data?, URLResponse?, Error?) -> Void
 
@@ -223,7 +222,7 @@ public class MockSession: Session {
         return dispatchQueue.sync {
             let isValid: (_ response: MockResponse) -> Bool = { return $0.isValid(request) }
             
-            guard let response = responses.first(where: isValid), let index = responses.index(where: isValid) else {
+            guard let response = responses.first(where: isValid), let index = responses.firstIndex(where: isValid) else {
                 if let session = self.fallbackSession {
                     return session.dataTask(with: request, completionHandler: completionHandler)
                 } else {

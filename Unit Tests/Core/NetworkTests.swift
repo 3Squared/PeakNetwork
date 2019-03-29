@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import PeakResult
 import PeakOperation
 
 #if os(iOS)
@@ -22,17 +21,17 @@ class NetworkTests: XCTestCase {
     
     func testResponseValidation() {
         let success = HTTPURLResponse(url: URL(string:"google.com")!, statusCode: 200, httpVersion: "1.1", headerFields: nil)
-        XCTAssertTrue(success!.statusCodeEnum.isSuccess)
+        XCTAssertTrue(success!.statusCodeValue.isSuccess)
         
         let serverFail = HTTPURLResponse(url: URL(string:"google.com")!, statusCode: 500, httpVersion: "1.1", headerFields: nil)
-        XCTAssertTrue(serverFail!.statusCodeEnum.isServerError)
+        XCTAssertTrue(serverFail!.statusCodeValue.isServerError)
 
         let notFound = HTTPURLResponse(url: URL(string:"google.com")!, statusCode: 404, httpVersion: "1.1", headerFields: nil)
-        XCTAssertTrue(notFound!.statusCodeEnum.isClientError)
+        XCTAssertTrue(notFound!.statusCodeValue.isClientError)
         
         let authentication = HTTPURLResponse(url: URL(string:"google.com")!, statusCode: 401, httpVersion: "1.1", headerFields: nil)
-        XCTAssertTrue(authentication!.statusCodeEnum.isClientError)
-        XCTAssertTrue(authentication!.statusCodeEnum == .unauthorized)
+        XCTAssertTrue(authentication!.statusCodeValue.isClientError)
+        XCTAssertTrue(authentication!.statusCodeValue == .unauthorized)
     }
     
     
@@ -96,7 +95,7 @@ class NetworkTests: XCTestCase {
 
         networkOperation.addResultBlock { result in
             do {
-                let response = try result.resolve()
+                let response = try result.get()
                 XCTAssertEqual(response.urlResponse.statusCode, 200)
                 expect.fulfill()
             } catch {
@@ -120,7 +119,7 @@ class NetworkTests: XCTestCase {
         
         networkOperation.addResultBlock { result in
             do {
-                let response = try result.resolve()
+                let response = try result.get()
                 XCTAssertEqual(response.parsed.name, "Sam")
                 expect.fulfill()
             } catch {
@@ -146,7 +145,7 @@ class NetworkTests: XCTestCase {
         
         networkOperation.addResultBlock { result in
             do {
-                let entity = try result.resolve()
+                let entity = try result.get()
                 XCTAssertEqual(entity.parsed.name, "Sam")
                 expect.fulfill()
             } catch {
@@ -168,7 +167,7 @@ class NetworkTests: XCTestCase {
 
         networkOperation.addResultBlock { result in
             do {
-                let _ = try result.resolve()
+                let _ = try result.get()
                 XCTFail()
             } catch {
                 switch error {
@@ -251,7 +250,7 @@ class NetworkTests: XCTestCase {
         networkOperation.enqueue()
         waitForExpectations(timeout: 10)
         
-        let outcomes = try! networkOperation.output.resolve()
+        let outcomes = try! networkOperation.output.get()
         XCTAssertEqual(outcomes.successes.count, 2)
         XCTAssertTrue(outcomes.successes.contains {
              $0.object == 1 && $0.response.parsed.name == "sam"
@@ -280,7 +279,7 @@ class NetworkTests: XCTestCase {
         networkOperation.enqueue()
         waitForExpectations(timeout: 10)
         
-        let outcomes = try! networkOperation.output.resolve()
+        let outcomes = try! networkOperation.output.get()
         XCTAssertEqual(outcomes.successes.count, 1)
         XCTAssertEqual(outcomes.successes[0].response.parsed.name, "sam")
         XCTAssertTrue(outcomes.successes[0].object == ())
@@ -306,7 +305,7 @@ class NetworkTests: XCTestCase {
         networkOperation.enqueue()
         waitForExpectations(timeout: 10)
         
-        let outcomes = try! networkOperation.output.resolve()
+        let outcomes = try! networkOperation.output.get()
         XCTAssertEqual(outcomes.successes.count, 2)
         XCTAssertTrue(outcomes.successes.contains { $0.response.parsed.name == "sam" })
         XCTAssertTrue(outcomes.successes.contains { $0.response.parsed.name == "ben" })
@@ -327,7 +326,7 @@ class NetworkTests: XCTestCase {
         networkOperation.enqueue()
         waitForExpectations(timeout: 1)
         
-        XCTAssertEqual(try! networkOperation.output.resolve().name, "Sam")
+        XCTAssertEqual(try! networkOperation.output.get().name, "Sam")
     }
     
     
