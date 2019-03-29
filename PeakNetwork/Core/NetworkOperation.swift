@@ -117,24 +117,20 @@ extension NetworkOperation {
     }
 }
 
+/// The outcome of the requests. The object provided with the `Resource`
+/// is associated with the the `Response` or `Error`.
+public struct MultipleResourceOutcome<E, O> {
+    public let successes: [(object: E, response: Response<O>)]
+    public let failures: [(object: E, error: Error)]
+}
+
 /// Perform a series of network requests on an internal queue and aggregate the results.
 open class MultipleResourceNetworkOperation<E, O>: ConcurrentOperation, ConsumesResult, ProducesResult {
 
-    /// The outcome of the requests. The object provided with the `Resource`
-    /// is associated with the the `Response` or `Error`.
-    public struct Outcome {
-        let successes: [IdentifiableResponse]
-        let failures: [IdentifiableError]
-    }
-    
-    public typealias IdentifiableResource = (object: E, resource: Resource<O>)
-    public typealias IdentifiableResponse = (object: E, response: Response<O>)
-    public typealias IdentifiableError = (object: E, error: Error)
-
     public let session: Session
 
-    public var input: Result<[IdentifiableResource]> = Result { throw ResultError.noResult }
-    public var output: Result<Outcome> = Result { throw ResultError.noResult }
+    public var input: Result<[(object: E, resource: Resource<O>)]> = Result { throw ResultError.noResult }
+    public var output: Result<MultipleResourceOutcome<E, O>> = Result { throw ResultError.noResult }
 
     let internalQueue = OperationQueue()
     let dispatchQueue = DispatchQueue(label: "MultipleResourceNetworkOperation", attributes: .concurrent)
@@ -147,7 +143,7 @@ open class MultipleResourceNetworkOperation<E, O>: ConcurrentOperation, Consumes
     ///     `Error` associated with it. This way you may see which specific requests failed by using an ID or
     ///     a request body.
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(identifiableResources: [IdentifiableResource]? = nil, session: Session = URLSession.shared) {
+    public init(identifiableResources: [(object: E, resource: Resource<O>)]? = nil, session: Session = URLSession.shared) {
         self.session = session
         if let identifiableResources = identifiableResources {
             input = .success(identifiableResources)
@@ -159,8 +155,8 @@ open class MultipleResourceNetworkOperation<E, O>: ConcurrentOperation, Consumes
         switch input {
         case .success(let resources):
 
-            var successes: [IdentifiableResponse] = []
-            var failures: [IdentifiableError] = []
+            var successes: [(object: E, response: Response<O>)] = []
+            var failures: [(object: E, error: Error)] = []
 
             let group = DispatchGroup()
             
@@ -187,7 +183,7 @@ open class MultipleResourceNetworkOperation<E, O>: ConcurrentOperation, Consumes
 
             self.internalQueue.addOperations(operations, waitUntilFinished: false)
             group.wait()
-            self.output = .success(Outcome(successes: successes, failures: failures))
+            self.output = .success(MultipleResourceOutcome(successes: successes, failures: failures))
             finish()
         case .failure(let error):
             output = .failure(error)
