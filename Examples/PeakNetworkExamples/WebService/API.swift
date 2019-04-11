@@ -8,16 +8,15 @@
 
 import Foundation
 import PeakNetwork
-import PeakResult
 
-struct API: APIProtocol {
+struct ExampleAPI: JSONAPI {
     let baseURL = "https://example.com"
     let session = URLSession.mock
 }
 
-extension API {
+extension ExampleAPI {
     func search(_ query: String) -> NetworkOperation<[SearchResult]> {
-        return operation(for: resource(path: "/search", query: ["search": query]))
+        return operation(for: resource(path: "/search", query: ["search": query], method: .get))
     }
 }
 
