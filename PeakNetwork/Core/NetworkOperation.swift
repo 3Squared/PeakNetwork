@@ -37,6 +37,8 @@ open class NetworkOperation<O>: RetryingOperation<Response<O>>, ConsumesResult {
     public let session: Session
     open var task: URLSessionTask?
     
+    internal var downloadProgress = Progress(totalUnitCount: 1)
+
     /// Create a new `NetworkOperation`, parsing the response into the `Resource`'s type.
     ///
     /// - Parameters:
@@ -79,7 +81,7 @@ open class NetworkOperation<O>: RetryingOperation<Response<O>>, ConsumesResult {
     ///   - session: The session on which to perform the task.
     /// - Returns: A URLSessionTask, or nil.
     open func createTask(with resource: Resource<O>, using session: Session) -> URLSessionTask? {
-        return session.dataTask(with: resource.request) { [weak self] data, response, error in
+        let task = session.dataTask(with: resource.request) { [weak self] data, response, error in
             guard let strongSelf = self else { return }
             guard !strongSelf.isCancelled else { return strongSelf.finish() }
 
@@ -98,6 +100,12 @@ open class NetworkOperation<O>: RetryingOperation<Response<O>>, ConsumesResult {
             }
             strongSelf.finish()
         }
+        
+        if #available(iOS 11.0, *) {
+            progress.addChild(task.progress, withPendingUnitCount: 1)
+        }
+        
+        return task
     }
 }
 

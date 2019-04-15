@@ -243,6 +243,11 @@ public class MockSession: Session {
         let taskResponse: MockResponse
         let request: URLRequest
         
+        let _progress = Progress(totalUnitCount: 1)
+        override var progress: Progress {
+            return _progress
+        }
+
         private let dispatchQueue = DispatchQueue(label: "URLSessionDataTaskMock", qos: .background)
 
         override var originalRequest: URLRequest { return request }
@@ -261,10 +266,12 @@ public class MockSession: Session {
                                                             httpVersion: "1.1",
                                                             headerFields: taskResponse.responseHeaders)
                 dispatchQueue.asyncAfter(deadline: .now() + taskResponse.delay) {
+                    self.progress.completedUnitCount = 1
                     self.completionHandler(self.taskResponse.dataBlock(), urlResponse, self.taskResponse.error)
                 }
             } else {
                 dispatchQueue.asyncAfter(deadline: .now() + taskResponse.delay) {
+                    self.progress.completedUnitCount = 1
                     self.completionHandler(self.taskResponse.dataBlock(), nil, self.taskResponse.error)
                 }
             }
