@@ -456,35 +456,15 @@ extension HTTPStatusCode: CustomDebugStringConvertible, CustomStringConvertible 
 extension HTTPStatusCode {
     
     /// Obtains a possible status code from an optional HTTP URL response.
-    public init?(HTTPResponse: HTTPURLResponse?) {
-        guard let statusCodeValue = HTTPResponse?.statusCode else {
-            return nil
-        }
-        self.init(statusCodeValue)
-    }
-    
-    /// This is declared as it's not automatically picked up by the complier for the above init
-    private init?(_ rawValue: Int) {
-        guard let value = HTTPStatusCode(rawValue: rawValue) else {
-            return nil
-        }
-        self = value
+    public init(HTTPResponse: HTTPURLResponse) {
+        self.init(rawValue: HTTPResponse.statusCode)!
     }
 }
 
 extension HTTPURLResponse {
     
-    /**
-     * Marked internal to expose (as `statusCodeValue`) for Objective-C interoperability only.
-     *
-     * - returns: the receiver’s HTTP status code.
-     */
-    var statusCodeEnum: HTTPStatusCode {
-        return HTTPStatusCode(HTTPResponse: self)!
-    }
-    
     /// - returns: the receiver’s HTTP status code.
-    public var statusCodeValue: HTTPStatusCode? {
+    public var statusCodeValue: HTTPStatusCode {
         return HTTPStatusCode(HTTPResponse: self)
     }
     
@@ -503,5 +483,3 @@ extension HTTPURLResponse {
         self.init(url: url, statusCode: statusCode.rawValue, httpVersion: httpVersion, headerFields: headerFields)
     }
 }
-
-
