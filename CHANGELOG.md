@@ -4,6 +4,11 @@ The changelog for `PeakNetwork`.
 
 --------------------------------------
 
+5.2.0
+-----
+- Add more detailed progress for network operations.
+- Update `PeakOperation` dependancy.
+
 5.1.0
 -----
 - Remove dependency on `PeakResult`.
