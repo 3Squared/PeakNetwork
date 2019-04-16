@@ -162,6 +162,7 @@ open class SequenceOperation<First, Second>: ConcurrentOperation, ProducesResult
     
     open override func execute() {
         guard !isCancelled else { return finish() }
+
         second.addResultBlock { [weak self] result in
             guard let strongSelf = self else { return }
             if !strongSelf.isCancelled {
@@ -170,9 +171,10 @@ open class SequenceOperation<First, Second>: ConcurrentOperation, ProducesResult
             strongSelf.finish()
         }
         
-        first
-            .passesResult(to: second)
-            .enqueue(on: queue)
+        let operations = first.passesResult(to: second)
+        progress.addChild(operations.chainProgress(), withPendingUnitCount: progress.totalUnitCount)
+
+        operations.enqueue(on: queue)
     }
 
     
