@@ -67,7 +67,7 @@ open class NetworkOperation: RetryingOperation<NetworkResponse>, ConsumesResult 
     ///   - session: The session on which to perform the task.
     /// - Returns: A URLSessionTask, or nil.
     open func createTask(with request: URLRequest, using session: Session) -> URLSessionTask? {
-        return session.dataTask(with: request) { [weak self] data, response, error in
+        let task = session.dataTask(with: request) { [weak self] data, response, error in
             guard let strongSelf = self else { return }
             guard !strongSelf.isCancelled else { return strongSelf.finish() }
 
@@ -88,6 +88,12 @@ open class NetworkOperation: RetryingOperation<NetworkResponse>, ConsumesResult 
             }
             strongSelf.finish()
         }
+        
+        if #available(iOS 11.0, *) {
+            progress.addChild(task.progress, withPendingUnitCount: progress.totalUnitCount)
+        }
+        
+        return task
     }
 }
 

@@ -202,6 +202,11 @@ public class MockSession: Session {
         let taskResponse: MockResponse
         let request: URLRequest
         
+        let _progress = Progress(totalUnitCount: 1)
+        override var progress: Progress {
+            return _progress
+        }
+
         override var originalRequest: URLRequest { return request }
         override var currentRequest: URLRequest { return request }
 
@@ -217,8 +222,10 @@ public class MockSession: Session {
                                                             statusCode: statusCode,
                                                             httpVersion: "1.1",
                                                             headerFields: taskResponse.responseHeaders)
+                progress.completedUnitCount = 1
                 completionHandler(taskResponse.data, urlResponse, taskResponse.error)
             } else {
+                progress.completedUnitCount = 1
                 completionHandler(taskResponse.data, nil, taskResponse.error)
             }
         }
