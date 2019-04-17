@@ -1,7 +1,7 @@
 PODS:
   - PeakNetwork (5.1.0):
     - PeakOperation
-  - PeakOperation (3.2.0)
+  - PeakOperation (4.0.0)
 
 DEPENDENCIES:
   - PeakNetwork (from `../`)
@@ -16,7 +16,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   PeakNetwork: 913433eb5621004501e7e6924a73ddb57fb4b069
-  PeakOperation: 59ee044652b7bd2f12a3ae0118aa0d02bb6f70cf
+  PeakOperation: 68825bedc2199bacba9d0fff14fd183078e16b59
 
 PODFILE CHECKSUM: 1ba7eb7b5ec1e6601a0201f475e55b5955b69ff0
 

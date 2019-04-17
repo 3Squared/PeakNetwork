@@ -1,16 +1,16 @@
 PODS:
-  - PeakOperation (3.2.0)
+  - PeakOperation (4.0.0)
 
 DEPENDENCIES:
-  - PeakOperation (from `../PeakOperation/`)
+  - PeakOperation
 
-EXTERNAL SOURCES:
-  PeakOperation:
-    :path: "../PeakOperation/"
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - PeakOperation
 
 SPEC CHECKSUMS:
-  PeakOperation: 59ee044652b7bd2f12a3ae0118aa0d02bb6f70cf
+  PeakOperation: 68825bedc2199bacba9d0fff14fd183078e16b59
 
-PODFILE CHECKSUM: 6d9810bd14bb6cf18d64dba465269c0ab4e5fbaa
+PODFILE CHECKSUM: 0c410e26e5f8f73432a1334539d84b2a6e9129ae
 
 COCOAPODS: 1.6.1
