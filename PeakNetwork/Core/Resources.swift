@@ -10,8 +10,8 @@ import Foundation
 
 /// Holds a `URLRequest` and a closure that can be used to parse the response into the `ResponseType`.
 public struct Resource<ResponseType> {
-    var request: URLRequest
-    let parse: (Data?) throws -> ResponseType
+    public var request: URLRequest
+    public let parse: (Data?) throws -> ResponseType
 }
 
 
