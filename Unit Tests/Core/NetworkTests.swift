@@ -231,86 +231,6 @@ class NetworkTests: XCTestCase {
         }
     }
     
-    func testMultipleResourceNetworkOperation_allSuccess() {
-        let session = MockSession { session in
-            session.queue(response: MockResponse(json: ["name": "sam"]) { $0.url!.absoluteString.contains("sam") })
-            session.queue(response: MockResponse(json: ["name": "ben"]) { $0.url!.absoluteString.contains("ben") })
-        }
-
-        let networkOperation = MultipleResourceNetworkOperation(identifiableResources: [
-            (1, api.resource(path: "/sam", method: .get) as Resource<TestEntity>),
-            (2, api.resource(path: "/ben", method: .get) as Resource<TestEntity>)
-        ], session: session)
-        
-        let expect = expectation(description: "")
-        networkOperation.addResultBlock { _ in
-            expect.fulfill()
-        }
-        
-        networkOperation.enqueue()
-        waitForExpectations(timeout: 10)
-        
-        let outcomes = try! networkOperation.output.get()
-        XCTAssertEqual(outcomes.successes.count, 2)
-        XCTAssertTrue(outcomes.successes.contains {
-             $0.object == 1 && $0.response.parsed.name == "sam"
-        })
-        XCTAssertTrue(outcomes.successes.contains {
-            $0.object == 2 && $0.response.parsed.name == "ben"
-        })
-    }
-    
-    func testMultipleResourceNetworkOperation_voidBody_withFailure() {
-        let session = MockSession { session in
-            session.queue(response: MockResponse(json: ["name": "sam"]))
-            session.queue(response: MockResponse(statusCode: .internalServerError))
-        }
-        
-        let networkOperation = MultipleResourceNetworkOperation(resources: [
-            api.simple(),
-            api.simple()
-        ], session: session)
-        
-        let expect = expectation(description: "")
-        networkOperation.addResultBlock { _ in
-            expect.fulfill()
-        }
-        
-        networkOperation.enqueue()
-        waitForExpectations(timeout: 10)
-        
-        let outcomes = try! networkOperation.output.get()
-        XCTAssertEqual(outcomes.successes.count, 1)
-        XCTAssertEqual(outcomes.successes[0].response.parsed.name, "sam")
-        XCTAssertTrue(outcomes.successes[0].object == ())
-        XCTAssertEqual(outcomes.failures.count, 1)
-    }
-
-    func testMultipleResourceNetworkOperation_voidBody_allSuccess() {
-        let session = MockSession { session in
-            session.queue(response: MockResponse(json: ["name": "sam"]))
-            session.queue(response: MockResponse(json: ["name": "ben"]))
-        }
-        
-        let networkOperation = MultipleResourceNetworkOperation(resources: [
-            api.simple(),
-            api.simple()
-        ], session: session)
-        
-        let expect = expectation(description: "")
-        networkOperation.addResultBlock { _ in
-            expect.fulfill()
-        }
-        
-        networkOperation.enqueue()
-        waitForExpectations(timeout: 10)
-        
-        let outcomes = try! networkOperation.output.get()
-        XCTAssertEqual(outcomes.successes.count, 2)
-        XCTAssertTrue(outcomes.successes.contains { $0.response.parsed.name == "sam" })
-        XCTAssertTrue(outcomes.successes.contains { $0.response.parsed.name == "ben" })
-    }
-    
     func testNetworkOperation_UnwrappingSuccess_GivesSuccessfullyParsedData() {
         let session = MockSession { session in
             session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok))
@@ -328,7 +248,6 @@ class NetworkTests: XCTestCase {
         
         XCTAssertEqual(try! networkOperation.output.get().name, "Sam")
     }
-    
     
     func testNetworkOperation_UnwrappingFailure_GivesFailure() {
         let session = MockSession { session in
@@ -350,7 +269,6 @@ class NetworkTests: XCTestCase {
             XCTFail()
         }
     }
-    
     
     public enum TestError: Error {
         case justATest
