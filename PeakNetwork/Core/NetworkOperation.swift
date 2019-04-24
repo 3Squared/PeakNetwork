@@ -13,12 +13,12 @@ import AppKit
 #endif
 import PeakOperation
 
-public struct Response<O> {
+public struct Response<Body> {
     public let data: Data?
     public let urlResponse: HTTPURLResponse
-    public let parsed: O
+    public let parsed: Body
     
-    public init(data: Data?, urlResponse: HTTPURLResponse, parsed: O) {
+    public init(data: Data?, urlResponse: HTTPURLResponse, parsed: Body) {
         self.data = data
         self.urlResponse = urlResponse
         self.parsed = parsed
@@ -31,9 +31,9 @@ public struct Response<O> {
 /// If `createTask` is overriden, ensure you call `finish` within your callback block.
 /// A subclass of `RetryingOperation` which wraps a `URLSessionTask`.
 /// If a `RetryStrategy` is provided, this can be re-run if the network task fails (not 200).
-open class NetworkOperation<O>: RetryingOperation<Response<O>>, ConsumesResult {
+open class NetworkOperation<Body>: RetryingOperation<Response<Body>>, ConsumesResult {
     
-    public var input: Result<Resource<O>, Error> = Result { throw ResultError.noResult }
+    public var input: Result<Resource<Body>, Error> = Result { throw ResultError.noResult }
     public let session: Session
     open var task: URLSessionTask?
     
@@ -44,7 +44,7 @@ open class NetworkOperation<O>: RetryingOperation<Response<O>>, ConsumesResult {
     /// - Parameters:
     ///   - requestable: A `Resource` describing the web resource to fetch.
     ///   - session: The `URLSession` in which to perform the fetch (optional).
-    public init(resource: Resource<O>? = nil, session: Session = URLSession.shared) {
+    public init(resource: Resource<Body>? = nil, session: Session = URLSession.shared) {
         self.session = session
         if let resource = resource {
             input = .success(resource)
@@ -80,7 +80,7 @@ open class NetworkOperation<O>: RetryingOperation<Response<O>>, ConsumesResult {
     ///   - request: A request passed from the provided Requestable
     ///   - session: The session on which to perform the task.
     /// - Returns: A URLSessionTask, or nil.
-    open func createTask(with resource: Resource<O>, using session: Session) -> URLSessionTask? {
+    open func createTask(with resource: Resource<Body>, using session: Session) -> URLSessionTask? {
         let task = session.dataTask(with: resource.request) { [weak self] data, response, error in
             guard let strongSelf = self else { return }
             guard !strongSelf.isCancelled else { return strongSelf.finish() }
@@ -112,8 +112,8 @@ open class NetworkOperation<O>: RetryingOperation<Response<O>>, ConsumesResult {
 extension NetworkOperation {
     /// Unwrap the Response and return a result containing only the
     /// parsed data, discarding the network response information.
-    public var unwrapped: MapOperation<Response<O>, O> {
-        return passesResult(to: BlockMapOperation<Response<O>, O> { input in
+    public var unwrapped: MapOperation<Response<Body>, Body> {
+        return passesResult(to: BlockMapOperation<Response<Body>, Body> { input in
             switch (input) {
             case .success(let response):
                 return .success(response.parsed)

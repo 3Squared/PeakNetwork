@@ -9,11 +9,10 @@
 import Foundation
 
 /// Holds a `URLRequest` and a closure that can be used to parse the response into the `ResponseType`.
-public struct Resource<ResponseType> {
+public struct Resource<ResponseBody> {
     public var request: URLRequest
-    public let parse: (Data?) throws -> ResponseType
+    public let parse: (Data?) throws -> ResponseBody
 }
-
 
 /// Errors returned on various resource failures.
 ///
@@ -24,7 +23,6 @@ public enum ResourceError: Error {
     case invalidData
 }
 
-
 public extension Resource {
     
     /// Create a `Resource` for a given `URL` with a custom parse closure.
@@ -34,7 +32,7 @@ public extension Resource {
     ///   - headers: The HTTP headers for the request.
     ///   - method: The HTTP method to use.
     ///   - parse: A parse closure to convert the response data to the required `ResponseType`.
-    init(url: URL, headers: [String: String], method: HTTPMethod, parse: @escaping (Data?) throws -> ResponseType) {
+    init(url: URL, headers: [String: String], method: HTTPMethod, parse: @escaping (Data?) throws -> ResponseBody) {
         request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         request.allHTTPHeaderFields = headers
@@ -48,13 +46,13 @@ public extension Resource {
     ///   - headers: The HTTP headers for the request.
     ///   - method: The HTTP method to use.
     ///   - parse: A parse closure to convert the response data to the required `ResponseType`.
-    init(endpoint: Endpoint, headers: [String: String], method: HTTPMethod, parse: @escaping (Data?) throws -> ResponseType) {
+    init(endpoint: Endpoint, headers: [String: String], method: HTTPMethod, parse: @escaping (Data?) throws -> ResponseBody) {
         self.init(url: endpoint.url, headers: headers, method: method, parse: parse)
     }
 }
 
 
-public extension Resource where ResponseType == Void {
+public extension Resource where ResponseBody == Void {
     
     /// Create a `Resource` for a given `URL` where the response is not parsed.
     ///
@@ -94,7 +92,7 @@ public extension Resource where ResponseType == Void {
 }
 
 
-public extension Resource where ResponseType: Decodable {
+public extension Resource where ResponseBody: Decodable {
     
     /// Create a `Resource` for a given `URL` where the response is expected to be `Decodable`.
     ///
@@ -106,7 +104,7 @@ public extension Resource where ResponseType: Decodable {
     init(url: URL, headers: [String: String], method: HTTPMethod, decoder: JSONDecoder) {
         self.init(url: url, headers: headers, method: method) { data in
             if let data = data {
-                return try decoder.decode(ResponseType.self, from: data)
+                return try decoder.decode(ResponseBody.self, from: data)
             } else {
                 throw ResourceError.noData
             }
@@ -140,7 +138,7 @@ public extension Resource where ResponseType: Decodable {
 }
 
 
-public extension Resource where ResponseType: PeakImage {
+public extension Resource where ResponseBody: PeakImage {
     
     /// Create a `Resource` for a given `URL` where the response is expected to be a platform Image type.
     ///
@@ -151,7 +149,7 @@ public extension Resource where ResponseType: PeakImage {
     init(url: URL, headers: [String: String], method: HTTPMethod) {
         self.init(url: url, headers: headers, method: method) { data in
             if let data = data {
-                if let image = ResponseType(data: data) {
+                if let image = ResponseBody(data: data) {
                     return image
                 } else {
                     throw ResourceError.invalidData
@@ -180,7 +178,7 @@ extension Resource {
     ///
     /// - Parameter session: The session in which to perform the request.
     /// - Returns: A `NetworkOperation` that will request the `Resource`.
-    func operation(session: Session) -> NetworkOperation<ResponseType> {
+    func operation(session: Session) -> NetworkOperation<ResponseBody> {
         return NetworkOperation(resource: self, session: session)
     }
 }
