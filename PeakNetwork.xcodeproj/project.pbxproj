@@ -54,6 +54,7 @@
 		CBCF0A482211D5D70023DF8E /* Interceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCF0A462211D5D70023DF8E /* Interceptor.swift */; };
 		CBD2826A2271B20800F349C7 /* QueryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD282692271B20800F349C7 /* QueryItems.swift */; };
 		CBD2826C2271C16E00F349C7 /* MockSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD2826B2271C16E00F349C7 /* MockSession.swift */; };
+		CBD2826E2271C20F00F349C7 /* JSONAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD2826D2271C20F00F349C7 /* JSONAPI.swift */; };
 		CBF2179720CAC63700515DB2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2179620CAC63700515DB2 /* Logger.swift */; };
 		CBFD4EE71F740C07008CD8AA /* PeakNetwork_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBFD4EDD1F740C07008CD8AA /* PeakNetwork_iOS.framework */; };
 /* End PBXBuildFile section */
@@ -120,6 +121,7 @@
 		CBCF0A462211D5D70023DF8E /* Interceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interceptor.swift; sourceTree = "<group>"; };
 		CBD282692271B20800F349C7 /* QueryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryItems.swift; sourceTree = "<group>"; };
 		CBD2826B2271C16E00F349C7 /* MockSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSession.swift; sourceTree = "<group>"; };
+		CBD2826D2271C20F00F349C7 /* JSONAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONAPI.swift; sourceTree = "<group>"; };
 		CBF2179620CAC63700515DB2 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		CBFD4EDD1F740C07008CD8AA /* PeakNetwork_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PeakNetwork_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PeakNetwork.h; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 				CB808B142237BECC00446EC0 /* Endpoint.swift */,
 				CB95D1D7222BDAEB004B29B3 /* Resources.swift */,
 				CB808B122237BEC400446EC0 /* API.swift */,
+				CBD2826D2271C20F00F349C7 /* JSONAPI.swift */,
 				CBD282692271B20800F349C7 /* QueryItems.swift */,
 			);
 			path = Core;
@@ -639,6 +642,7 @@
 				CB95D1D8222BDAEB004B29B3 /* Resources.swift in Sources */,
 				CB2380E91F740D1500F1B001 /* HTTPMethods.swift in Sources */,
 				CB2380E51F740D1500F1B001 /* CertificatePinningSessionDelegate.swift in Sources */,
+				CBD2826E2271C20F00F349C7 /* JSONAPI.swift in Sources */,
 				CB2380E61F740D1500F1B001 /* ImageController.swift in Sources */,
 				188DEAC5220DAF9B0067A6EF /* PeakNetwork+Aliases.swift in Sources */,
 				CBCF0A472211D5D70023DF8E /* Interceptor.swift in Sources */,
