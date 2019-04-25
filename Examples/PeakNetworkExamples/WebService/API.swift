@@ -16,7 +16,7 @@ struct ExampleAPI: JSONAPI {
 
 extension ExampleAPI {
     func search(_ query: String) -> NetworkOperation<[SearchResult]> {
-        return operation(for: resource(path: "/search", query: ["search": query], method: .get))
+        return operation(for: resource(path: "/search", queryItems: ["search": query].queryItems, method: .get))
     }
 }
 
