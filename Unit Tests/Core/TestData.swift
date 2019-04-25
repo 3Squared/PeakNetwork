@@ -26,7 +26,7 @@ struct MyAPI: JSONAPI {
     let baseURL = "https://example.com"
     let encoder: JSONEncoder = JSONEncoder()
     let decoder: JSONDecoder = JSONDecoder()
-    let commonQueryItems = ["token": "hello"]
+    let commonQueryItems = ["token": "hello"].queryItems
     let commonHeaders = ["user-agent": "peaknetwork"]
 }
 
@@ -38,7 +38,7 @@ extension MyAPI {
     
     func complex(_ entity: TestEntity) -> Resource<Void> {
         return resource(path: "/upload",
-                        queryItems: ["token": "overridden", "search": "test"],
+                        queryItems: ["token": "overridden", "search": "test"].queryItems,
                         headers: ["user-agent": "overridden", "device": "iphone"],
                         method: .put,
                         body: entity)
@@ -46,7 +46,7 @@ extension MyAPI {
     
     func complexWithResponse(_ entity: TestEntity) -> Resource<TestEntity> {
         return resource(path: "/upload",
-                        queryItems: ["token": "overridden", "search": "test"],
+                        queryItems: ["token": "overridden", "search": "test"].queryItems,
                         headers: ["user-agent": "overridden", "device": "iphone"],
                         method: .put,
                         body: entity)

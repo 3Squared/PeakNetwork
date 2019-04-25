@@ -14,10 +14,10 @@ public typealias URLComponentsCustomisationBlock = (inout URLComponents) -> ()
 public struct Endpoint {
     let baseURL: String
     let path: String
-    let queryItems: [String: String]
+    let queryItems: [URLQueryItem]
     let customise: URLComponentsCustomisationBlock?
     
-    init(baseURL: String, path: String, queryItems: [String: String], customise: URLComponentsCustomisationBlock?) {
+    init(baseURL: String, path: String, queryItems: [URLQueryItem], customise: URLComponentsCustomisationBlock?) {
         self.baseURL = baseURL.hasSuffix("/") ? baseURL : (baseURL + "/")
         self.path = path.hasPrefix("/") ? String(path.dropFirst()) : path
         self.queryItems = queryItems
@@ -29,17 +29,9 @@ public extension Endpoint {
     var url: URL {
         var components = URLComponents(string: baseURL)!
         components.path = components.path + path
-        components.queryItems = queryItems.isEmpty ? nil : queryItems.queryItems
+        components.queryItems = queryItems.isEmpty ? nil : queryItems
         customise?(&components)
+        
         return components.url!
     }
 }
-
-extension Dictionary where Key == String, Value == String {
-    var queryItems: [URLQueryItem] {
-        return map { (key, value) in
-            URLQueryItem(name: key, value: value)
-        }
-    }
-}
-

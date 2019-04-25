@@ -28,7 +28,7 @@ class APITests: XCTestCase {
     func test_GET_FromAPIWithCommonFields_CreatesCorrectRequest() {
         let api = MyAPI()
         let resource = api.simple()
-        
+
         XCTAssertEqual(resource.request.url!.absoluteString, "https://example.com/all?token=hello")
         XCTAssertEqual(resource.request.value(forHTTPHeaderField: "user-agent")!, "peaknetwork")
     }
