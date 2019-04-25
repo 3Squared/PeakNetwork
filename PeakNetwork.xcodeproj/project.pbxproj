@@ -53,6 +53,7 @@
 		CBCF0A472211D5D70023DF8E /* Interceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCF0A462211D5D70023DF8E /* Interceptor.swift */; };
 		CBCF0A482211D5D70023DF8E /* Interceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCF0A462211D5D70023DF8E /* Interceptor.swift */; };
 		CBD2826A2271B20800F349C7 /* QueryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD282692271B20800F349C7 /* QueryItems.swift */; };
+		CBD2826C2271C16E00F349C7 /* MockSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD2826B2271C16E00F349C7 /* MockSession.swift */; };
 		CBF2179720CAC63700515DB2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2179620CAC63700515DB2 /* Logger.swift */; };
 		CBFD4EE71F740C07008CD8AA /* PeakNetwork_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBFD4EDD1F740C07008CD8AA /* PeakNetwork_iOS.framework */; };
 /* End PBXBuildFile section */
@@ -118,6 +119,7 @@
 		CB95D1D7222BDAEB004B29B3 /* Resources.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Resources.swift; sourceTree = "<group>"; };
 		CBCF0A462211D5D70023DF8E /* Interceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interceptor.swift; sourceTree = "<group>"; };
 		CBD282692271B20800F349C7 /* QueryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryItems.swift; sourceTree = "<group>"; };
+		CBD2826B2271C16E00F349C7 /* MockSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSession.swift; sourceTree = "<group>"; };
 		CBF2179620CAC63700515DB2 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		CBFD4EDD1F740C07008CD8AA /* PeakNetwork_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PeakNetwork_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PeakNetwork.h; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 				CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */,
 				188DEAC4220DAF9B0067A6EF /* PeakNetwork+Aliases.swift */,
 				CB2380DF1F740D1500F1B001 /* Session.swift */,
+				CBD2826B2271C16E00F349C7 /* MockSession.swift */,
 				CB808B142237BECC00446EC0 /* Endpoint.swift */,
 				CB95D1D7222BDAEB004B29B3 /* Resources.swift */,
 				CB808B122237BEC400446EC0 /* API.swift */,
@@ -640,6 +643,7 @@
 				188DEAC5220DAF9B0067A6EF /* PeakNetwork+Aliases.swift in Sources */,
 				CBCF0A472211D5D70023DF8E /* Interceptor.swift in Sources */,
 				CB808B132237BEC400446EC0 /* API.swift in Sources */,
+				CBD2826C2271C16E00F349C7 /* MockSession.swift in Sources */,
 				CBD2826A2271B20800F349C7 /* QueryItems.swift in Sources */,
 				CBF2179720CAC63700515DB2 /* Logger.swift in Sources */,
 				CB2380E81F740D1500F1B001 /* Session.swift in Sources */,
