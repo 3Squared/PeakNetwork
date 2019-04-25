@@ -183,24 +183,24 @@
 		1830B136219D8E3400AC862F /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */,
+				CB808B122237BEC400446EC0 /* API.swift */,
 				CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */,
+				CB808B142237BECC00446EC0 /* Endpoint.swift */,
 				CB2380E31F740D1500F1B001 /* Errors.swift */,
 				CB2380E01F740D1500F1B001 /* HTTPMethods.swift */,
 				CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */,
 				CB2380DD1F740D1500F1B001 /* ImageController.swift */,
 				CBCF0A462211D5D70023DF8E /* Interceptor.swift */,
+				CBD2826D2271C20F00F349C7 /* JSONAPI.swift */,
 				CBF2179620CAC63700515DB2 /* Logger.swift */,
+				CBD2826B2271C16E00F349C7 /* MockSession.swift */,
 				CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */,
 				CB2380DE1F740D1500F1B001 /* Operators.swift */,
-				CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */,
 				188DEAC4220DAF9B0067A6EF /* PeakNetwork+Aliases.swift */,
-				CB2380DF1F740D1500F1B001 /* Session.swift */,
-				CBD2826B2271C16E00F349C7 /* MockSession.swift */,
-				CB808B142237BECC00446EC0 /* Endpoint.swift */,
-				CB95D1D7222BDAEB004B29B3 /* Resources.swift */,
-				CB808B122237BEC400446EC0 /* API.swift */,
-				CBD2826D2271C20F00F349C7 /* JSONAPI.swift */,
 				CBD282692271B20800F349C7 /* QueryItems.swift */,
+				CB95D1D7222BDAEB004B29B3 /* Resources.swift */,
+				CB2380DF1F740D1500F1B001 /* Session.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -233,20 +233,20 @@
 		1830B157219D8F2A00AC862F /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				CB2380F11F740D7600F1B001 /* github.com.cer */,
+				CB3178721FDAA5AF00B063ED /* test.json */,
 				CB2380EF1F740D7600F1B001 /* 300.png */,
 				CB2380F41F740D7600F1B001 /* 600.png */,
-				CB2380F21F740D7600F1B001 /* CertificatePinningTests.swift */,
-				CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */,
-				CB2380F11F740D7600F1B001 /* github.com.cer */,
-				CB808B172237E7F000446EC0 /* ErrorInterceptorSessionTests.swift */,
-				CB808B162237E7F000446EC0 /* RequestInterceptorSessionTests.swift */,
-				CB2380EE1F740D7600F1B001 /* ImageControllerTests.swift */,
-				CB2380F01F740D7600F1B001 /* NetworkTests.swift */,
-				CB808B0E2236B4BB00446EC0 /* EndpointTests.swift */,
 				CB808B102237BA7600446EC0 /* APITests.swift */,
+				CB2380F21F740D7600F1B001 /* CertificatePinningTests.swift */,
+				CB808B0E2236B4BB00446EC0 /* EndpointTests.swift */,
+				CB808B172237E7F000446EC0 /* ErrorInterceptorSessionTests.swift */,
+				CB2380EE1F740D7600F1B001 /* ImageControllerTests.swift */,
+				CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */,
+				CB2380F01F740D7600F1B001 /* NetworkTests.swift */,
 				CB0C195F225F94DB004ECDD1 /* ProgressTests.swift */,
+				CB808B162237E7F000446EC0 /* RequestInterceptorSessionTests.swift */,
 				CB2380F31F740D7600F1B001 /* TestData.swift */,
-				CB3178721FDAA5AF00B063ED /* test.json */,
 			);
 			path = Core;
 			sourceTree = "<group>";
