@@ -60,6 +60,6 @@ class APITests: XCTestCase {
     }
 }
 
-struct SimpleAPI: API {
+struct SimpleAPI: WebAPI {
     let baseURL = URL("https://simple.com/")
 }

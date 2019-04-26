@@ -9,7 +9,7 @@
 import Foundation
 
 /// A type that represents a JSON web API.
-public protocol JSONAPI: API {
+public protocol JSONWebAPI: WebAPI {
     
     /// The `JSONEncoder` used to encode request bodies.
     var encoder: JSONEncoder { get }
@@ -18,7 +18,7 @@ public protocol JSONAPI: API {
     var decoder: JSONDecoder { get }
 }
 
-public extension JSONAPI {
+public extension JSONWebAPI {
     
     var encoder: JSONEncoder { return JSONEncoder() }
     var decoder: JSONDecoder { return JSONDecoder() }

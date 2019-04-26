@@ -9,7 +9,7 @@
 import Foundation
 
 /// A type that represents a web API.
-public protocol API {
+public protocol WebAPI {
     
     /// The base URL of the API. Paths will be appended to this.
     var baseURL: URL { get }
@@ -24,7 +24,7 @@ public protocol API {
     var headers: [String: String] { get }
 }
 
-public extension API {
+public extension WebAPI {
     
     var queryItems: [URLQueryItem] { return [] }
     var headers: [String: String] { return [:] }

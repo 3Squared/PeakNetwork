@@ -22,7 +22,7 @@ struct TestEntity: Codable {
     }
 }
 
-struct MyAPI: JSONAPI {
+struct MyAPI: JSONWebAPI {
     let baseURL = URL("https://example.com/")
     let encoder: JSONEncoder = JSONEncoder()
     let decoder: JSONDecoder = JSONDecoder()
