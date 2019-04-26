@@ -18,16 +18,16 @@ public protocol API {
     var session: Session { get }
     
     /// Common query items that will be added to every request.
-    var commonQueryItems: [URLQueryItem] { get }
+    var queryItems: [URLQueryItem] { get }
     
     /// Common HTTP headers that will be added to every request.
-    var commonHeaders: [String: String] { get }
+    var headers: [String: String] { get }
 }
 
 public extension API {
     
-    var commonQueryItems: [URLQueryItem] { return [] }
-    var commonHeaders: [String: String] { return [:] }
+    var queryItems: [URLQueryItem] { return [] }
+    var headers: [String: String] { return [:] }
     var session: Session { return URLSession.shared }
     
     /// Create a new `NetworkOperation` initialised with the provided `Resource`.
@@ -50,7 +50,7 @@ public extension API {
     func resource(path: String, queryItems: [URLQueryItem] = [], headers: [String: String] = [:], method: HTTPMethod, customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
         return Resource(
             endpoint: endpoint(path, queryItems: queryItems, customise: customise),
-            headers: headers.merging(commonHeaders) { current, _ in current },
+            headers: headers.merging(self.headers) { current, _ in current },
             method: method
         )
     }
@@ -65,7 +65,7 @@ public extension API {
     func endpoint(_ path: String, queryItems: [URLQueryItem] = [], customise: URLComponentsCustomisationBlock? = nil) -> Endpoint {
         return Endpoint(baseURL: baseURL,
                         path: path,
-                        queryItems: queryItems.merging(commonQueryItems) { current, _ in current },
+                        queryItems: queryItems.merging(self.queryItems) { current, _ in current },
                         customise: customise)
     }
 }

@@ -35,7 +35,7 @@ public extension JSONAPI {
     func resource<E: Encodable>(path: String, queryItems: [URLQueryItem] = [], headers: [String: String] = [:], method: HTTPMethod, body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
         return Resource(
             endpoint: endpoint(path, queryItems: queryItems, customise: customise),
-            headers: headers.merging(commonHeaders) { current, _ in current },
+            headers: headers.merging(self.headers) { current, _ in current },
             method: method,
             body: body,
             encoder: encoder
@@ -54,7 +54,7 @@ public extension JSONAPI {
     func resource<D: Decodable>(path: String, queryItems: [URLQueryItem] = [], headers: [String: String] = [:], method: HTTPMethod, customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
         return Resource(
             endpoint: endpoint(path, queryItems: queryItems, customise: customise),
-            headers: headers.merging(commonHeaders) { current, _ in current },
+            headers: headers.merging(self.headers) { current, _ in current },
             method: method,
             decoder: decoder
         )
@@ -73,7 +73,7 @@ public extension JSONAPI {
     func resource<E: Encodable, D: Decodable>(path: String, queryItems: [URLQueryItem] = [], headers: [String: String] = [:], method: HTTPMethod, body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
         return Resource(
             endpoint: endpoint(path, queryItems: queryItems, customise: customise),
-            headers: headers.merging(commonHeaders) { current, _ in current },
+            headers: headers.merging(self.headers) { current, _ in current },
             method: method,
             body: body,
             encoder: encoder,

@@ -26,8 +26,8 @@ struct MyAPI: JSONAPI {
     let baseURL = URL("https://example.com/")
     let encoder: JSONEncoder = JSONEncoder()
     let decoder: JSONDecoder = JSONDecoder()
-    let commonQueryItems = ["token": "hello"].queryItems
-    let commonHeaders = ["user-agent": "peaknetwork"]
+    let queryItems = ["token": "hello"].queryItems
+    let headers = ["user-agent": "peaknetwork"]
 }
 
 extension MyAPI {
