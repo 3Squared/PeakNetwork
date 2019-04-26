@@ -12,14 +12,23 @@ public typealias URLComponentsCustomisationBlock = (inout URLComponents) -> ()
 
 /// Describes an API endpoint.
 public struct Endpoint {
-    let baseURL: String
+    let baseURL: URL
     let path: String
     let queryItems: [URLQueryItem]
     let customise: URLComponentsCustomisationBlock?
     
-    init(baseURL: String, path: String, queryItems: [URLQueryItem], customise: URLComponentsCustomisationBlock?) {
-        self.baseURL = baseURL.hasSuffix("/") ? baseURL : (baseURL + "/")
-        self.path = path.hasPrefix("/") ? String(path.dropFirst()) : path
+    init(baseURL: URL, path: String, queryItems: [URLQueryItem], customise: URLComponentsCustomisationBlock?) {
+        
+        if !baseURL.absoluteString.hasSuffix("/") {
+            preconditionFailure("Invalid baseURL (must end with \"/\"): \(path)")
+        }
+        
+        if path.hasPrefix("/") {
+            preconditionFailure("Invalid path component (must not start with \"/\"): \(path)")
+        }
+        
+        self.baseURL = baseURL
+        self.path = path
         self.queryItems = queryItems
         self.customise = customise
     }
@@ -27,7 +36,7 @@ public struct Endpoint {
 
 public extension Endpoint {
     var url: URL {
-        var components = URLComponents(string: baseURL)!
+        var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
         components.path = components.path + path
         components.queryItems = queryItems.isEmpty ? nil : queryItems
         customise?(&components)

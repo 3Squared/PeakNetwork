@@ -12,7 +12,7 @@ import Foundation
 public protocol API {
     
     /// The base URL of the API. Paths will be appended to this.
-    var baseURL: String { get }
+    var baseURL: URL { get }
     
     /// The session in which to perform generated requests.
     var session: Session { get }
