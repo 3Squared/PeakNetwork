@@ -112,7 +112,7 @@ open class NetworkOperation<Body>: RetryingOperation<Response<Body>>, ConsumesRe
 extension NetworkOperation {
     /// Unwrap the Response and return a result containing only the
     /// parsed data, discarding the network response information.
-    public var unwrapped: MapOperation<Response<Body>, Body> {
+    public func unwrapBodyOperation() -> MapOperation<Response<Body>, Body> {
         return passesResult(to: BlockMapOperation<Response<Body>, Body> { input in
             switch (input) {
             case .success(let response):

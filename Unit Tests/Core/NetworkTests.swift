@@ -238,7 +238,7 @@ class NetworkTests: XCTestCase {
         
         let expect = expectation(description: "")
         
-        let networkOperation = NetworkOperation(resource: api.simple(), session: session).unwrapped
+        let networkOperation = NetworkOperation(resource: api.simple(), session: session).unwrapBodyOperation()
         
         networkOperation.addResultBlock { result in
             expect.fulfill()
@@ -255,7 +255,7 @@ class NetworkTests: XCTestCase {
         }
         
         let expect = expectation(description: "")
-        let networkOperation = NetworkOperation(resource: api.simple(), session: session).unwrapped
+        let networkOperation = NetworkOperation(resource: api.simple(), session: session).unwrapBodyOperation()
         networkOperation.enqueue { result in
             expect.fulfill()
         }
