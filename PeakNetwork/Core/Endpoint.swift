@@ -17,7 +17,7 @@ public struct Endpoint {
     let queryItems: [URLQueryItem]
     let customise: URLComponentsCustomisationBlock?
     
-    init(baseURL: URL, path: String, queryItems: [URLQueryItem], customise: URLComponentsCustomisationBlock?) {
+    public init(baseURL: URL, path: String, queryItems: [URLQueryItem], customise: URLComponentsCustomisationBlock?) {
         
         if !baseURL.absoluteString.hasSuffix("/") {
             preconditionFailure("Invalid baseURL (must end with \"/\"): \(path)")
