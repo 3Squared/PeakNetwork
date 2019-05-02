@@ -36,9 +36,13 @@ extension MyAPI {
         return resource(path: "all", method: .get)
     }
     
+    func queryParams(_ params: [URLQueryItem]) -> Resource<TestEntity> {
+        return resource(path: "query", queryItems: params, method: .get)
+    }
+    
     func complex(_ entity: TestEntity) -> Resource<Void> {
         return resource(path: "upload",
-                        queryItems: ["token": "overridden", "search": "test"].queryItems,
+                        queryItems: ["search": "test"].queryItems,
                         headers: ["user-agent": "overridden", "device": "iphone"],
                         method: .put,
                         body: entity)

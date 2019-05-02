@@ -65,7 +65,7 @@ public extension WebAPI {
     func endpoint(_ path: String, queryItems: [URLQueryItem] = [], customise: URLComponentsCustomisationBlock? = nil) -> Endpoint {
         return Endpoint(baseURL: baseURL,
                         path: path,
-                        queryItems: queryItems.merging(self.queryItems) { current, _ in current },
+                        queryItems: queryItems + self.queryItems,
                         customise: customise)
     }
 }

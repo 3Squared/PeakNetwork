@@ -33,6 +33,16 @@ class APITests: XCTestCase {
         XCTAssertEqual(resource.request.value(forHTTPHeaderField: "user-agent")!, "peaknetwork")
     }
     
+    func test_GET_FromAPIWithNonUniqueQueryParams_CreatesCorrectRequest() {
+        let api = MyAPI()
+        let resource = api.queryParams([
+            URLQueryItem(name: "param", value: "1"),
+            URLQueryItem(name: "param", value: "2")
+        ])
+        
+        XCTAssertEqual(resource.request.url!.absoluteString, "https://example.com/query?param=1&param=2&token=hello")
+    }
+    
     func test_POST_FromAPIWithCommonFields_CreatesCorrectRequest() {
         let api = MyAPI()
         let resource = api.complex(TestEntity(name: "sam"))
@@ -42,7 +52,6 @@ class APITests: XCTestCase {
         
         XCTAssertEqual(components.queryItems!.count, 2)
         XCTAssertTrue(components.queryItems!.contains { $0.name == "search" && $0.value == "test"})
-        XCTAssertTrue(components.queryItems!.contains { $0.name == "token" && $0.value == "overridden"})
         
         XCTAssertEqual(request.allHTTPHeaderFields!.count, 2)
         XCTAssertEqual(request.value(forHTTPHeaderField: "user-agent")!, "overridden")
