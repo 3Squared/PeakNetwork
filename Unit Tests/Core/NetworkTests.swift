@@ -270,6 +270,53 @@ class NetworkTests: XCTestCase {
         }
     }
     
+    func testNetworkOperation_PassingBody_OnlyPassesTheParsedData() {
+        let session = MockSession { session in
+            session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok))
+        }
+
+        let expect = expectation(description: "")
+        let networkOperation = NetworkOperation(resource: api.simple(), session: session)
+
+        let mapOperation = BlockMapOperation<TestEntity, Void> { input in
+            do {
+                let entity = try input.get()
+                XCTAssertEqual(entity.name, "Sam")
+                expect.fulfill()
+            } catch {
+                XCTFail()
+            }
+            return .success(())
+        }
+        
+        networkOperation.passesBody(to: mapOperation).enqueue()
+        
+        waitForExpectations(timeout: 1)
+    }
+    
+    func testNetworkOperation_PassingBody_PassesFailure() {
+        let session = MockSession { session in
+            session.queue(response: MockResponse(statusCode: .internalServerError))
+        }
+        
+        let expect = expectation(description: "")
+        let networkOperation = NetworkOperation(resource: api.simple(), session: session)
+        
+        let mapOperation = BlockMapOperation<TestEntity, Void> { input in
+            do {
+                _ = try input.get()
+                XCTFail()
+            } catch {
+                expect.fulfill()
+            }
+            return .success(())
+        }
+        
+        networkOperation.passesBody(to: mapOperation).enqueue()
+        
+        waitForExpectations(timeout: 1)
+    }
+    
     public enum TestError: Error {
         case justATest
     }

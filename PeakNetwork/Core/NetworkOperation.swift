@@ -123,3 +123,26 @@ extension NetworkOperation {
         })
     }
 }
+
+extension NetworkOperation  {
+    /// Use to chain a NetworkOperation into something that only wants the response body.
+    ///
+    /// - Parameter operation: The operation to pass the parsed response body to.
+    /// - Returns: The dependant operation, with the dependancy added.
+    @discardableResult
+    public func passesBody<Consumer>(to operation: Consumer) -> Consumer where Consumer: Operation, Consumer: ConsumesResult, Consumer.Input == Body {
+        operation.addDependency(self)
+        addWillFinishBlock { [weak self, unowned operation] in
+            guard let strongSelf = self else { return }
+            if !strongSelf.isCancelled {
+                switch (strongSelf.output) {
+                case .success(let response):
+                    operation.input = .success(response.parsed)
+                case .failure(let error):
+                    operation.input = .failure(error)
+                }
+            }
+        }
+        return operation
+    }
+}
