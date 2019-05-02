@@ -9,8 +9,8 @@
 import Foundation
 import PeakNetwork
 
-struct ExampleAPI: JSONAPI {
-    let baseURL = "https://example.com"
+struct ExampleAPI: JSONWebAPI {
+    let baseURL = URL("https://example.com")
     let session = URLSession.mock
 }
 
