@@ -19,7 +19,7 @@ class APITests: XCTestCase {
     
     func test_SimpleAPI_CreatesCorrectRequest() {
         let api = SimpleAPI()
-        let resource = api.resource(path: "test", method: .get)
+        let resource = api.resource(.get, path: "test")
         
         XCTAssertEqual(resource.request.url!.absoluteString, "https://simple.com/test")
         XCTAssertTrue(resource.request.allHTTPHeaderFields!.isEmpty)
@@ -61,7 +61,7 @@ class APITests: XCTestCase {
     
     func test_SimpleAPI_CreatesConfiguredOperation() {
         let api = SimpleAPI()
-        let operation = api.operation(for: api.resource(path: "test", method: .get))
+        let operation = api.operation(for: api.resource(.get, path: "test"))
         
         let input = try! operation.input.get()
         XCTAssertEqual(operation.session as! URLSession, api.session as! URLSession)

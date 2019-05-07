@@ -26,17 +26,17 @@ public extension JSONWebAPI {
     /// Create a `Resource` pointing to the provided path, with an encodable HTTP body.
     ///
     /// - Parameters:
+    ///   - method: The HTTP method with which to perform the request.
     ///   - path: The path of the `Resource`, relative to the `API`'s `baseURL`.
     ///   - queryItems: Query items for the request.
     ///   - headers: HTTP headers for the request.
-    ///   - method: The HTTP method with which to perform the request.
     ///   - body: An `Encodable` object to be used as the HTTP request body.
     /// - Returns: A configured `Resource`.
-    func resource<E: Encodable>(path: String, queryItems: [URLQueryItem] = [], headers: [String: String] = [:], method: HTTPMethod, body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
+    func resource<E: Encodable>(_ method: HTTPMethod, path: String, queryItems: [URLQueryItem] = [], headers: [String: String] = [:], body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
         return Resource(
+            method: method,
             endpoint: endpoint(path, queryItems: queryItems, customise: customise),
             headers: headers.merging(self.headers) { current, _ in current },
-            method: method,
             body: body,
             encoder: encoder
         )
@@ -46,16 +46,16 @@ public extension JSONWebAPI {
     /// Create a `Resource` pointing to the provided path, with a decodable response body.
     ///
     /// - Parameters:
+    ///   - method: The HTTP method with which to perform the request.
     ///   - path: The path of the `Resource`, relative to the `API`'s `baseURL`.
     ///   - queryItems: Query items for the request.
     ///   - headers: HTTP headers for the request.
-    ///   - method: The HTTP method with which to perform the request.
     /// - Returns: A configured `Resource`.
-    func resource<D: Decodable>(path: String, queryItems: [URLQueryItem] = [], headers: [String: String] = [:], method: HTTPMethod, customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
+    func resource<D: Decodable>(_ method: HTTPMethod, path: String, queryItems: [URLQueryItem] = [], headers: [String: String] = [:], customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
         return Resource(
+            method: method,
             endpoint: endpoint(path, queryItems: queryItems, customise: customise),
             headers: headers.merging(self.headers) { current, _ in current },
-            method: method,
             decoder: decoder
         )
     }
@@ -64,17 +64,17 @@ public extension JSONWebAPI {
     /// Create a `Resource` pointing to the provided path, with a decodable response body and an encodable HTTP body.
     ///
     /// - Parameters:
+    ///   - method: The HTTP method with which to perform the request.
     ///   - path: The path of the `Resource`, relative to the `API`'s `baseURL`.
     ///   - queryItems: Query items for the request.
     ///   - headers: HTTP headers for the request.
-    ///   - method: The HTTP method with which to perform the request.
     ///   - body: An `Encodable` object to be used as the HTTP request body.
     /// - Returns: A configured `Resource`.
-    func resource<E: Encodable, D: Decodable>(path: String, queryItems: [URLQueryItem] = [], headers: [String: String] = [:], method: HTTPMethod, body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
+    func resource<E: Encodable, D: Decodable>(_ method: HTTPMethod, path: String, queryItems: [URLQueryItem] = [], headers: [String: String] = [:], body: E, customise: URLComponentsCustomisationBlock? = nil) -> Resource<D> {
         return Resource(
+            method: method,
             endpoint: endpoint(path, queryItems: queryItems, customise: customise),
             headers: headers.merging(self.headers) { current, _ in current },
-            method: method,
             body: body,
             encoder: encoder,
             decoder: decoder

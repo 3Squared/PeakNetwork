@@ -33,31 +33,31 @@ struct MyAPI: JSONWebAPI {
 extension MyAPI {
     
     func simple() -> Resource<TestEntity> {
-        return resource(path: "all", method: .get)
+        return resource(.get, path: "all")
     }
     
     func queryParams(_ params: [URLQueryItem]) -> Resource<TestEntity> {
-        return resource(path: "query", queryItems: params, method: .get)
+        return resource(.get, path: "query", queryItems: params)
     }
     
     func complex(_ entity: TestEntity) -> Resource<Void> {
-        return resource(path: "upload",
+        return resource(.put,
+                        path: "upload",
                         queryItems: ["search": "test"].queryItems,
                         headers: ["user-agent": "overridden", "device": "iphone"],
-                        method: .put,
                         body: entity)
     }
     
     func complexWithResponse(_ entity: TestEntity) -> Resource<TestEntity> {
-        return resource(path: "upload",
+        return resource(.put,
+                        path: "upload",
                         queryItems: ["token": "overridden", "search": "test"].queryItems,
                         headers: ["user-agent": "overridden", "device": "iphone"],
-                        method: .put,
                         body: entity)
     }
     
     func url(_ url: URL) -> Resource<Data> {
-        return Resource<Data>(url: url, headers: [:], method: .get) { data in
+        return Resource<Data>(method: .get, url: url, headers: [:]) { data in
             return data!
         }
     }

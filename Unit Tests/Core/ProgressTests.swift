@@ -23,7 +23,7 @@ class ProgressTests: XCTestCase {
             session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok))
         }
 
-        let resource = Resource<Void>(url: URL(string: "http://example.com")!, headers: [:], method: .get)
+        let resource = Resource<Void>(method: .get, url: URL(string: "http://example.com")!, headers: [:])
 
         let networkOperation = NetworkOperation(resource: resource, session: session)
         

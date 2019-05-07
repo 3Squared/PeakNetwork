@@ -28,11 +28,11 @@ public extension Resource {
     /// Create a `Resource` for a given `URL` with a custom parse closure.
     ///
     /// - Parameters:
+    ///   - method: The HTTP method to use.
     ///   - url: The `URL` of the resource.
     ///   - headers: The HTTP headers for the request.
-    ///   - method: The HTTP method to use.
     ///   - parse: A parse closure to convert the response data to the required `ResponseType`.
-    init(url: URL, headers: [String: String], method: HTTPMethod, parse: @escaping (Data?) throws -> ResponseBody) {
+    init(method: HTTPMethod, url: URL, headers: [String: String], parse: @escaping (Data?) throws -> ResponseBody) {
         request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         request.allHTTPHeaderFields = headers
@@ -42,12 +42,12 @@ public extension Resource {
     /// Create a `Resource` for a given `Endpoint` with a custom parse closure.
     ///
     /// - Parameters:
+    ///   - method: The HTTP method to use.
     ///   - endpoint: The `Endpoint` for the resource.
     ///   - headers: The HTTP headers for the request.
-    ///   - method: The HTTP method to use.
     ///   - parse: A parse closure to convert the response data to the required `ResponseType`.
-    init(endpoint: Endpoint, headers: [String: String], method: HTTPMethod, parse: @escaping (Data?) throws -> ResponseBody) {
-        self.init(url: endpoint.url, headers: headers, method: method, parse: parse)
+    init(method: HTTPMethod, endpoint: Endpoint, headers: [String: String], parse: @escaping (Data?) throws -> ResponseBody) {
+        self.init(method: method, url: endpoint.url, headers: headers, parse: parse)
     }
 }
 
@@ -57,11 +57,11 @@ public extension Resource where ResponseBody == Void {
     /// Create a `Resource` for a given `URL` where the response is not parsed.
     ///
     /// - Parameters:
+    ///   - method: The HTTP method to use.
     ///   - url: The `URL` of the resource.
     ///   - headers: The HTTP headers for the request.
-    ///   - method: The HTTP method to use.
-    init(url: URL, headers: [String: String], method: HTTPMethod) {
-        self.init(url: url, headers: headers, method: method) { data in
+    init(method: HTTPMethod, url: URL, headers: [String: String]) {
+        self.init(method: method, url: url, headers: headers) { data in
             return ()
         }
     }
@@ -69,24 +69,24 @@ public extension Resource where ResponseBody == Void {
     /// Create a `Resource` for a given `Endpoint` where the response is not parsed.
     ///
     /// - Parameters:
+    ///   - method: The HTTP method to use.
     ///   - endpoint: The `Endpoint` for the resource.
     ///   - headers: The HTTP headers for the request.
-    ///   - method: The HTTP method to use.
     ///   - parse: A parse closure to convert the response data to the required `ResponseType`.
-    init(endpoint: Endpoint, headers: [String: String], method: HTTPMethod) {
-        self.init(url: endpoint.url, headers: headers, method: method)
+    init(method: HTTPMethod, endpoint: Endpoint, headers: [String: String]) {
+        self.init(method: method, url: endpoint.url, headers: headers)
     }
     
     /// Create a `Resource` for a given `Endpoint` with a HTTP body where the response is not parsed.
     ///
     /// - Parameters:
+    ///   - method: The HTTP method to use.
     ///   - endpoint: The `Endpoint` for the resource.
     ///   - headers: The HTTP headers for the request.
-    ///   - method: The HTTP method to use.
     ///   - body: The `Encodable` object to use as the HTTP body.
     ///   - encoder: The `JSONEncoder` used to encode `body`.
-    init<Body: Encodable>(endpoint: Endpoint, headers: [String: String], method: HTTPMethod, body: Body, encoder: JSONEncoder) {
-        self.init(endpoint: endpoint, headers: headers, method: method)
+    init<Body: Encodable>(method: HTTPMethod, endpoint: Endpoint, headers: [String: String], body: Body, encoder: JSONEncoder) {
+        self.init(method: method, endpoint: endpoint, headers: headers)
         request.httpBody = try! encoder.encode(body)
     }
 }
@@ -97,12 +97,12 @@ public extension Resource where ResponseBody: Decodable {
     /// Create a `Resource` for a given `URL` where the response is expected to be `Decodable`.
     ///
     /// - Parameters:
+    ///   - method: The HTTP method to use.
     ///   - url: The `URL` of the resource.
     ///   - headers: The HTTP headers for the request.
-    ///   - method: The HTTP method to use.
     ///   - decoder: The `JSONDecoder` used to decode the response.
-    init(url: URL, headers: [String: String], method: HTTPMethod, decoder: JSONDecoder) {
-        self.init(url: url, headers: headers, method: method) { data in
+    init(method: HTTPMethod, url: URL, headers: [String: String], decoder: JSONDecoder) {
+        self.init(method: method, url: url, headers: headers) { data in
             if let data = data {
                 return try decoder.decode(ResponseBody.self, from: data)
             } else {
@@ -114,25 +114,25 @@ public extension Resource where ResponseBody: Decodable {
     /// Create a `Resource` for a given `Endpoint` where the response is expected to be `Decodable`.
     ///
     /// - Parameters:
+    ///   - method: The HTTP method to use.
     ///   - endpoint: The `Endpoint` for the resource.
     ///   - headers: The HTTP headers for the request.
-    ///   - method: The HTTP method to use.
     ///   - decoder: The `JSONDecoder` used to decode the response.
-    init(endpoint: Endpoint, headers: [String: String], method: HTTPMethod, decoder: JSONDecoder) {
-        self.init(url: endpoint.url, headers: headers, method: method, decoder: decoder)
+    init(method: HTTPMethod, endpoint: Endpoint, headers: [String: String], decoder: JSONDecoder) {
+        self.init(method: method, url: endpoint.url, headers: headers, decoder: decoder)
     }
     
     /// Create a `Resource` for a given `Endpoint` with a HTTP body where the response is expected to be `Decodable`.
     ///
     /// - Parameters:
+    ///   - method: The HTTP method to use.
     ///   - endpoint: The `Endpoint` for the resource.
     ///   - headers: The HTTP headers for the request.
-    ///   - method: The HTTP method to use.
     ///   - body: The `Encodable` object to use as the HTTP body.
     ///   - encoder: The `JSONEncoder` used to encode `body`.
     ///   - decoder: The `JSONDecoder` used to decode the response.
-    init<Body: Encodable>(endpoint: Endpoint, headers: [String: String], method: HTTPMethod, body: Body, encoder: JSONEncoder, decoder: JSONDecoder) {
-        self.init(endpoint: endpoint, headers: headers, method: method, decoder: decoder)
+    init<Body: Encodable>(method: HTTPMethod, endpoint: Endpoint, headers: [String: String], body: Body, encoder: JSONEncoder, decoder: JSONDecoder) {
+        self.init(method: method, endpoint: endpoint, headers: headers, decoder: decoder)
         request.httpBody = try! encoder.encode(body)
     }
 }
@@ -143,11 +143,11 @@ public extension Resource where ResponseBody: PeakImage {
     /// Create a `Resource` for a given `URL` where the response is expected to be a platform Image type.
     ///
     /// - Parameters:
+    ///   - method: The HTTP method to use.
     ///   - url: The `URL` of the resource.
     ///   - headers: The HTTP headers for the request.
-    ///   - method: The HTTP method to use.
-    init(url: URL, headers: [String: String], method: HTTPMethod) {
-        self.init(url: url, headers: headers, method: method) { data in
+    init(method: HTTPMethod, url: URL, headers: [String: String]) {
+        self.init(method: method, url: url, headers: headers) { data in
             if let data = data {
                 if let image = ResponseBody(data: data) {
                     return image
@@ -166,8 +166,8 @@ public extension Resource where ResponseBody: PeakImage {
     ///   - endpoint: The `Endpoint` for the resource.
     ///   - headers: The HTTP headers for the request.
     ///   - method: The HTTP method to use.
-    init(endpoint: Endpoint, headers: [String: String], method: HTTPMethod) {
-        self.init(url: endpoint.url, headers: headers, method: method)
+    init(method: HTTPMethod, endpoint: Endpoint, headers: [String: String]) {
+        self.init(method: method, url: endpoint.url, headers: headers)
     }
 }
 

@@ -47,11 +47,11 @@ public extension WebAPI {
     ///   - headers: HTTP headers for the request.
     ///   - method: The HTTP method with which to perform the request.
     /// - Returns: A configured `Resource`.
-    func resource(path: String, queryItems: [URLQueryItem] = [], headers: [String: String] = [:], method: HTTPMethod, customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
+    func resource(_ method: HTTPMethod, path: String, queryItems: [URLQueryItem] = [], headers: [String: String] = [:], customise: URLComponentsCustomisationBlock? = nil) -> Resource<Void> {
         return Resource(
+            method: method,
             endpoint: endpoint(path, queryItems: queryItems, customise: customise),
-            headers: headers.merging(self.headers) { current, _ in current },
-            method: method
+            headers: headers.merging(self.headers) { current, _ in current }
         )
     }
     

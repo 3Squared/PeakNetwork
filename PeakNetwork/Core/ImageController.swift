@@ -62,7 +62,7 @@ public class ImageController {
     
     /// Get an image available at the URL described by a Requestable. object is a unique key, such as an ImageView.
     public func getImage<T: NSObject>(_ url: URL, object: T, queue: OperationQueue? = nil, completion: @escaping (PeakImage?, T, Source) -> ()) {
-        return getImage(Resource(url: url, headers: [:], method: .get), object: object, completion: completion)
+        return getImage(Resource(method: .get, url: url, headers: [:]), object: object, completion: completion)
     }
     
     /// Get an image available at the URL described by a Requestable. object is a unique key, such as an ImageView.
@@ -148,7 +148,7 @@ public extension PeakImageView {
     ///   - animation: The animation options (optional).
     ///   - completion: A completion block indicating success or failure.
     func setImage(_ url: URL, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
-        setImage(Resource(url: url, headers: [:], method: .get), queue: queue, animation: animation, duration: duration, completion: completion)
+        setImage(Resource(method: .get, url: url, headers: [:]), queue: queue, animation: animation, duration: duration, completion: completion)
     }
     
     /// Set the image available at the `Resource` as the `UIButton`'s image, for the given state.
@@ -199,7 +199,7 @@ public extension UIButton {
     ///   - animation: The animation options (optional).
     ///   - completion: A completion block indicating success or failure.
     func setImage(_ url: URL, queue: OperationQueue? = nil, for state: UIControl.State, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
-        setImage(Resource(url: url, headers: [:], method: .get), for: state, queue: queue, animation: animation, duration: duration, completion: completion)
+        setImage(Resource(method: .get, url: url, headers: [:]), for: state, queue: queue, animation: animation, duration: duration, completion: completion)
     }
     
     /// Set the image available at the `Resource` as the `UIButton`'s image, for the given state.
