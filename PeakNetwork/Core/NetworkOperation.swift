@@ -145,4 +145,22 @@ extension NetworkOperation  {
         }
         return operation
     }
+    
+    
+    /// Add a block to be called on the completion of a `NetworkOperation` with a result of the parsed body object.
+    /// This is called at the same time and in the same manner as `completionBlock`.
+    /// Multiple result blocks can be added to a single `Operation`.
+    ///
+    /// - Parameter block: The block to be called on completion.
+    public func addBodyResultBlock(block: @escaping (Result<Body, Error>) -> Void) {
+        addResultBlock { result in
+            switch result {
+            case .success(let response):
+                block(.success(response.parsed))
+            case .failure(let error):
+                block(.failure(error))
+            }
+        }
+    }
+
 }
