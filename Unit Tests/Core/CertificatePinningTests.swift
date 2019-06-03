@@ -10,16 +10,15 @@ import Foundation
 import XCTest
 
 #if os(iOS)
-
 @testable import PeakNetwork_iOS
-
 #else
-
 @testable import PeakNetwork_macOS
-
 #endif
 
 class CertificatePinningTests: XCTestCase {
+    
+    let api = MyAPI()
+
     func testNoCertificate() {
         let expect = expectation(description: "")
         
@@ -28,7 +27,7 @@ class CertificatePinningTests: XCTestCase {
                                     delegate: certificatePinningSessionDelegate,
                                     delegateQueue: nil)
         
-        let networkOperation = NetworkOperation(requestable: "https://google.com", session: urlSession)
+        let networkOperation = NetworkOperation(resource: api.url(URL(string: "https://google.com")!), session: urlSession)
         
         networkOperation.addResultBlock { result in
             do {
@@ -53,7 +52,7 @@ class CertificatePinningTests: XCTestCase {
                                     delegate: certificatePinningSessionDelegate,
                                     delegateQueue: nil)
         
-        let networkOperation = NetworkOperation(requestable: "https://github.com", session: urlSession)
+        let networkOperation = NetworkOperation(resource: api.url(URL(string: "https://github.com")!), session: urlSession)
         
         networkOperation.addResultBlock { result in
             do {
