@@ -19,7 +19,7 @@ public class ImageController {
     public static var sharedInstance = ImageController()
     
     let internalQueue = OperationQueue()
-    let urlToOperationTable = NSMapTable<NSURL, SequenceOperation<NetworkOperation, ImageDecodeOperation>>.strongToWeakObjects()
+    let urlToOperationTable = NSMapTable<NSURL, NetworkOperation<PeakImage>>.strongToWeakObjects()
     let objectToUrlTable = NSMapTable<NSObject, NSURL>.weakToStrongObjects()
     let urlsToObjectsTable = NSMapTable<NSURL, NSMutableSet>.weakToStrongObjects()
 
@@ -60,30 +60,31 @@ public class ImageController {
         objectToUrlTable.removeObject(forKey: object)
     }
     
+    /// Get an image available at the URL described by a Requestable. object is a unique key, such as an ImageView.
+    public func getImage<T: NSObject>(_ url: URL, object: T, queue: OperationQueue? = nil, completion: @escaping (PeakImage?, T, Source) -> ()) {
+        return getImage(Resource(method: .get, url: url, headers: [:]), object: object, completion: completion)
+    }
     
     /// Get an image available at the URL described by a Requestable. object is a unique key, such as an ImageView.
-    public func getImage<T: NSObject>(_ requestable: Requestable, object: T, queue: OperationQueue? = nil, completion: @escaping (PeakImage?, T, Source) -> ()) {
+    public func getImage<T: NSObject>(_ resource: Resource<PeakImage>, object: T, queue: OperationQueue? = nil, completion: @escaping (PeakImage?, T, Source) -> ()) {
         
         // Cancel any in-flight operation for the same object
         cancelOperation(forObject: object)
         
         // Maybe we already have the image in the cache
-        let url = requestable.request.url! as NSURL
+        let url = resource.request.url! as NSURL
         if let image = cache.object(forKey: url) {
             completion(image, object, .cache)
             return
         }
         
-        let imageOperation: SequenceOperation<NetworkOperation, ImageDecodeOperation>
+        let imageOperation: NetworkOperation<PeakImage>
         var usingExisting = false
         if let existingOperation = urlToOperationTable.object(forKey: url) {
             imageOperation = existingOperation
             usingExisting = true
         } else {
-            imageOperation = SequenceOperation(
-                do: NetworkOperation(requestable: requestable, session: session),
-                passResultTo: ImageDecodeOperation()
-            )
+            imageOperation = NetworkOperation(resource: resource, session: session)
         }
         
         // Create an operation to fetch the image data
@@ -91,11 +92,10 @@ public class ImageController {
             if imageOperation.isCancelled {
                 completion(nil, object, .network)
             } else {
-                do {
-                    let image = try result.get()
+                if let image = try? result.get().parsed {
                     self.cache.setObject(image, forKey: url)
                     completion(image, object, .network)
-                } catch {
+                } else {
                     completion(nil, object, .network)
                 }
             }
@@ -137,17 +137,29 @@ public enum Source {
 
 import UIKit
 
-extension PeakImageView {
+public extension PeakImageView {
     
-    /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
+    
+    /// Set the image available at the `URL` as the `UIButton`'s image, for the given state.
+    ///
+    /// - Parameters:
+    ///   - url: A URL to an image.
+    ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
+    ///   - animation: The animation options (optional).
+    ///   - completion: A completion block indicating success or failure.
+    func setImage(_ url: URL, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
+        setImage(Resource(method: .get, url: url, headers: [:]), queue: queue, animation: animation, duration: duration, completion: completion)
+    }
+    
+    /// Set the image available at the `Resource` as the `UIButton`'s image, for the given state.
     ///
     /// - Parameters:
     ///   - requestable: A requestable describing the location of an image.
     ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
     ///   - animation: The animation options (optional).
     ///   - completion: A completion block indicating success or failure.
-    public func setImage(_ requestable: Requestable, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
-        ImageController.sharedInstance.getImage(requestable, object: self, queue: queue) { image, imageView, source in
+    func setImage(_ resource: Resource<PeakImage>, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
+        ImageController.sharedInstance.getImage(resource, object: self, queue: queue) { image, imageView, source in
             OperationQueue.main.addOperation {
                 if image == nil {
                     completion(false)
@@ -169,14 +181,28 @@ extension PeakImageView {
     }
     
     /// Cancel any in-flight images requests for the `UIImageView`.
-    public func cancelImage() {
+    func cancelImage() {
         ImageController.sharedInstance.cancelOperation(forObject: self)
     }
 }
 
-extension UIButton {
+
+public extension UIButton {
     
-    /// Set the image available at the resource described by the given `Requestable` as the `UIButton`'s image, for the given state.
+    /// Set the image available at the `URL` as the `UIButton`'s image, for the given state.
+    /// You may set multiple images, one for each state, on a `UIButton` - only images for the same state will clash.
+    ///
+    /// - Parameters:
+    ///   - url: A URL to an image.
+    ///   - state: The `UIControlState` for which the image be displayed.
+    ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
+    ///   - animation: The animation options (optional).
+    ///   - completion: A completion block indicating success or failure.
+    func setImage(_ url: URL, queue: OperationQueue? = nil, for state: UIControl.State, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
+        setImage(Resource(method: .get, url: url, headers: [:]), for: state, queue: queue, animation: animation, duration: duration, completion: completion)
+    }
+    
+    /// Set the image available at the `Resource` as the `UIButton`'s image, for the given state.
     /// You may set multiple images, one for each state, on a `UIButton` - only images for the same state will clash.
     ///
     /// - Parameters:
@@ -185,10 +211,10 @@ extension UIButton {
     ///   - queue: The `OperationQueue` on which to run the `ImageOperation` (optional).
     ///   - animation: The animation options (optional).
     ///   - completion: A completion block indicating success or failure.
-    public func setImage(_ requestable: Requestable, for state: UIControl.State, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
+    func setImage(_ resource: Resource<PeakImage>, for state: UIControl.State, queue: OperationQueue? = nil, animation: UIView.AnimationOptions? = nil, duration: TimeInterval = 0, completion: @escaping (Bool) -> () = { _ in }) {
         // Cannot use self as the object, as you may want to request multiple images - one for each state
         let object: NSString = NSString.init(format: "%d%d", self.hash, state.rawValue)
-        ImageController.sharedInstance.getImage(requestable, object: object, queue: queue) { image, button, source in
+        ImageController.sharedInstance.getImage(resource, object: object, queue: queue) { image, button, source in
             OperationQueue.main.addOperation {
                 if image == nil {
                     completion(false)
@@ -211,7 +237,7 @@ extension UIButton {
     
     
     /// Cancel any in-flight images requests for the `UIButton`.
-    public func cancelImage() {
+    func cancelImage() {
         ImageController.sharedInstance.cancelOperation(forObject: self)
     }
 }

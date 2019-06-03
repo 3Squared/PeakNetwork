@@ -9,17 +9,15 @@
 import XCTest
 
 #if os(iOS)
-
 @testable import PeakNetwork_iOS
-
 #else
-
 @testable import PeakNetwork_macOS
-
 #endif
 
 class ImageControllerTests: XCTestCase {
     
+    let api = MyAPI()
+
     override func setUp() {
         super.setUp()
         
@@ -141,7 +139,7 @@ class ImageControllerTests: XCTestCase {
         }
         XCTAssertEqual(queue.operations.count, 1)
         
-        imageView.setImage(URL(string: "https://placehold.it/600")!, queue: queue) { success in
+        imageView.setImage(URL(string: "https://placehold.it/300")!, queue: queue) { success in
             XCTAssertTrue(success)
             expect.fulfill()
         }

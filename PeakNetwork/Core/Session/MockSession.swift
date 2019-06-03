@@ -1,29 +1,21 @@
 //
-//  Session.swift
-//  PeakNetwork
+//  MockSession.swift
+//  PeakNetwork-iOS
 //
-//  Created by Sam Oakley on 06/10/2016.
-//  Copyright © 2016 3Squared. All rights reserved.
+//  Created by Sam Oakley on 25/04/2019.
+//  Copyright © 2019 3Squared. All rights reserved.
 //
 
 import Foundation
 
-public typealias DataTaskCompletionHandler = (Data?, URLResponse?, Error?) -> Void
-
-/// A protocol that mimics the functions on URLSession that we want to mock.
-public protocol Session {
-    func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskCompletionHandler) -> URLSessionDataTask
-}
-
-extension URLSession: Session { }
-
 /// This describes a mocked response.
 public struct MockResponse {
-    let data: Data
+    let dataBlock: () -> Data
     let error: Error?
     let statusCode: HTTPStatusCode?
     let responseHeaders: [String: String]
     let sticky: Bool
+    let delay: TimeInterval
     let isValid: (URLRequest) -> Bool
     
     /// Create a new `MockResponse` with a JSON-type array.
@@ -40,6 +32,7 @@ public struct MockResponse {
                               responseHeaders: [String: String] = [:],
                               error: Error? = nil,
                               sticky: Bool = false,
+                              delay: TimeInterval = 0,
                               encoder: JSONEncoder = JSONEncoder(),
                               isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
         self.init(data: try! encoder.encode(json),
@@ -47,6 +40,7 @@ public struct MockResponse {
                   responseHeaders: responseHeaders,
                   error: error,
                   sticky: sticky,
+                  delay: delay,
                   isValid: isValid)
     }
     
@@ -64,6 +58,7 @@ public struct MockResponse {
                               responseHeaders: [String: String] = [:],
                               error: Error? = nil,
                               sticky: Bool = false,
+                              delay: TimeInterval = 0,
                               encoder: JSONEncoder = JSONEncoder(),
                               isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
         self.init(data: try! encoder.encode(json),
@@ -71,6 +66,7 @@ public struct MockResponse {
                   responseHeaders: responseHeaders,
                   error: error,
                   sticky: sticky,
+                  delay: delay,
                   isValid: isValid)
     }
     
@@ -88,6 +84,7 @@ public struct MockResponse {
                 responseHeaders: [String: String] = [:],
                 error: Error? = nil,
                 sticky: Bool = false,
+                delay: TimeInterval = 0,
                 isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
         let path = Bundle.allBundles.path(forResource: fileName, ofType: "json")!
         let data = try! NSData(contentsOfFile: path) as Data
@@ -96,6 +93,7 @@ public struct MockResponse {
                   responseHeaders: responseHeaders,
                   error: error,
                   sticky: sticky,
+                  delay: delay,
                   isValid: isValid)
     }
     
@@ -113,6 +111,7 @@ public struct MockResponse {
                 responseHeaders: [String: String] = [:],
                 error: Error? = nil,
                 sticky: Bool = false,
+                delay: TimeInterval = 0,
                 isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
         
         self.init(data: jsonString.data(using: .utf8)!,
@@ -120,6 +119,7 @@ public struct MockResponse {
                   responseHeaders: responseHeaders,
                   error: error,
                   sticky: sticky,
+                  delay: delay,
                   isValid: isValid)
     }
     
@@ -138,12 +138,39 @@ public struct MockResponse {
                 responseHeaders: [String: String] = [:],
                 error: Error? = nil,
                 sticky: Bool = false,
+                delay: TimeInterval = 0,
                 isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
-        self.data = data
+        self.init(dataBlock: { return data },
+                  statusCode: statusCode,
+                  responseHeaders: responseHeaders,
+                  error: error,
+                  sticky: sticky,
+                  delay: delay,
+                  isValid: isValid)
+    }
+    
+    /// Create a new `MockResponse`.
+    ///
+    /// - Parameters:
+    ///   - dataBlock: A block called to create the data to be returned in the response.
+    ///   - error: An optional error to pass back.
+    ///   - statusCode: The status code of the response.
+    ///   - responseHeaders: Headers to be returned in the response.
+    ///   - sticky: By default (false) responses are returned once and removed. Set this to true to keep the response around forever when you want the same data to always be returned for a call.
+    ///   - isValid: A block used to determine if a response should be returned for a given request. Return true to indicate that this response should be used.
+    public init(dataBlock: @escaping () -> Data,
+                statusCode: HTTPStatusCode? = .ok,
+                responseHeaders: [String: String] = [:],
+                error: Error? = nil,
+                sticky: Bool = false,
+                delay: TimeInterval = 0,
+                isValid: @escaping (URLRequest) -> Bool = { _ in true }) {
+        self.dataBlock = dataBlock
         self.statusCode = statusCode
         self.responseHeaders = responseHeaders
         self.error = error
         self.sticky = sticky
+        self.delay = delay
         self.isValid = isValid
     }
 }
@@ -157,6 +184,8 @@ public class MockSession: Session {
     
     private var responses: [MockResponse] = []
     private var fallbackSession: Session?
+    
+    private let dispatchQueue = DispatchQueue(label: "MockSession", qos: .background)
     
     /// Create a new session.
     ///
@@ -174,26 +203,29 @@ public class MockSession: Session {
     ///
     /// - Parameter response: A MockResponse.
     public func queue(response: MockResponse) {
-        responses += [response]
+        dispatchQueue.sync {
+            responses += [response]
+        }
     }
     
     public func dataTask(with request: URLRequest, completionHandler: @escaping DataTaskCompletionHandler) -> URLSessionDataTask {
         
-        let isValid: (_ response: MockResponse) -> Bool = { return $0.isValid(request) }
-        
-        guard let response = responses.first(where: isValid), let index = responses.firstIndex(where: isValid) else {
+        return dispatchQueue.sync {
+            let isValid: (_ response: MockResponse) -> Bool = { return $0.isValid(request) }
+            
+            guard let response = responses.first(where: isValid), let index = responses.firstIndex(where: isValid) else {
                 if let session = self.fallbackSession {
                     return session.dataTask(with: request, completionHandler: completionHandler)
                 } else {
                     fatalError("No matching mock response found for the request (\(request))")
                 }
+            }
+            
+            if !response.sticky {
+                responses.remove(at: index)
+            }
+            return URLSessionDataTaskMock(response, forRequest: request, completionHandler: completionHandler)
         }
-        
-        if !response.sticky {
-            responses.remove(at: index)
-        }
-        
-        return URLSessionDataTaskMock(response, forRequest: request, completionHandler: completionHandler)
     }
     
     final private class URLSessionDataTaskMock : URLSessionDataTask {
@@ -206,10 +238,12 @@ public class MockSession: Session {
         override var progress: Progress {
             return _progress
         }
-
+        
+        private let dispatchQueue = DispatchQueue(label: "URLSessionDataTaskMock", qos: .background)
+        
         override var originalRequest: URLRequest { return request }
         override var currentRequest: URLRequest { return request }
-
+        
         init(_ response: MockResponse, forRequest request: URLRequest, completionHandler: @escaping DataTaskCompletionHandler) {
             self.taskResponse = response
             self.request = request
@@ -219,14 +253,18 @@ public class MockSession: Session {
         override func resume() {
             if let statusCode = taskResponse.statusCode {
                 let urlResponse = HTTPURLResponse(url: request.url!,
-                                                            statusCode: statusCode,
-                                                            httpVersion: "1.1",
-                                                            headerFields: taskResponse.responseHeaders)
-                progress.completedUnitCount = 1
-                completionHandler(taskResponse.data, urlResponse, taskResponse.error)
+                                                  statusCode: statusCode,
+                                                  httpVersion: "1.1",
+                                                  headerFields: taskResponse.responseHeaders)
+                dispatchQueue.asyncAfter(deadline: .now() + taskResponse.delay) {
+                    self.progress.completedUnitCount = 1
+                    self.completionHandler(self.taskResponse.dataBlock(), urlResponse, self.taskResponse.error)
+                }
             } else {
-                progress.completedUnitCount = 1
-                completionHandler(taskResponse.data, nil, taskResponse.error)
+                dispatchQueue.asyncAfter(deadline: .now() + taskResponse.delay) {
+                    self.progress.completedUnitCount = 1
+                    self.completionHandler(self.taskResponse.dataBlock(), nil, self.taskResponse.error)
+                }
             }
         }
         

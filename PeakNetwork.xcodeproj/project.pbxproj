@@ -21,11 +21,11 @@
 		188DEAC3220DAF790067A6EF /* PeakNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */; };
 		188DEAC5220DAF9B0067A6EF /* PeakNetwork+Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188DEAC4220DAF9B0067A6EF /* PeakNetwork+Aliases.swift */; };
 		188DEAC7220DAF9F0067A6EF /* PeakNetwork+Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188DEAC4220DAF9B0067A6EF /* PeakNetwork+Aliases.swift */; };
-		18F2DFF321A81ABD007098FB /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2DFF221A81ABD007098FB /* Requestable.swift */; };
-		18F2DFF421A81ABD007098FB /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2DFF221A81ABD007098FB /* Requestable.swift */; };
-		38557FF1F780C5251F480188 /* libPods-PeakNetwork-macOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63E301A888B82032236FB6DB /* libPods-PeakNetwork-macOSTests.a */; };
-		5A490C4ECD37E1F2312340BA /* libPods-PeakNetwork-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF0DBAA977D5D9B40BED8137 /* libPods-PeakNetwork-iOS.a */; };
-		5B4A52C5C474B3286A94EF59 /* libPods-PeakNetwork-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 032A8E1152CCFD18E8246036 /* libPods-PeakNetwork-macOS.a */; };
+		1C05FBFCC6AF6FBA9744DEBE /* libPods-PeakNetwork-macOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB0B42F0C7A5EFB22C11EC40 /* libPods-PeakNetwork-macOS.a */; };
+		209C27538847537599F9C940 /* libPods-PeakNetwork-iOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9DF8BDDA137E2BD8CBC6AAA /* libPods-PeakNetwork-iOSTests.a */; };
+		907828E570F7E8C01D981B78 /* libPods-PeakNetwork-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47DDA43274ABCFA938655F25 /* libPods-PeakNetwork-iOS.a */; };
+		BA23D5E29BBAEBED5D91BDFF /* libPods-PeakNetwork-macOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA1A384329D17D74DB9AE423 /* libPods-PeakNetwork-macOSTests.a */; };
+		CB0C1960225F94DB004ECDD1 /* ProgressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0C195F225F94DB004ECDD1 /* ProgressTests.swift */; };
 		CB2380E41F740D1500F1B001 /* NetworkOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */; };
 		CB2380E51F740D1500F1B001 /* CertificatePinningSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */; };
 		CB2380E61F740D1500F1B001 /* ImageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380DD1F740D1500F1B001 /* ImageController.swift */; };
@@ -36,20 +36,35 @@
 		CB2380F51F740D9C00F1B001 /* CertificatePinningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380F21F740D7600F1B001 /* CertificatePinningTests.swift */; };
 		CB2380F61F740D9C00F1B001 /* ImageControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380EE1F740D7600F1B001 /* ImageControllerTests.swift */; };
 		CB2380F71F740D9C00F1B001 /* NetworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380F01F740D7600F1B001 /* NetworkTests.swift */; };
-		CB2380F81F740D9C00F1B001 /* TestEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380F31F740D7600F1B001 /* TestEntity.swift */; };
+		CB2380F81F740D9C00F1B001 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2380F31F740D7600F1B001 /* TestData.swift */; };
 		CB2380F91F740DBD00F1B001 /* 300.png in Resources */ = {isa = PBXBuildFile; fileRef = CB2380EF1F740D7600F1B001 /* 300.png */; };
 		CB2380FA1F740DBD00F1B001 /* 600.png in Resources */ = {isa = PBXBuildFile; fileRef = CB2380F41F740D7600F1B001 /* 600.png */; };
 		CB2380FB1F740DBD00F1B001 /* github.com.cer in Resources */ = {isa = PBXBuildFile; fileRef = CB2380F11F740D7600F1B001 /* github.com.cer */; };
 		CB3178731FDAA5AF00B063ED /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = CB3178721FDAA5AF00B063ED /* test.json */; };
 		CB3AA6CA1FD5A5C9008EFC5C /* HTTPStatusCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */; };
 		CB5F252A206BD4A30023FB7F /* MockSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */; };
+		CB808B0F2236B4BB00446EC0 /* EndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB808B0E2236B4BB00446EC0 /* EndpointTests.swift */; };
+		CB808B112237BA7600446EC0 /* APITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB808B102237BA7600446EC0 /* APITests.swift */; };
+		CB808B132237BEC400446EC0 /* WebAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB808B122237BEC400446EC0 /* WebAPI.swift */; };
+		CB808B152237BECC00446EC0 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB808B142237BECC00446EC0 /* Endpoint.swift */; };
+		CB808B182237E7F100446EC0 /* RequestInterceptorSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB808B162237E7F000446EC0 /* RequestInterceptorSessionTests.swift */; };
+		CB808B192237E7F100446EC0 /* ErrorInterceptorSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB808B172237E7F000446EC0 /* ErrorInterceptorSessionTests.swift */; };
+		CB95D1D8222BDAEB004B29B3 /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB95D1D7222BDAEB004B29B3 /* Resources.swift */; };
 		CBCF0A472211D5D70023DF8E /* Interceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCF0A462211D5D70023DF8E /* Interceptor.swift */; };
 		CBCF0A482211D5D70023DF8E /* Interceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCF0A462211D5D70023DF8E /* Interceptor.swift */; };
-		CBCF0A4A2212E3A00023DF8E /* DecodeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCF0A492212E3A00023DF8E /* DecodeOperation.swift */; };
-		CBCF0A4B2212E3A00023DF8E /* DecodeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCF0A492212E3A00023DF8E /* DecodeOperation.swift */; };
+		CBD2826A2271B20800F349C7 /* QueryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD282692271B20800F349C7 /* QueryItems.swift */; };
+		CBD2826C2271C16E00F349C7 /* MockSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD2826B2271C16E00F349C7 /* MockSession.swift */; };
+		CBD2826E2271C20F00F349C7 /* JSONWebAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD2826D2271C20F00F349C7 /* JSONWebAPI.swift */; };
+		CBD2827422733BC200F349C7 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD2827322733BC200F349C7 /* URL.swift */; };
+		CBD28275227717B200F349C7 /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB95D1D7222BDAEB004B29B3 /* Resources.swift */; };
+		CBD28276227717B600F349C7 /* WebAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB808B122237BEC400446EC0 /* WebAPI.swift */; };
+		CBD28277227717BB00F349C7 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB808B142237BECC00446EC0 /* Endpoint.swift */; };
+		CBD28278227717C200F349C7 /* JSONWebAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD2826D2271C20F00F349C7 /* JSONWebAPI.swift */; };
+		CBD28279227717C600F349C7 /* MockSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD2826B2271C16E00F349C7 /* MockSession.swift */; };
+		CBD2827A227717CC00F349C7 /* QueryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD282692271B20800F349C7 /* QueryItems.swift */; };
+		CBD2827B227717D200F349C7 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD2827322733BC200F349C7 /* URL.swift */; };
 		CBF2179720CAC63700515DB2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2179620CAC63700515DB2 /* Logger.swift */; };
 		CBFD4EE71F740C07008CD8AA /* PeakNetwork_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBFD4EDD1F740C07008CD8AA /* PeakNetwork_iOS.framework */; };
-		DCF788A4868E6D9849E8F8DC /* libPods-PeakNetwork-iOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B7FBB5BF5E0FE0F13FEDD1C /* libPods-PeakNetwork-iOSTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,7 +85,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		032A8E1152CCFD18E8246036 /* libPods-PeakNetwork-macOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetwork-macOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		056D1377BC3154B39DE0DF12 /* Pods-PeakNetwork-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-macOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-macOS/Pods-PeakNetwork-macOS.debug.xcconfig"; sourceTree = "<group>"; };
 		1181CBF1635E348B99C9CBA8 /* Pods-PeakNetwork-iOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-iOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-iOSTests/Pods-PeakNetwork-iOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		1830B13F219D8ED600AC862F /* PeakNetwork_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PeakNetwork_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,15 +92,16 @@
 		1830B147219D8ED600AC862F /* PeakNetwork_macOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PeakNetwork_macOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1830B14E219D8ED600AC862F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		188DEAC4220DAF9B0067A6EF /* PeakNetwork+Aliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PeakNetwork+Aliases.swift"; sourceTree = "<group>"; };
-		18F2DFF221A81ABD007098FB /* Requestable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Requestable.swift; sourceTree = "<group>"; };
 		19F67A4308912F1015036221 /* Pods-PeakNetwork-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-macOS/Pods-PeakNetwork-macOS.release.xcconfig"; sourceTree = "<group>"; };
 		3F9F5BFD151A18FBA00DF18B /* Pods-PeakNetwork-macOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-macOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-macOSTests/Pods-PeakNetwork-macOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		63E301A888B82032236FB6DB /* libPods-PeakNetwork-macOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetwork-macOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		47DDA43274ABCFA938655F25 /* libPods-PeakNetwork-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetwork-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		73AF6A0F3F1AF9D6A6612758 /* Pods-PeakNetwork-iOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-iOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-iOSTests/Pods-PeakNetwork-iOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		7F13389A8316B538B81A6709 /* Pods-PeakNetwork-macOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-macOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-macOSTests/Pods-PeakNetwork-macOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		8A48F868C8C5C16D7EF37F7F /* Pods-PeakNetwork-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PeakNetwork-iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-PeakNetwork-iOS/Pods-PeakNetwork-iOS.release.xcconfig"; sourceTree = "<group>"; };
-		8B7FBB5BF5E0FE0F13FEDD1C /* libPods-PeakNetwork-iOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetwork-iOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AF0DBAA977D5D9B40BED8137 /* libPods-PeakNetwork-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetwork-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9DF8BDDA137E2BD8CBC6AAA /* libPods-PeakNetwork-iOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetwork-iOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA1A384329D17D74DB9AE423 /* libPods-PeakNetwork-macOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetwork-macOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB0B42F0C7A5EFB22C11EC40 /* libPods-PeakNetwork-macOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PeakNetwork-macOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB0C195F225F94DB004ECDD1 /* ProgressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTests.swift; sourceTree = "<group>"; };
 		CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkOperation.swift; sourceTree = "<group>"; };
 		CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatePinningSessionDelegate.swift; sourceTree = "<group>"; };
 		CB2380DD1F740D1500F1B001 /* ImageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageController.swift; sourceTree = "<group>"; };
@@ -99,13 +114,23 @@
 		CB2380F01F740D7600F1B001 /* NetworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTests.swift; sourceTree = "<group>"; };
 		CB2380F11F740D7600F1B001 /* github.com.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = github.com.cer; sourceTree = "<group>"; };
 		CB2380F21F740D7600F1B001 /* CertificatePinningTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatePinningTests.swift; sourceTree = "<group>"; };
-		CB2380F31F740D7600F1B001 /* TestEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEntity.swift; sourceTree = "<group>"; };
+		CB2380F31F740D7600F1B001 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		CB2380F41F740D7600F1B001 /* 600.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 600.png; sourceTree = "<group>"; };
 		CB3178721FDAA5AF00B063ED /* test.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPStatusCodes.swift; sourceTree = "<group>"; };
 		CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSessionTests.swift; sourceTree = "<group>"; };
+		CB808B0E2236B4BB00446EC0 /* EndpointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointTests.swift; sourceTree = "<group>"; };
+		CB808B102237BA7600446EC0 /* APITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APITests.swift; sourceTree = "<group>"; };
+		CB808B122237BEC400446EC0 /* WebAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAPI.swift; sourceTree = "<group>"; };
+		CB808B142237BECC00446EC0 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		CB808B162237E7F000446EC0 /* RequestInterceptorSessionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestInterceptorSessionTests.swift; sourceTree = "<group>"; };
+		CB808B172237E7F000446EC0 /* ErrorInterceptorSessionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorInterceptorSessionTests.swift; sourceTree = "<group>"; };
+		CB95D1D7222BDAEB004B29B3 /* Resources.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Resources.swift; sourceTree = "<group>"; };
 		CBCF0A462211D5D70023DF8E /* Interceptor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interceptor.swift; sourceTree = "<group>"; };
-		CBCF0A492212E3A00023DF8E /* DecodeOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodeOperation.swift; sourceTree = "<group>"; };
+		CBD282692271B20800F349C7 /* QueryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryItems.swift; sourceTree = "<group>"; };
+		CBD2826B2271C16E00F349C7 /* MockSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSession.swift; sourceTree = "<group>"; };
+		CBD2826D2271C20F00F349C7 /* JSONWebAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONWebAPI.swift; sourceTree = "<group>"; };
+		CBD2827322733BC200F349C7 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		CBF2179620CAC63700515DB2 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		CBFD4EDD1F740C07008CD8AA /* PeakNetwork_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PeakNetwork_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PeakNetwork.h; sourceTree = "<group>"; };
@@ -120,7 +145,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B4A52C5C474B3286A94EF59 /* libPods-PeakNetwork-macOS.a in Frameworks */,
+				1C05FBFCC6AF6FBA9744DEBE /* libPods-PeakNetwork-macOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,7 +154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1830B148219D8ED600AC862F /* PeakNetwork_macOS.framework in Frameworks */,
-				38557FF1F780C5251F480188 /* libPods-PeakNetwork-macOSTests.a in Frameworks */,
+				BA23D5E29BBAEBED5D91BDFF /* libPods-PeakNetwork-macOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,7 +162,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A490C4ECD37E1F2312340BA /* libPods-PeakNetwork-iOS.a in Frameworks */,
+				907828E570F7E8C01D981B78 /* libPods-PeakNetwork-iOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,7 +171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CBFD4EE71F740C07008CD8AA /* PeakNetwork_iOS.framework in Frameworks */,
-				DCF788A4868E6D9849E8F8DC /* libPods-PeakNetwork-iOSTests.a in Frameworks */,
+				209C27538847537599F9C940 /* libPods-PeakNetwork-iOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,10 +181,10 @@
 		115BC29ECA395A799C88B9AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				AF0DBAA977D5D9B40BED8137 /* libPods-PeakNetwork-iOS.a */,
-				8B7FBB5BF5E0FE0F13FEDD1C /* libPods-PeakNetwork-iOSTests.a */,
-				032A8E1152CCFD18E8246036 /* libPods-PeakNetwork-macOS.a */,
-				63E301A888B82032236FB6DB /* libPods-PeakNetwork-macOSTests.a */,
+				47DDA43274ABCFA938655F25 /* libPods-PeakNetwork-iOS.a */,
+				A9DF8BDDA137E2BD8CBC6AAA /* libPods-PeakNetwork-iOSTests.a */,
+				CB0B42F0C7A5EFB22C11EC40 /* libPods-PeakNetwork-macOS.a */,
+				BA1A384329D17D74DB9AE423 /* libPods-PeakNetwork-macOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -167,20 +192,15 @@
 		1830B136219D8E3400AC862F /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */,
-				CB2380E31F740D1500F1B001 /* Errors.swift */,
-				CB2380E01F740D1500F1B001 /* HTTPMethods.swift */,
-				CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */,
-				CB2380DD1F740D1500F1B001 /* ImageController.swift */,
-				CBCF0A462211D5D70023DF8E /* Interceptor.swift */,
-				CBF2179620CAC63700515DB2 /* Logger.swift */,
 				CB2380DB1F740D1500F1B001 /* NetworkOperation.swift */,
-				CBCF0A492212E3A00023DF8E /* DecodeOperation.swift */,
+				CB0683FB227C4549006214D7 /* API */,
+				CB0683FC227C4584006214D7 /* Session */,
+				CB0683FD227C45E8006214D7 /* HTTP */,
+				CB2380E31F740D1500F1B001 /* Errors.swift */,
+				CB2380DD1F740D1500F1B001 /* ImageController.swift */,
 				CB2380DE1F740D1500F1B001 /* Operators.swift */,
 				CBFD4EE01F740C07008CD8AA /* PeakNetwork.h */,
 				188DEAC4220DAF9B0067A6EF /* PeakNetwork+Aliases.swift */,
-				18F2DFF221A81ABD007098FB /* Requestable.swift */,
-				CB2380DF1F740D1500F1B001 /* Session.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -213,15 +233,20 @@
 		1830B157219D8F2A00AC862F /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				CB2380F11F740D7600F1B001 /* github.com.cer */,
+				CB3178721FDAA5AF00B063ED /* test.json */,
 				CB2380EF1F740D7600F1B001 /* 300.png */,
 				CB2380F41F740D7600F1B001 /* 600.png */,
+				CB808B102237BA7600446EC0 /* APITests.swift */,
 				CB2380F21F740D7600F1B001 /* CertificatePinningTests.swift */,
-				CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */,
-				CB2380F11F740D7600F1B001 /* github.com.cer */,
+				CB808B0E2236B4BB00446EC0 /* EndpointTests.swift */,
+				CB808B172237E7F000446EC0 /* ErrorInterceptorSessionTests.swift */,
 				CB2380EE1F740D7600F1B001 /* ImageControllerTests.swift */,
+				CB5F2529206BD4A30023FB7F /* MockSessionTests.swift */,
 				CB2380F01F740D7600F1B001 /* NetworkTests.swift */,
-				CB2380F31F740D7600F1B001 /* TestEntity.swift */,
-				CB3178721FDAA5AF00B063ED /* test.json */,
+				CB0C195F225F94DB004ECDD1 /* ProgressTests.swift */,
+				CB808B162237E7F000446EC0 /* RequestInterceptorSessionTests.swift */,
+				CB2380F31F740D7600F1B001 /* TestData.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -264,6 +289,40 @@
 				7F13389A8316B538B81A6709 /* Pods-PeakNetwork-macOSTests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		CB0683FB227C4549006214D7 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				CB808B142237BECC00446EC0 /* Endpoint.swift */,
+				CBD2826D2271C20F00F349C7 /* JSONWebAPI.swift */,
+				CBD282692271B20800F349C7 /* QueryItems.swift */,
+				CB95D1D7222BDAEB004B29B3 /* Resources.swift */,
+				CBD2827322733BC200F349C7 /* URL.swift */,
+				CB808B122237BEC400446EC0 /* WebAPI.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		CB0683FC227C4584006214D7 /* Session */ = {
+			isa = PBXGroup;
+			children = (
+				CB2380DF1F740D1500F1B001 /* Session.swift */,
+				CBD2826B2271C16E00F349C7 /* MockSession.swift */,
+				CB2380DC1F740D1500F1B001 /* CertificatePinningSessionDelegate.swift */,
+				CBF2179620CAC63700515DB2 /* Logger.swift */,
+				CBCF0A462211D5D70023DF8E /* Interceptor.swift */,
+			);
+			path = Session;
+			sourceTree = "<group>";
+		};
+		CB0683FD227C45E8006214D7 /* HTTP */ = {
+			isa = PBXGroup;
+			children = (
+				CB2380E01F740D1500F1B001 /* HTTPMethods.swift */,
+				CB3AA6C91FD5A5C9008EFC5C /* HTTPStatusCodes.swift */,
+			);
+			path = HTTP;
 			sourceTree = "<group>";
 		};
 		CBFD4ED31F740C07008CD8AA = {
@@ -416,7 +475,6 @@
 				TargetAttributes = {
 					1830B13E219D8ED600AC862F = {
 						CreatedOnToolsVersion = 10.1;
-						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					1830B146219D8ED600AC862F = {
@@ -587,17 +645,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBD28277227717BB00F349C7 /* Endpoint.swift in Sources */,
 				1830B168219D8F9E00AC862F /* ImageController.swift in Sources */,
 				1830B16B219D8F9E00AC862F /* Operators.swift in Sources */,
+				CBD28278227717C200F349C7 /* JSONWebAPI.swift in Sources */,
 				1830B169219D8F9E00AC862F /* Logger.swift in Sources */,
 				1830B165219D8F9E00AC862F /* Errors.swift in Sources */,
 				1830B164219D8F9E00AC862F /* CertificatePinningSessionDelegate.swift in Sources */,
-				18F2DFF421A81ABD007098FB /* Requestable.swift in Sources */,
 				188DEAC7220DAF9F0067A6EF /* PeakNetwork+Aliases.swift in Sources */,
-				CBCF0A4B2212E3A00023DF8E /* DecodeOperation.swift in Sources */,
+				CBD2827A227717CC00F349C7 /* QueryItems.swift in Sources */,
 				CBCF0A482211D5D70023DF8E /* Interceptor.swift in Sources */,
 				1830B167219D8F9E00AC862F /* HTTPStatusCodes.swift in Sources */,
+				CBD2827B227717D200F349C7 /* URL.swift in Sources */,
+				CBD28279227717C600F349C7 /* MockSession.swift in Sources */,
+				CBD28276227717B600F349C7 /* WebAPI.swift in Sources */,
 				1830B166219D8F9E00AC862F /* HTTPMethods.swift in Sources */,
+				CBD28275227717B200F349C7 /* Resources.swift in Sources */,
 				1830B16A219D8F9E00AC862F /* NetworkOperation.swift in Sources */,
 				1830B16C219DBE6A00AC862F /* Session.swift in Sources */,
 			);
@@ -614,15 +677,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB808B152237BECC00446EC0 /* Endpoint.swift in Sources */,
 				CB2380E41F740D1500F1B001 /* NetworkOperation.swift in Sources */,
 				CB2380E71F740D1500F1B001 /* Operators.swift in Sources */,
+				CB95D1D8222BDAEB004B29B3 /* Resources.swift in Sources */,
 				CB2380E91F740D1500F1B001 /* HTTPMethods.swift in Sources */,
 				CB2380E51F740D1500F1B001 /* CertificatePinningSessionDelegate.swift in Sources */,
+				CBD2826E2271C20F00F349C7 /* JSONWebAPI.swift in Sources */,
 				CB2380E61F740D1500F1B001 /* ImageController.swift in Sources */,
-				18F2DFF321A81ABD007098FB /* Requestable.swift in Sources */,
 				188DEAC5220DAF9B0067A6EF /* PeakNetwork+Aliases.swift in Sources */,
-				CBCF0A4A2212E3A00023DF8E /* DecodeOperation.swift in Sources */,
 				CBCF0A472211D5D70023DF8E /* Interceptor.swift in Sources */,
+				CB808B132237BEC400446EC0 /* WebAPI.swift in Sources */,
+				CBD2827422733BC200F349C7 /* URL.swift in Sources */,
+				CBD2826C2271C16E00F349C7 /* MockSession.swift in Sources */,
+				CBD2826A2271B20800F349C7 /* QueryItems.swift in Sources */,
 				CBF2179720CAC63700515DB2 /* Logger.swift in Sources */,
 				CB2380E81F740D1500F1B001 /* Session.swift in Sources */,
 				CB2380EC1F740D1500F1B001 /* Errors.swift in Sources */,
@@ -634,11 +702,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CB2380F81F740D9C00F1B001 /* TestEntity.swift in Sources */,
+				CB2380F81F740D9C00F1B001 /* TestData.swift in Sources */,
+				CB0C1960225F94DB004ECDD1 /* ProgressTests.swift in Sources */,
+				CB808B182237E7F100446EC0 /* RequestInterceptorSessionTests.swift in Sources */,
 				CB2380F71F740D9C00F1B001 /* NetworkTests.swift in Sources */,
 				CB2380F51F740D9C00F1B001 /* CertificatePinningTests.swift in Sources */,
 				CB2380F61F740D9C00F1B001 /* ImageControllerTests.swift in Sources */,
+				CB808B0F2236B4BB00446EC0 /* EndpointTests.swift in Sources */,
+				CB808B112237BA7600446EC0 /* APITests.swift in Sources */,
 				CB5F252A206BD4A30023FB7F /* MockSessionTests.swift in Sources */,
+				CB808B192237E7F100446EC0 /* ErrorInterceptorSessionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -681,7 +754,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -707,7 +780,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
