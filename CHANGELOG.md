@@ -4,6 +4,11 @@ The changelog for `PeakNetwork`.
 
 --------------------------------------
 
+6.0.0
+-----
+- Adds a new, more structured way to construct your API and requests.
+- `WebAPI`, `Resource` and `Endpoint` replacing existing `Requestable`.
+
 5.2.0
 -----
 - Add more detailed progress for network operations.
