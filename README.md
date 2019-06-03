@@ -1,4 +1,3 @@
-
 ![Peak Network](PeakNetwork.png "Peak Network")
 
 PeakNetwork is a Swift networking microframework, built on top of [`Session`](https://developer.apple.com/documentation/foundation/urlsession) and leveraging the power of [`Codable`](https://developer.apple.com/documentation/swift/codable).
