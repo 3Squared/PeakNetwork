@@ -54,7 +54,7 @@ public extension Resource {
 
 public extension Resource where ResponseBody == Void {
     
-    /// Create a `Resource` for a given `URL` where the response is not parsed.
+    /// Create a `Resource` for a given `URL` where the response body is not returned.
     ///
     /// - Parameters:
     ///   - method: The HTTP method to use.
@@ -66,7 +66,7 @@ public extension Resource where ResponseBody == Void {
         }
     }
     
-    /// Create a `Resource` for a given `Endpoint` where the response is not parsed.
+    /// Create a `Resource` for a given `Endpoint` where the response body is not returned.
     ///
     /// - Parameters:
     ///   - method: The HTTP method to use.
@@ -77,7 +77,7 @@ public extension Resource where ResponseBody == Void {
         self.init(method: method, url: endpoint.url, headers: headers)
     }
     
-    /// Create a `Resource` for a given `Endpoint` with a HTTP body where the response is not parsed.
+    /// Create a `Resource` for a given `Endpoint` with a HTTP body where the response body is not returned.
     ///
     /// - Parameters:
     ///   - method: The HTTP method to use.
@@ -91,6 +91,49 @@ public extension Resource where ResponseBody == Void {
     }
 }
 
+public extension Resource where ResponseBody == Data {
+
+    /// Create a `Resource` for a given `URL` where the response body is not parsed.
+    ///
+    /// - Parameters:
+    ///   - method: The HTTP method to use.
+    ///   - url: The `URL` of the resource.
+    ///   - headers: The HTTP headers for the request.
+    init(method: HTTPMethod, url: URL, headers: [String: String]) {
+        self.init(method: method, url: url, headers: headers) { data in
+            if let data = data {
+                return data
+            } else {
+                throw ResourceError.noData
+            }
+        }
+    }
+    
+    /// Create a `Resource` for a given `Endpoint` where the response body is not parsed.
+    ///
+    /// - Parameters:
+    ///   - method: The HTTP method to use.
+    ///   - endpoint: The `Endpoint` for the resource.
+    ///   - headers: The HTTP headers for the request.
+    ///   - parse: A parse closure to convert the response data to the required `ResponseType`.
+    init(method: HTTPMethod, endpoint: Endpoint, headers: [String: String]) {
+        self.init(method: method, url: endpoint.url, headers: headers)
+    }
+    
+    /// Create a `Resource` for a given `Endpoint` with a HTTP body where the response body is not parsed.
+    ///
+    /// - Parameters:
+    ///   - method: The HTTP method to use.
+    ///   - endpoint: The `Endpoint` for the resource.
+    ///   - headers: The HTTP headers for the request.
+    ///   - body: The `Encodable` object to use as the HTTP body.
+    ///   - encoder: The `JSONEncoder` used to encode `body`.
+    init<Body: Encodable>(method: HTTPMethod, endpoint: Endpoint, headers: [String: String], body: Body, encoder: JSONEncoder) {
+        self.init(method: method, endpoint: endpoint, headers: headers)
+        request.httpBody = try! encoder.encode(body)
+    }
+
+}
 
 public extension Resource where ResponseBody: Decodable {
     

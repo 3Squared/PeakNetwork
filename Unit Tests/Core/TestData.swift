@@ -48,6 +48,11 @@ extension MyAPI {
                         body: entity)
     }
     
+    func data() -> Resource<Data> {
+        return resource(.get,
+                        path: "query")
+    }
+    
     func complexWithResponse(_ entity: TestEntity) -> Resource<TestEntity> {
         return resource(.put,
                         path: "upload",

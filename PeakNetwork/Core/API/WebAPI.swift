@@ -38,7 +38,6 @@ public extension WebAPI {
         return resource.operation(session: session)
     }
     
-    
     /// Create a `Resource` pointing to the provided path.
     ///
     /// - Parameters:
@@ -55,6 +54,21 @@ public extension WebAPI {
         )
     }
     
+    /// Create a `Resource` pointing to the provided path.
+    ///
+    /// - Parameters:
+    ///   - path: The path of the `Resource`, relative to the `API`'s `baseURL`.
+    ///   - queryItems: Query items for the request.
+    ///   - headers: HTTP headers for the request.
+    ///   - method: The HTTP method with which to perform the request.
+    /// - Returns: A configured `Resource`.
+    func resource(_ method: HTTPMethod, path: String, queryItems: [URLQueryItem] = [], headers: [String: String] = [:], customise: URLComponentsCustomisationBlock? = nil) -> Resource<Data> {
+        return Resource(
+            method: method,
+            endpoint: endpoint(path, queryItems: queryItems, customise: customise),
+            headers: headers.merging(self.headers) { current, _ in current }
+        )
+    }
     
     /// Create an `Endpoint` for the provided path.
     ///
