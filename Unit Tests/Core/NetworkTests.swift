@@ -35,7 +35,7 @@ class NetworkTests: XCTestCase {
     }
     
     
-    func testNetworkOperationFailure() {
+    func testNetworkOperation_Failure() {
         let session = MockSession { session in
             session.queue(response: MockResponse(statusCode: .internalServerError))
         }
@@ -58,7 +58,7 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
-    func testNetworkOperationFailureWithResponseBody() {
+    func testNetworkOperation_Failure_WithResponseBody() {
         let session = MockSession { session in
             session.queue(response: MockResponse(json: ["hello": "world"], statusCode: .internalServerError))
         }
@@ -84,7 +84,7 @@ class NetworkTests: XCTestCase {
     }
 
     
-    func testNetworkOperationSuccess() {
+    func testNetworkOperation_Success() {
         let session = MockSession { session in
             session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok))
         }
@@ -132,7 +132,7 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
-    func testNetworkOperationInputSuccess() {
+    func testNetworkOperation_Input_Success() {
         let session = MockSession { session in
             session.queue(response: MockResponse(json: ["name" : "Sam"], statusCode: .ok))
         }
@@ -158,7 +158,7 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
-    func testNetworkOperationWithNoInputFailure() {
+    func testNetworkOperation_WithNoInput_Failure() {
         let session = MockSession { _ in }
         
         let expect = expectation(description: "")
@@ -183,7 +183,7 @@ class NetworkTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
     
-    func testNetworkOperationFailureWithRetry() {
+    func testNetworkOperation_Failure_WithRetry() {
         let session = MockSession { session in
             session.queue(response: MockResponse(statusCode: .internalServerError, sticky: true))
         }
@@ -226,6 +226,30 @@ class NetworkTests: XCTestCase {
         switch networkOperation.output {
         case .success(let response):
             XCTAssertNotNil(response.parsed)
+        case .failure(let error):
+            XCTFail(error.localizedDescription)
+        }
+    }
+    
+    func testNetworkOperation_dataResponse() {
+        let session = MockSession { session in
+            session.queue(response: MockResponse(data: "Hello".data(using: .utf8)!))
+        }
+        
+        let networkOperation = NetworkOperation(resource: api.data(), session: session)
+
+        let expect = expectation(description: "")
+        networkOperation.addResultBlock { response in
+            expect.fulfill()
+        }
+        
+        networkOperation.enqueue()
+        waitForExpectations(timeout: 10)
+        
+        switch networkOperation.output {
+        case .success(let response):
+            let string = String(data: response.parsed, encoding: .utf8)!
+            XCTAssertEqual("Hello", string)
         case .failure(let error):
             XCTFail(error.localizedDescription)
         }
