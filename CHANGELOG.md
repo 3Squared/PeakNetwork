@@ -4,6 +4,10 @@ The changelog for `PeakNetwork`.
 
 --------------------------------------
 
+6.1.0
+-----
+- Add additional support for handling of requests where the required response body is plain `Data`.
+
 6.0.0
 -----
 - Adds a new, more structured way to construct your API and requests.
