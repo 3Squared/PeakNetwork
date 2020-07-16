@@ -24,7 +24,7 @@ class ErrorInterceptorSessionTests: XCTestCase {
             session.queue(response: MockResponse(statusCode: .internalServerError, error: TestError.justATest))
         }
         
-        let session = ErrorInterceptorSession(with: baseSession) { _, _, error in
+        let session = ErrorInterceptorSession(with: baseSession) { error in
             switch (error) {
             case TestError.justATest:
                 expect.fulfill()
@@ -46,7 +46,7 @@ class ErrorInterceptorSessionTests: XCTestCase {
             session.queue(response: MockResponse(statusCode: .ok))
         }
         
-        let session = ErrorInterceptorSession(with: baseSession) { _, _, error in
+        let session = ErrorInterceptorSession(with: baseSession) { error in
             XCTFail()
         }
         

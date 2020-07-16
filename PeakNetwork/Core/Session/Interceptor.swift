@@ -51,7 +51,7 @@ public class RequestInterceptorSession: Session {
 }
 
 
-public typealias ErrorInterceptor = (Data?, URLResponse?, Error) -> Void
+public typealias ErrorInterceptor = (Error) -> Void
 
 /// A session which allows you to provide actions which are performed if a request encounters an error.
 public class ErrorInterceptorSession: Session {
@@ -83,8 +83,17 @@ public class ErrorInterceptorSession: Session {
         
         return session.dataTask(with: request) { data, response, error in
             if let error = error {
-                self.interceptors.forEach { $0(data, response, error) }
+                self.interceptors.forEach { $0(error) }
+            } else if let httpResponse = response as? HTTPURLResponse {
+                if !httpResponse.statusCodeValue.isSuccess {
+                    let serverError = ServerError.error(code: httpResponse.statusCodeValue, data: data, response: httpResponse)
+                    self.interceptors.forEach { $0(serverError) }
+                }
+            } else {
+                let unknownResponseError = ServerError.unknownResponse
+                self.interceptors.forEach { $0(unknownResponseError) }
             }
+            
             completionHandler(data, response, error)
         }
     }
