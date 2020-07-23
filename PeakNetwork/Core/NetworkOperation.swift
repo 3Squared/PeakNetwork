@@ -101,9 +101,7 @@ open class NetworkOperation<Body>: RetryingOperation<Response<Body>>, ConsumesRe
             strongSelf.finish()
         }
         
-        if #available(iOS 11.0, tvOS 11.0, *) {
-            progress.addChild(task.progress, withPendingUnitCount: progress.totalUnitCount)
-        }
+        progress.addChild(task.progress, withPendingUnitCount: progress.totalUnitCount)
         
         return task
     }

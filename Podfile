@@ -1,7 +1,7 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
 target 'PeakNetwork-iOS' do
-    platform :ios, '10.0'
+    platform :ios, '11.0'
     
     pod 'PeakOperation'
     target 'PeakNetwork-iOSTests' do
