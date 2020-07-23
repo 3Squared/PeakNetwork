@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "PeakNetwork"
-  s.version      = "6.1.0"
+  s.version      = "6.2.0"
   s.summary      = "A collection of classes to aid performing network operations."
   s.homepage     = "https://github.com/3squared/PeakNetwork"
   s.license      = { :type => 'Custom', :file => 'LICENSE.md' }
@@ -12,8 +12,8 @@ Pod::Spec.new do |s|
   s.dependency 'PeakOperation'
   s.swift_version = '5.0'
 
-  s.ios.deployment_target = '10.0'
-  s.tvos.deployment_target = '10.0'
+  s.ios.deployment_target = '11.0'
+  s.tvos.deployment_target = '11.0'
   s.macos.deployment_target = '10.13'
 
   s.source_files = "PeakNetwork", "PeakNetwork/Core/**/*.{h,m,swift}"

@@ -193,7 +193,7 @@ class NetworkTests: XCTestCase {
         let networkOperation = NetworkOperation(resource: api.simple(), session: session)
 
         var runCount = 0
-        networkOperation.retryStrategy = { failureCount in
+        networkOperation.retryStrategy = { failureCount, _ in
             runCount += 1
             return failureCount < 3
         }

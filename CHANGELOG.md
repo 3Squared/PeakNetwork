@@ -4,6 +4,11 @@ The changelog for `PeakNetwork`.
 
 --------------------------------------
 
+6.2.0
+-----
+- `ErrorInterceptor` now returns Server Errors and only returns the error.
+- Drops support for iOS 10.
+
 6.1.0
 -----
 - Add additional support for handling of requests where the required response body is plain `Data`.
