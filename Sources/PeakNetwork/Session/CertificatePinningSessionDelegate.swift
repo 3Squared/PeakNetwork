@@ -87,14 +87,3 @@ public class CertificatePinningSessionDelegate: NSObject, URLSessionDelegate {
         completionHandler(.cancelAuthenticationChallenge, nil)
     }
 }
-
-//extension Collection where Iterator.Element: Bundle {
-//    func path(forResource resource: String, ofType type: String) -> String? {
-//        for bundle in self {
-//            if let path = bundle.path(forResource: resource, ofType: type) {
-//                return path
-//            }
-//        }
-//        return nil
-//    }
-//}
