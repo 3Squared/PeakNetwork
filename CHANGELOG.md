@@ -4,6 +4,10 @@ The changelog for `PeakNetwork`.
 
 --------------------------------------
 
+6.3.0
+-----
+- Replaces Cocoapods with Swift Package Manager.
+
 6.2.0
 -----
 - `ErrorInterceptor` now returns Server Errors and only returns the error.

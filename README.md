@@ -4,16 +4,9 @@ PeakNetwork is a Swift networking microframework, built on top of [`Session`](ht
 
 ## Examples
 
-Please see the included sample project (`Examples/PeakNetworkExamples.xcworkspace`) for examples and a suggested structure for your networking code. 
+Please see the included sample project (`Example/PeakNetworkExample.xcodeproj`) for examples and a suggested structure for your networking code. 
 
 Please see the tests for further examples. 
-
-## Getting Started
-
-### Installing
-
-- Using Cocoapods, add `pod 'PeakNetwork'` to your Podfile.
-- `import PeakNetwork` where necessary.
 
 ## Contributing
 
